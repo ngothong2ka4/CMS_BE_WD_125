@@ -3,6 +3,8 @@
     data-sidebar-image="none" data-preloader="disable">
 
     @include('layouts.includes.theme-header');
+    
+    @stack('styles')
 
 <body>
 
@@ -58,6 +60,8 @@
 
     <!-- JAVASCRIPT -->
     @include('layouts.includes.theme-footer')
+
+    @stack('scripts')
     
 </body>
 

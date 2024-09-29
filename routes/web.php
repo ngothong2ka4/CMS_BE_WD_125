@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\product\ProductColorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,5 +39,10 @@ Route::get('/signup',function() {
  Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+
+        Route::prefix('products')->group(function () {
+            Route::resource('/product_color', ProductColorController::class);
+        });
+
     // });
  });
