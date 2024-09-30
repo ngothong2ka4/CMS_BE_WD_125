@@ -19,30 +19,31 @@
                         style="width:100%">
                         <thead>
                         <tr>
-                            <th data-ordering="false">SR No.</th>
-                            <th data-ordering="false">ID</th>
-                            <th>Assigned To</th>
-                            <th>Created By</th>
-                            <th>Create Date</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Action</th>
+                            <th >No</th>
+                            <th >Màu sắc sản phẩm</th>
+                            <th >Ngày tạo</th>
+                            <th >Ngày cập nhật</th>
+                            <th >Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>01</td>
-                            <td>VLZ-452</td>
-                            <td>Alexis Clarke</td>
-                            <td>Joseph Parker</td>
-                            <td>03 Oct, 2021</td>
-                            <td><span class="badge bg-info-subtle text-info">Re-open</span></td>
-                            <td><span class="badge bg-danger">High</span></td>
-                            <td>
-                                <a href=""><button class="btn btn-warning">Sửa</button></a>
-                                <button class="btn btn-danger">Xoá</button>
-                            </td>
-                        </tr>
+                            @foreach ($productColors as $productColor)
+                                <tr>
+                                    <td>{{ $productColor->id }}</td>
+                                    <td>{{ $productColor->name }}</td>
+                                    <td>{{ $productColor->created_at }}</td>
+                                    <td>{{ $productColor->updated_at }}</td>
+                                    <td>
+                                        <a href="{{ route('product_color.edit', $productColor->id) }}"><button class="btn btn-warning">Sửa</button></a>
+                                        
+                                            <form action="{{ route('product_color.destroy', $productColor->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
+                                            </form>
+                                    </td>
+                                </tr>
+                            @endforeach
    
                         </tbody>
                     </table>
