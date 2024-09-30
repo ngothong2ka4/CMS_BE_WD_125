@@ -33,8 +33,9 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::is('categories*') ? 'active' : '' }}" href="" data-bs-toggle="collapse"
-                        role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link {{ Request::is('categories*') ? 'active' : '' }}"
+                        href="{{ route('category.index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Category</span>
                     </a>
                     {{-- <div class="collapse menu-dropdown" id="sidebarDashboards">
@@ -65,29 +66,36 @@
                             </li>
                         </ul>
                     </div> --}}
-                </li> 
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::is('products*') ? 'active' : '' }}" href="#sidebarProduct" data-bs-toggle="collapse"
-                        role="button" aria-expanded="false" aria-controls="sidebarProduct">
+                    <a class="nav-link menu-link {{ Request::is('products*') ? 'active' : '' }}" href="#sidebarProduct"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Sản phẩm</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Request::is('products*') ? 'show' : '' }}" id="sidebarProduct">
+                    <div class="collapse menu-dropdown {{ Request::is('products*') ? 'show' : '' }}"
+                        id="sidebarProduct">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="" class="nav-link {{ Request::is('products/product_management') ? 'active' : '' }}" data-key="t-analytics">
+                                <a href=""
+                                    class="nav-link {{ Request::is('products/product_management') ? 'active' : '' }}"
+                                    data-key="t-analytics">
                                     Quản lý Sản phẩm </a>
                             </li>
                             <li class="nav-item">
-                                <a href="" class="nav-link {{ Request::is('products/product_size') ? 'active' : '' }}" data-key="t-analytics">
+                                <a href=""
+                                    class="nav-link {{ Request::is('products/product_size') ? 'active' : '' }}"
+                                    data-key="t-analytics">
                                     Quản lý kích thước </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('product_color.index') }}" class="nav-link {{ Request::is('products/product_color*') ? 'active' : '' }}" data-key="t-analytics">
+                                <a href="{{ route('product_color.index') }}"
+                                    class="nav-link {{ Request::is('products/product_color*') ? 'active' : '' }}"
+                                    data-key="t-analytics">
                                     Quản lý Màu sắc </a>
                             </li>
                         </ul>
                     </div>
-                </li> 
+                </li>
 
             </ul>
         </div>
