@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\product\ProductColorController;
 use Illuminate\Support\Facades\Route;
@@ -23,26 +24,27 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/login',function() {
-   return view('auth.login'); 
+Route::get('/login', function () {
+    return view('auth.login');
 })->name('login');
 
-Route::get('/signup',function() {
-    return view('auth.signup'); 
- })->name('signup');
+Route::get('/signup', function () {
+    return view('auth.signup');
+})->name('signup');
 
- Route::get('/forgot',function() {
-    return view('auth.forgot'); 
- })->name('forgot');
+Route::get('/forgot', function () {
+    return view('auth.forgot');
+})->name('forgot');
 
 
- Route::group(['namespace' => 'App\Http\Controllers'], function () {
+Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Route::middleware(['auth'])->group(function () {
-        Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+    Route::resource('category', CategoryController::class);
 
-        Route::prefix('products')->group(function () {
-            Route::resource('/product_color', ProductColorController::class);
-        });
+    Route::prefix('products')->group(function () {
+        Route::resource('/product_color', ProductColorController::class);
+    });
 
     // });
- });
+});
