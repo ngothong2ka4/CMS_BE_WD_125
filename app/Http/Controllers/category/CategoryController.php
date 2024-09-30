@@ -31,7 +31,15 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $params = $request->except('_token');
+            $params = $request->validate([
+                'name' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:categories,name,',
+            ], [
+                'name.required' => 'Tên danh mục là bắt buộc.',
+                'name.max' => 'Tên danh mục không được vượt quá 25 ký tự.',
+                'name.min' => 'Tên danh mục phải có ít nhất 3 ký tự.',
+                'name.regex' => 'Tên danh mục chỉ được chứa chữ cái, số và khoảng trắng.',
+                'name.unique' => 'Tên danh mục đã tồn tại, vui lòng chọn tên khác.',
+            ]);
             Category::create($params);
             return redirect()->route('category.index')->with('success', 'Thêm danh mục thành công');
         }
@@ -60,12 +68,24 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         if ($request->isMethod('PUT')) {
-            $params = $request->except('_token', '_method');
             $category = Category::findOrFail($id);
+            $params = $request->validate([
+                'name' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:categories,name,' . $category->id,
+            ], [
+                'name.required' => 'Tên danh mục là bắt buộc.',
+                'name.max' => 'Tên danh mục không được vượt quá 25 ký tự.',
+                'name.min' => 'Tên danh mục phải có ít nhất 3 ký tự.',
+                'name.regex' => 'Tên danh mục chỉ được chứa chữ cái, số và khoảng trắng.',
+                'name.unique' => 'Tên danh mục đã tồn tại, vui lòng chọn tên khác.',
+            ]);
+
             $category->update($params);
         }
         return redirect()->route('category.index')->with('success', 'Chỉnh sửa danh mục thành công!');
     }
+
+
+
 
     /**
      * Remove the specified resource from storage.
