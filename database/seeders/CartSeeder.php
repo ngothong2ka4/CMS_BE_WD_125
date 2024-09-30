@@ -20,6 +20,7 @@ class CartSeeder extends Seeder
         for($i=0;$i<5;$i++){
             DB::table('cart')->insert([
             'id_variant'=>rand(1,20),
+            'id_user'=>rand(1,10),
             'quantity'=>rand(1,100),
             ]);
         }

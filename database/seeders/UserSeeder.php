@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
+        for($i=0;$i<9;$i++){
         DB::table('users')->insert([
             'name' => $faker->text(50),
             'image' => $faker->imageUrl(),
@@ -24,6 +25,6 @@ class UserSeeder extends Seeder
             'address' => $faker->address,
             'role' => rand(0,1),
             'status' => rand(0,1),
-        ]);
+        ]);}
     }
 }

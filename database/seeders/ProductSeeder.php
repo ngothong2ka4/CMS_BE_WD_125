@@ -18,6 +18,8 @@ class ProductSeeder extends Seeder
         for ($i = 0; $i < 20; $i++) {
             DB::table('products')->insert([
                 'id_category' => rand(1, 4),
+                'id_materials' => rand(1, 3),
+                'id_stones' => rand(1, 3),
                 'name' => $faker->text(25),
                 'description' => $faker->text(),
                 'thumbnail' => $faker->imageUrl(),
