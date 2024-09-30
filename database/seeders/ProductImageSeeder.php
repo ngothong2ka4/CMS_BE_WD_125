@@ -19,6 +19,7 @@ class ProductImageSeeder extends Seeder
             for ($j = 0; $j < 5; $j++) {
                 DB::table('product_images')->insert([
                     'id_product' => $i,
+                    'id_attribute_color' => rand(1,6),
                     'link_image' => $faker->imageUrl(),
                 ]);
             }
