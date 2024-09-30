@@ -17,8 +17,13 @@
                         @method('PUT')
                         <div>
                             <label for="basiInput" class="form-label">Tên danh mục</label>
-                            <input type="text" class="form-control" id="basiInput" value="{{ $category->name }}"
-                                name="name">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="basiInput"
+                                value="{{ $category->name }}" name="name">
+                            @error('name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div class="mt-3">
                             <button type="reset" class="btn btn-warning">Nhập lại</button>
