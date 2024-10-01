@@ -36,7 +36,7 @@
                     <a class="nav-link menu-link {{ Request::is('categories*') ? 'active' : '' }}"
                         href="{{ route('category.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Category</span>
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Danh mục</span>
                     </a>
                     {{-- <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
@@ -82,8 +82,8 @@
                                     Quản lý Sản phẩm </a>
                             </li>
                             <li class="nav-item">
-                                <a href=""
-                                    class="nav-link {{ Request::is('products/product_size') ? 'active' : '' }}"
+                                <a href="{{ route('product_size.index') }}"
+                                    class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
                                     data-key="t-analytics">
                                     Quản lý kích thước </a>
                             </li>
