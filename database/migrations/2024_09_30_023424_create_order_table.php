@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status_payment',['Đang chờ xử lý','Đã hoàn thành','Đã hủy'])->default('Đang chờ xử lý');
             $table->enum('status',['Đang chờ xử lý','Đang vận chuyển','Đang chờ giao hàng','Đã hủy'])->default('Đang chờ xử lý');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

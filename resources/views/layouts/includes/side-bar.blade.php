@@ -76,13 +76,17 @@
                         id="sidebarProduct">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href=""
-                                    class="nav-link {{ Request::is('products/product_management') ? 'active' : '' }}"
+                                <a href="{{ route('product_management.index') }}"
+                                    class="nav-link {{ Request::is('products/product_management*') ? 'active' : '' }}"
                                     data-key="t-analytics">
                                     Quản lý Sản phẩm </a>
                             </li>
                             <li class="nav-item">
+<<<<<<< HEAD
                                 <a href="{{ route('product_size.index') }}"
+=======
+                                <a href=""
+>>>>>>> a7fb1c92487514b8679a21def4ccb3b328773749
                                     class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
                                     data-key="t-analytics">
                                     Quản lý kích thước </a>

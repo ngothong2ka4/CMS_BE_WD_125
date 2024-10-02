@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('id_attribute_color');
             $table->string('link_image');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
