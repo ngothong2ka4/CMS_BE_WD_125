@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->date('posting_date');
             $table->tinyInteger('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('product_image');
             $table->integer('quantity');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

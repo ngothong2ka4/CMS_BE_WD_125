@@ -45,8 +45,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::resource('category', CategoryController::class);
 
     Route::prefix('products')->group(function () {
+        Route::resource('/product_size', ProductColorController::class);
         Route::resource('/product_color', ProductColorController::class);
-        Route::resource('/product_management', ProductController::class);
         Route::resource('/product_size', ProductSizeController::class);
     });
 

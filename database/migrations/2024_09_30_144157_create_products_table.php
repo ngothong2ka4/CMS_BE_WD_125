@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('thumbnail');
             $table->integer('sold')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
