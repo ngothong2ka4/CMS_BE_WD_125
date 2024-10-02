@@ -38,7 +38,7 @@ class ProductColorController extends Controller
     {
         try {
             DB::beginTransaction();
-                ProductColor::create($request->all());
+            ProductColor::create($request->all());
             DB::commit();
             toastr()->success('Thêm mới thành công!');
             return redirect()->route('product_color.index');
@@ -61,17 +61,17 @@ class ProductColorController extends Controller
      */
     public function edit(ProductColor $productColor)
     {
-        return view('product.product_color.edit',compact('productColor'));
+        return view('product.product_color.edit', compact('productColor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request,ProductColor $productColor)
+    public function update(UpdateRequest $request, ProductColor $productColor)
     {
         try {
             DB::beginTransaction();
-                $productColor->update($request->all());
+            $productColor->update($request->all());
             DB::commit();
             toastr()->success('Cập nhật thành công!');
             return redirect()->route('product_color.index');

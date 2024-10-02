@@ -18,11 +18,6 @@
                             <label for="basiInput" class="form-label">Tên danh mục</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="basiInput"
                                 name="name">
-                            @error('name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
                         </div>
                         <div class="mt-3">
                             <button type="submit" class="btn btn-success">Thêm mới</button>
