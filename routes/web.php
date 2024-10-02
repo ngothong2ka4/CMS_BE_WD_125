@@ -3,6 +3,8 @@
 use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\product\ProductColorController;
+use App\Http\Controllers\product\ProductController;
+use App\Http\Controllers\product\ProductSizeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +46,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     Route::prefix('products')->group(function () {
         Route::resource('/product_color', ProductColorController::class);
+        Route::resource('/product_management', ProductController::class);
+        Route::resource('/product_size', ProductSizeController::class);
     });
 
     // });
