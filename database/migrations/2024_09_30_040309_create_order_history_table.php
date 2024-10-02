@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('id_user');
             $table->timestamp('at_date_time');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

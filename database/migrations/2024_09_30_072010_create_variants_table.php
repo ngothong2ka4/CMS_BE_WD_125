@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->boolean('is_show')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
