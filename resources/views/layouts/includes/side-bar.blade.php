@@ -82,7 +82,10 @@
                                     Quản lý Sản phẩm </a>
                             </li>
                             <li class="nav-item">
+
                                 <a href="{{ route('product_size.index') }}"
+
+                           
                                     class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
                                     data-key="t-analytics">
                                     Quản lý kích thước </a>
