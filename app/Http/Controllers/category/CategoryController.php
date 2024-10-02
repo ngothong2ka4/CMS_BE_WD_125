@@ -30,7 +30,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->isMethod('POST')) {
+        try {
             $params = $request->validate([
                 'name' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:categories,name,',
             ], [
@@ -40,10 +40,19 @@ class CategoryController extends Controller
                 'name.regex' => 'Tên danh mục chỉ được chứa chữ cái, số và khoảng trắng.',
                 'name.unique' => 'Tên danh mục đã tồn tại, vui lòng chọn tên khác.',
             ]);
+
             Category::create($params);
-            return redirect()->route('category.index')->with('success', 'Thêm danh mục thành công');
+            toastr()->success('Thêm danh mục thành công!');
+            return redirect()->route('category.index');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
+            foreach ($e->errors() as $error) {
+                toastr()->error(implode(' ', $error));
+            }
+            return redirect()->back()->withErrors($e->errors())->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -67,7 +76,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if ($request->isMethod('PUT')) {
+
+        try {
             $category = Category::findOrFail($id);
             $params = $request->validate([
                 'name' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:categories,name,' . $category->id,
@@ -80,8 +90,17 @@ class CategoryController extends Controller
             ]);
 
             $category->update($params);
+            toastr()->success('Cập nhật danh mục thành công!');
+            return redirect()->route('category.index');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Lấy tất cả các lỗi xác thực và hiển thị qua Toastr
+            foreach ($e->errors() as $error) {
+                toastr()->error(implode(' ', $error));
+            }
+
+            // Quay lại trang trước với dữ liệu cũ và lỗi
+            return redirect()->back()->withErrors($e->errors())->withInput();
         }
-        return redirect()->route('category.index')->with('success', 'Chỉnh sửa danh mục thành công!');
     }
 
 
@@ -97,8 +116,9 @@ class CategoryController extends Controller
             $category = Category::query()->findOrFail($id);
 
             $category->delete();
+            toastr()->success('Xoá danh mục thành công!');
 
-            return redirect()->route('category.index')->with('success', 'Xóa danh mục thành công!');
+            return redirect()->route('category.index');
         }
     }
 }
