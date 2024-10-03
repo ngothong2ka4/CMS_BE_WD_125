@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -12,7 +13,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('product.product_management.index');
+        $products= Product::all();
+        return view('product.product_management.index',compact('products'));
     }
 
     /**
@@ -58,8 +60,12 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product )
     {
-        //
+
+        $product->delete();
+        // dd($product);
+        toastr()->success('Xoá thành công!');
+        return redirect()->route('product_management.index');
     }
 }
