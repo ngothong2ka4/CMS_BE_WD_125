@@ -5,6 +5,7 @@ namespace App\Http\Controllers\product;
 use App\Http\Controllers\Controller;
 use App\Models\ProductSize;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ProductSizeController extends Controller
 {
@@ -31,17 +32,22 @@ class ProductSizeController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|max:25|min:1|regex:/^[\p{L}\p{N}\s]+$/u|unique:attribute_size,name,',
-        ], [
-            'name.required' => 'Tên kích thước là bắt buộc.',
-            'name.max' => 'Tên kích thước không được vượt quá 25 ký tự.',
-            'name.min' => 'Tên kích thước phải có ít nhất 1 ký tự.',
-            'name.regex' => 'Tên kích thước chỉ được chứa chữ cái, số và khoảng trắng.',
-            'name.unique' => 'Tên kích thước đã tồn tại, vui lòng chọn tên khác.',
-        ]);
-        ProductSize::create($data);
-        return redirect()->route('product_size.index')->with('success', 'Thêm kích thước thành công');
+        try {
+            $data = $request->validate([
+                'name' => 'required|max:25|unique:attribute_size,name,',
+            ], [
+                'name.required' => 'Tên kích thước là bắt buộc.',
+                'name.max' => 'Tên kích thước không được vượt quá 25 ký tự.',
+                'name.unique' => 'Tên kích thước đã tồn tại, vui lòng chọn tên khác.',
+            ]);
+            ProductSize::create($data);
+            toastr()->success('Thêm mới kích thước thành công!');
+            return redirect()->route('product_size.index');
+        } catch (\Exception $e) {
+            toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+            return redirect()->back();
+        }
+       
     
     }
 
@@ -66,19 +72,23 @@ class ProductSizeController extends Controller
      */
     public function update(Request $request, ProductSize $ProductSize)
     {
+        try {
         $data = $request->validate([
-            'name' => 'required|max:25|min:1|regex:/^[\p{L}\p{N}\s]+$/u|unique:attribute_size,name,' . $ProductSize->id,
+            'name' => 'required|max:25|unique:attribute_size,name,' . $ProductSize->id,
         ], [
             'name.required' => 'Tên kích thước là bắt buộc.',
             'name.max' => 'Tên kích thước không được vượt quá 25 ký tự.',
-            'name.min' => 'Tên kích thước phải có ít nhất 1 ký tự.',
-            'name.regex' => 'Tên kích thước chỉ được chứa chữ cái, số và khoảng trắng.',
             'name.unique' => 'Tên kích thước đã tồn tại, vui lòng chọn tên khác.',
         ]);
 
         $ProductSize->update($data);
+        toastr()->success('Chỉnh sửa kích thước thành công!');
+        return redirect()->route('product_size.index');
 
-        return redirect()->route('product_size.index')->with('success', 'Chỉnh sửa kích thước thành công!');
+    } catch (\Exception $e) {
+        toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+        return redirect()->back();
+    }
     }
 
     /**
@@ -87,7 +97,7 @@ class ProductSizeController extends Controller
     public function destroy(ProductSize $ProductSize)
     {
         $ProductSize->delete();
-
-        return redirect()->route('product_size.index')->with('success', 'Xóa kích thước thành công!');
+        toastr()->success('Xoá thành công!');
+        return redirect()->route('product_size.index');
     }
 }
