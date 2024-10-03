@@ -19,31 +19,43 @@
                         style="width:100%">
                         <thead>
                         <tr>
-                            <th >No</th>
-                            <th >Màu sắc sản phẩm</th>
+                            <th >ID</th>
+                            <th >Tên sản phẩm</th>
+                            {{-- <th >Mô tả</th> --}}
+                            <th >Ảnh</th>
+                            <th >Danh mục</th>
+                            <th >Chất liệu</th>
+                            <th >Loại đá</th>
+                            <th >Đã bán</th>
                             <th >Ngày tạo</th>
                             <th >Ngày cập nhật</th>
                             <th >Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($productColors as $productColor)
+                            @foreach ($products as $product)
                                 <tr>
-                                    <td>{{ $productColor->id }}</td>
-                                    <td>{{ $productColor->name }}</td>
-                                    <td>{{ $productColor->created_at }}</td>
-                                    <td>{{ $productColor->updated_at }}</td>
+                                    <td>{{ $product->id }}</td>
+                                    <td>{{ $product->name }}</td>
+                                    {{-- <td>{{ $product->description }}</td> --}}
+                                    <td><img src="{{ $product->thumbnail }}" width="80px" height="80px" alt="Ảnh sản phẩm {{ $product->name }}"></td>
+                                    <td>{{ $product->category->name }}</td>
+                                    <td>{{ $product->material->name }}</td>
+                                    <td>{{ $product->stone->name }}</td>
+                                    <td>{{ $product->sold }}</td>
+                                    <td>{{ $product->created_at }}</td>
+                                    <td>{{ $product->updated_at }}</td>
                                     <td>
-                                        <a href="{{ route('product_color.edit', $productColor->id) }}"><button class="btn btn-warning">Sửa</button></a>
+                                        <a href="{{ route('product_management.edit', $product->id) }}"><button class="btn btn-warning">Sửa</button></a>
                                         
-                                            <form action="{{ route('product_color.destroy', $productColor->id) }}" method="POST" style="display:inline;">
+                                            <form action="{{ route('product_management.destroy', $product->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
                                             </form>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
    
                         </tbody>
                     </table>
