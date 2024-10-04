@@ -25,6 +25,7 @@
                             <th >Danh mục</th>
                             <th >Chất liệu</th>
                             <th >Đá</th>
+                            <th> Đã bán</th>
                             <th >Ngày tạo</th>
                             <th >Ngày cập nhật</th>
                             <th >Hành động</th>
@@ -39,6 +40,7 @@
                                     <td>{{ $product->category?->name }}</td>
                                     <td>{{ $product->material?->name }}</td>
                                     <td>{{ $product->stone?->name }}</td>
+                                    <td>{{ $product->sold }}</td>
                                     <td>{{ $product->created_at }}</td>
                                     <td>{{ $product->updated_at }}</td>
                                     <td>

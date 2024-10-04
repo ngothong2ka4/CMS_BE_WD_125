@@ -78,19 +78,22 @@ class ProductController extends Controller
         ];
        
         $product = Product::create($data_pro);
-        foreach($request->id_attribute_color as $key => $color){
-            $data_var = [
-                'id_product' => $product->id,
-                'id_attribute_color' => $color,
-                'id_attribute_size' => $request->id_attribute_size[$key],
-                'import_price' => $request->import_price[$key],
-                'list_price' => $request->list_price[$key],
-                'selling_price' => $request->selling_price[$key],
-                'quantity' => $request->quantity[$key],
-            ];
-
-            Variant::create($data_var);
+        if($request->id_attribute_color){
+            foreach($request->id_attribute_color as $key => $color){
+                $data_var = [
+                    'id_product' => $product->id,
+                    'id_attribute_color' => $color,
+                    'id_attribute_size' => $request->id_attribute_size[$key],
+                    'import_price' => $request->import_price[$key],
+                    'list_price' => $request->list_price[$key],
+                    'selling_price' => $request->selling_price[$key],
+                    'quantity' => $request->quantity[$key],
+                ];
+    
+                Variant::create($data_var);
+            }
         }
+      
   
 
        toastr()->success('Thêm mới sản phẩm thành công!');
