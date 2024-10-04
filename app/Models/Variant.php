@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Material extends Model
+class Variant extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'materials';
-    protected $fillable = [
-        'name',
-    ];
+    protected $table = 'variants';
+    protected $guarded = [];
 }

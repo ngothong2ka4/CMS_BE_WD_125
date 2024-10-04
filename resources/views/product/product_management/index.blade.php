@@ -10,7 +10,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Quản lý màu sắc sản phẩm</h5>
+                    <h5 class="card-title mb-0">Quản lý sản phẩm</h5>
                 </div>
                 <div class="card-body">
                     <a href="{{ route('product_management.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
@@ -19,33 +19,32 @@
                         style="width:100%">
                         <thead>
                         <tr>
-                            <th >ID</th>
+                            <th >STT</th>
                             <th >Tên sản phẩm</th>
-                            {{-- <th >Mô tả</th> --}}
-                            <th >Ảnh</th>
+                            <th >Hình ảnh</th>
                             <th >Danh mục</th>
                             <th >Chất liệu</th>
-                            <th >Loại đá</th>
-                            <th >Đã bán</th>
+                            <th >Đá</th>
+                            <th> Đã bán</th>
                             <th >Ngày tạo</th>
                             <th >Ngày cập nhật</th>
                             <th >Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach ($products as $product)
+                            @foreach ($products as $index => $product)
                                 <tr>
-                                    <td>{{ $product->id }}</td>
+                                    <td>{{ $index + 1 }}</td>
                                     <td>{{ $product->name }}</td>
-                                    {{-- <td>{{ $product->description }}</td> --}}
-                                    <td><img src="{{ $product->thumbnail }}" width="80px" height="80px" alt="Ảnh sản phẩm {{ $product->name }}"></td>
-                                    <td>{{ $product->category->name }}</td>
-                                    <td>{{ $product->material->name }}</td>
-                                    <td>{{ $product->stone->name }}</td>
+                                    <td><img src="{{ $product->thumbnail}}" alt="" width = 80></td>
+                                    <td>{{ $product->category?->name }}</td>
+                                    <td>{{ $product->material?->name }}</td>
+                                    <td>{{ $product->stone?->name }}</td>
                                     <td>{{ $product->sold }}</td>
                                     <td>{{ $product->created_at }}</td>
                                     <td>{{ $product->updated_at }}</td>
                                     <td>
+                                    <a href="{{ route('product_management.edit', $product->id) }}"><button class="btn btn-info">Chi tiết</button></a>
                                         <a href="{{ route('product_management.edit', $product->id) }}"><button class="btn btn-warning">Sửa</button></a>
                                         
                                             <form action="{{ route('product_management.destroy', $product->id) }}" method="POST" style="display:inline;">
