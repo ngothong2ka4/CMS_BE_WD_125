@@ -17,7 +17,7 @@
                 </div>
             </div>
             
-            <form action="{{ route('product_color.store') }}" method="POST">
+            <form action="{{ route('product_management.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card mb-2">
                     <div class="card-header">
@@ -27,60 +27,77 @@
                         <div>
                             <label for="basiInput" class="form-label">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="basiInput" name="name">
+                            @error('name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div>
-                            <label for="basiInput" class="form-label">Mã sản phẩm</label>
-                            <input type="text" class="form-control" id="basiInput" name="name">
-                        </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Danh mục</label>
-                            <select class="form-select mb-3" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <label for="basiInput" class="form-label">Danh mục sản phẩm</label>
+                            <select name="id_category" class="form-select mb-3" aria-label="Default select example">
+                                <option value="">Chọn danh mục</option>
+                                @foreach($categories as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
                             </select>
+                            @error('id_category')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div>
-                            <label for="basiInput" class="form-label">Danh mục</label>
-                            <select class="form-select mb-3" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <label for="basiInput" class="form-label">Chất liệu sản phẩm</label>
+                            <select name="id_materials" class="form-select mb-3" aria-label="Default select example">
+                                <option value="">Chọn chất liệu</option>
+                                @foreach($materials as $material)
+                                <option value="{{$material->id}}">{{$material->name}}</option>
+                                @endforeach
                             </select>
-                        </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Chất liệu</label>
-                            <select class="form-select mb-3" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            @error('id_materials')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Đá</label>
-                            <select class="form-select mb-3" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select name="id_stones" class="form-select mb-3" aria-label="Default select example">
+                                <option value="">Chọn đá</option>
+                                @foreach($stones as $stone)
+                                <option value="{{$stone->id}}">{{$stone->name}}</option>
+                                @endforeach
                             </select>
+                            @error('id_stones')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         <div>
-                            <label for="basiInput" class="form-label">Mô tả</label>
-                            <textarea class="form-control" id="meassageInput" rows="3" placeholder="Nhập mô tả"></textarea>
+                            <label for="basiInput" class="form-label">Hình ảnh</label>
+                           <input type="file" name="thumbnail" id="" class="form-control mb-3">
+                           @error('thumbnail')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-                    </div>
+    
+                        <div>
+                            <label for="basiInput" class="form-label">Mô tả</label>
+                            <textarea class="form-control" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả"></textarea>
+                        </div>
+                    </div>   
                 </div>
                 <div class="card mt-2">
                     <div class="card-header">
-                        <h4 class="mb-0">Biến thể</h4>
+                        <h4 class="mb-0">Danh sách biến thể</h4>
                     </div>
                     <div class="card-body">
                         <div id="variant-container">
-                            <div class="form-group d-flex" id="variant-0">
+                            <!-- <div class="form-group d-flex" id="variant-0">
                                 <div class="form-group me-1">
                                     <label for="color-0" class="form-label">Màu sắc</label>
                                     <select class="form-select mb-3" id="color-0" name="colors[]" aria-label="Default select example">
@@ -118,7 +135,7 @@
                                 <div style="margin-top: 27px">
                                     <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-0" type="button">Xoá</button>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         
                         <div class="form-group">
@@ -145,37 +162,40 @@
                 <div class="form-group d-flex" id="variant-${variantCounter}">
                     <div class="form-group me-1">
                         <label for="color-${variantCounter}" class="form-label">Màu sắc</label>
-                        <select class="form-select mb-3" id="color-${variantCounter}" name="colors[]" aria-label="Default select example">
-                            <option selected>Chọn màu sắc</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select required name="id_attribute_color[]" class="form-select mb-3" id="color-${variantCounter}" aria-label="Default select example">
+                            <option value="">Chọn màu sắc</option>
+                            @foreach($colors as $color)
+                                <option value="{{$color->id}}">{{$color->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group me-1">
                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                        <select class="form-select mb-3" id="size-${variantCounter}" name="sizes[]" aria-label="Default select example">
-                            <option selected>Chọn kích thước</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select required name="id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
+                            <option value="" >Chọn kích thước</option>
+                           @foreach($sizes as $size)
+                                <option value="{{$size->id}}">{{$size->name}}</option>
+                            @endforeach
+                           
+                        
+                               
                         </select>
                     </div>
                     <div class="me-1">
                         <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
-                        <input type="text" class="form-control" id="price_in-${variantCounter}" name="price_in[]" placeholder="Nhập giá nhập">
+                        <input name="import_price[]" type="number" required min=0 class="form-control" id="price_in-${variantCounter}" placeholder="Nhập giá nhập">
                     </div>
                     <div class="me-1">
                         <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
-                        <input type="text" class="form-control" id="price_out-${variantCounter}" name="price_out[]" placeholder="Nhập giá niêm yết">
+                        <input name="list_price[]" type="number" required min=0 class="form-control" id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết">
                     </div>
                     <div class="me-1">
                         <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                        <input type="text" class="form-control" id="sale_price-${variantCounter}" name="sale_price[]" placeholder="Nhập giá bán">
+                        <input name="selling_price[]" type="number" required min=0  class="form-control" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
                     </div>
                     <div class="me-1">
                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
-                        <input type="number" class="form-control" id="quantity-${variantCounter}" name="quantity[]" placeholder="Nhập số lượng">
+                        <input name="quantity[]" type="number" required min=0 class="form-control" id="quantity-${variantCounter}" placeholder="Nhập số lượng">
                     </div>
                     <div style="margin-top: 27px">
                         <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-${variantCounter}" type="button">Xoá</button>
@@ -190,7 +210,7 @@
             let totalVariants = $('#variant-container .form-group.d-flex').length;
             console.log(totalVariants);
             
-            if (totalVariants > 1) {
+            if (totalVariants >= 1) {
                 let variantId = $(this).data('variant-id'); 
                 $('#' + variantId).remove(); 
             } 
