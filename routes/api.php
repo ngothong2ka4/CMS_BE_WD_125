@@ -22,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('category',CategoryController::class);
 // API sản phẩm mới (5 cái)
 Route::get('/products/new', [ProductController::class, 'getNewProducts']);
+Route::get('/products/filter', [ProductController::class, 'filterProductsByPrice']);
+// giá cao -> thấp : /api/products/filter?sort=desc
+// giá thấp -> cao : /api/products/filter?sort=asc
