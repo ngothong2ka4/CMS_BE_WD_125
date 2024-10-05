@@ -13,10 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        {
-            $listCategory = Category::get();
-            return response()->json($listCategory);
-        }
+        $listCategory = Category::select('name')->get();
+        return response()->json($listCategory);
     }
 
     /**
