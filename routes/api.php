@@ -26,4 +26,4 @@ Route::get('/products/new', [ProductController::class, 'getNewProducts']);
 Route::get('/products/filter', [ProductController::class, 'filterProductsByPrice']);
 // giá cao -> thấp : /api/products/filter?sort=desc
 // giá thấp -> cao : /api/products/filter?sort=asc
-
+Route::get('/products', [ProductController::class, 'index']);
