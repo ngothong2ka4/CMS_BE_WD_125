@@ -197,6 +197,10 @@
                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
                         <input name="quantity[]" type="number" required min=0 class="form-control" id="quantity-${variantCounter}" placeholder="Nhập số lượng">
                     </div>
+                    <div class="me-1">
+                        <label for="image_color-${variantCounter}" class="form-label">Ảnh</label>
+                        <input name="image_color[]" type="file" required min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
+                    </div>
                     <div style="margin-top: 27px">
                         <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-${variantCounter}" type="button">Xoá</button>
                     </div>

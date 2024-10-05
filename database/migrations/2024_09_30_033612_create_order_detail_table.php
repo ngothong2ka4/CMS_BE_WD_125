@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('id_oder');
             $table->integer('id_variant');
-            $table->decimal('import_price',8,2);
-            $table->decimal('list_price',8,2);
-            $table->decimal('selling_price',8,2);
+            $table->decimal('import_price',8,0);
+            $table->decimal('list_price',8);
+            $table->decimal('selling_price',8);
             $table->string('product_name');
             $table->string('product_image');
             $table->integer('quantity');
