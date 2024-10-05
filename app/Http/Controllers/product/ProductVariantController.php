@@ -25,6 +25,13 @@ class ProductVariantController extends Controller
     }
 
     public function addImage(Request $request, $id){
+        $request->validate([        
+            'thumbnail' => 'nullable|file|image|max:2048',
+        ], [
+            'thumbnail.max' => 'Hình sản phẩm dung lượng vượt quá 2Mb.',
+            'thumbnail.image' => 'Hình ảnh sản phẩm phải là một hình ảnh',
+        ]);
+
         if($request->hasFile('image')){
            
             $image = $request->file('image');
