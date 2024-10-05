@@ -38,7 +38,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        onclick="return confirm('Do you really want to delete this item?')"
+                                        onclick="return confirm('Bạn có muốn xóa không?')"
                                         class="btn btn-sm btn-outline-danger border-0 position-absolute">
                                         X
 
@@ -75,7 +75,7 @@
                 @endforeach
                 <div class="position-relative row form-group mb-1">
                     <div class="col-md-9 col-xl-8 offset-md-3">
-                        <a href="{{route('product_management.show',$product->id)}}" class="btn-shadow btn-hover-shine btn btn-primary">
+                        <a href="{{route('product_management.index')}}" class="btn-shadow btn-hover-shine btn btn-primary">
                             <span>OK</span>
                         </a>
                     </div>

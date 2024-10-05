@@ -21,8 +21,7 @@
                         <tr>
                             <th >No</th>
                             <th >Màu sắc sản phẩm</th>
-                            <th >Ngày tạo</th>
-                            <th >Ngày cập nhật</th>
+                         
                             <th >Hành động</th>
                         </tr>
                         </thead>
@@ -31,8 +30,7 @@
                                 <tr>
                                     <td>{{ $productColor->id }}</td>
                                     <td>{{ $productColor->name }}</td>
-                                    <td>{{ $productColor->created_at }}</td>
-                                    <td>{{ $productColor->updated_at }}</td>
+                                   
                                     <td>
                                         <a href="{{ route('product_color.edit', $productColor->id) }}"><button class="btn btn-warning">Sửa</button></a>
                                         
