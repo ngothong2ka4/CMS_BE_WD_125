@@ -15,9 +15,11 @@ class Product extends Model
     public function category(){
         return $this->belongsTo(Category::class,'id_category','id');
     }
+
     public function material(){
         return $this->belongsTo(Material::class,'id_materials','id');
     }
+
     public function stone(){
         return $this->belongsTo(Stone::class,'id_stones','id');
     }
@@ -25,5 +27,4 @@ class Product extends Model
     public function variants(){
         return $this->hasMany(Variant::class,'id_product','id');
     }
-
 }
