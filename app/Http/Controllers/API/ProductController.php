@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -10,9 +11,21 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $minPrice = 0;
+        $maxPrice = 500000;
+        $sortPrice=$request->get('sortPrice','asc');
+        $sortDirectionPrice = in_array($sortPrice, ['asc', 'desc']) ? $sortPrice : 'asc';
+
+        $sortName = $request->get('sortName', 'asc');
+        $sortDirectionName = in_array($sortName, ['asc', 'desc']) ? $sortName : 'asc';
+        $products = Product::select('id', 'name', 'thumbnail', 'list_price', 'selling_price')
+            ->whereBetween('selling_price', [$minPrice, $maxPrice])
+             ->orderBy('selling_price', $sortDirectionPrice)
+            ->orderBy('name', $sortDirectionName)
+            ->paginate(10);
+        return response()->json($products);
     }
 
     /**

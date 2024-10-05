@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('category',CategoryController::class);
 // API sản phẩm mới (5 cái)
 Route::get('/products/new', [ProductController::class, 'getNewProducts']);
+Route::apiResource('products', ProductController::class);
