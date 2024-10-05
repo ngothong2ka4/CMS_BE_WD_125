@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Product\ProductDetailResource;
+use App\Http\Resources\Product\RelatedProductsResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -104,4 +106,26 @@ class ProductController extends Controller
 
         return response()->json($products, 200);
     }
+
+    public function detailProduct ($id){
+        $product = Product::with([
+            'variants.color',
+            'variants.size'
+        ])->find($id);
+        
+        if (!$product) {
+            return $this->jsonResponse('Không tìm thấy sản phẩm');
+        }
+
+        return $this->jsonResponse('Success',true, new ProductDetailResource($product));
+    }
+
+    public function relatedProducts ($id){
+        $relatedProducts = Product::where('id_category', $id)->with('variants')->limit(5)->get();
+        if (!$relatedProducts) {
+            return $this->jsonResponse('Không có sản phẩm liên quan');
+        }
+        return $this->jsonResponse('Success',true, RelatedProductsResource::collection($relatedProducts));
+    }
+
 }
