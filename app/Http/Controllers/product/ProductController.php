@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Material;
 use App\Models\Product;
 use App\Models\ProductColor;
+use App\Models\ProductImage;
 use App\Models\ProductSize;
 use App\Models\Stone;
 use App\Models\Variant;
@@ -114,8 +115,9 @@ class ProductController extends Controller
         $stones = Stone::all();
         $colors = ProductColor::all();
         $sizes = ProductSize::all();
+        $images = ProductImage::where('id_product', $id)->get();
         return view('product.product_management.show', 
-        compact('product','variants','categories','materials','stones','colors','sizes'));
+        compact('product','variants','categories','materials','stones','colors','sizes','images'));
     }
 
     /**

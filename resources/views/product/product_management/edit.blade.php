@@ -171,6 +171,37 @@
                                 </div>
                             @endforeach
 
+                           
+                        
+                               
+                        </select>
+                    </div>
+                    <div class="me-1">
+                        <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
+                        <input value="{{number_format($var->import_price)}}" name="import_price[]" type="number" required min=0 class="form-control" id="price_in-${variantCounter}" placeholder="Nhập giá nhập">
+                    </div>
+                    <div class="me-1">
+                        <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
+                        <input value="{{number_format($var->list_price)}}" name="list_price[]" type="number" required min=0 class="form-control" id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết">
+                    </div>
+                    <div class="me-1">
+                        <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
+                        <input value="{{number_format($var->selling_price)}}" name="selling_price[]" type="text" class="form-control" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
+                    </div>
+                    <div class="me-1">
+                        <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
+                        <input value="{{$var->quantity}}" name="quantity[]" type="number" required min=0 class="form-control" id="quantity-${variantCounter}" placeholder="Nhập số lượng">
+                    </div>
+                    <div style="margin-top: 27px">
+                        
+                        <a href="products/variant/{{$var->id}}"  onclick="return confirm('Bạn có chắc chắn muốn xóa?')" class="btn btn-danger remove-variant-btn"  type="button">Xoá</a>
+                        
+                       
+                    </div>
+                </div>
+                @endforeach
+
+
                         </div>
 
                         <div class="form-group">
