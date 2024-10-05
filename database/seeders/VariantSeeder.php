@@ -24,6 +24,7 @@ class VariantSeeder extends Seeder
                 'import_price' => $faker->randomFloat(2, 100, 500),
                 'list_price' => $faker->randomFloat(2, 500, 1000),
                 'selling_price' => $faker->randomFloat(2, 400, 900),
+                'image_color'=>$faker->imageUrl() ,
                 'quantity' => rand(1, 1000),
                 'is_show' => $faker->boolean(),
 

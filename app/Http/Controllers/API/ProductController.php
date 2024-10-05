@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Product\ProductDetailResource;
+use App\Http\Resources\Product\RelatedProductsResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -11,21 +13,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request)//tất cả sản phẩm
     {
-        $minPrice = 0;
-        $maxPrice = 500000;
-        $sortPrice=$request->get('sortPrice','asc');
-        $sortDirectionPrice = in_array($sortPrice, ['asc', 'desc']) ? $sortPrice : 'asc';
+        $products = Product::with(['variants' => function ($query) {
+            $query->select('id_product', 'selling_price', 'list_price')
+                ->whereIn('id_product', function ($subQuery) {
+                    $subQuery->select('id_product')
+                        ->from('variants')
+                        ->whereNull('deleted_at')
+                        ->groupBy('id_product')
+                        ->havingRaw('selling_price = MIN(selling_price)');
+                });
+        }])
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'name', 'thumbnail']);
 
-        $sortName = $request->get('sortName', 'asc');
-        $sortDirectionName = in_array($sortName, ['asc', 'desc']) ? $sortName : 'asc';
-        $products = Product::select('id', 'name', 'thumbnail', 'list_price', 'selling_price')
-            ->whereBetween('selling_price', [$minPrice, $maxPrice])
-             ->orderBy('selling_price', $sortDirectionPrice)
-            ->orderBy('name', $sortDirectionName)
-            ->paginate(10);
-        return response()->json($products);
+        return response()->json($products, 200);
     }
 
     /**
@@ -103,4 +106,26 @@ class ProductController extends Controller
 
         return response()->json($products, 200);
     }
+
+    public function detailProduct ($id){
+        $product = Product::with([
+            'variants.color',
+            'variants.size'
+        ])->find($id);
+        
+        if (!$product) {
+            return $this->jsonResponse('Không tìm thấy sản phẩm');
+        }
+
+        return $this->jsonResponse('Success',true, new ProductDetailResource($product));
+    }
+
+    public function relatedProducts ($id){
+        $relatedProducts = Product::where('id_category', $id)->with('variants')->limit(5)->get();
+        if (!$relatedProducts) {
+            return $this->jsonResponse('Không có sản phẩm liên quan');
+        }
+        return $this->jsonResponse('Success',true, RelatedProductsResource::collection($relatedProducts));
+    }
+
 }
