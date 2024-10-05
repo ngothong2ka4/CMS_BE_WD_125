@@ -11,4 +11,8 @@ class Variant extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'variants';
     protected $guarded = [];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'id_product','id');
+    }
 }

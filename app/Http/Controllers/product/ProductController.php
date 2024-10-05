@@ -107,7 +107,15 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFAil($id);
+        $variants = Variant::where('id_product',$id)->get();
+        $categories = Category::all();
+        $materials = Material::all();
+        $stones = Stone::all();
+        $colors = ProductColor::all();
+        $sizes = ProductSize::all();
+        return view('product.product_management.show', 
+        compact('product','variants','categories','materials','stones','colors','sizes'));
     }
 
     /**

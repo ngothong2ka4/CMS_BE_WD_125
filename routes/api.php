@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::apiResource('category',CategoryController::class);
+// API sản phẩm mới (5 cái)
+Route::get('/products/new', [ProductController::class, 'getNewProducts']);
+
+Route::get('/products/filter', [ProductController::class, 'filterProductsByPrice']);
+// giá cao -> thấp : /api/products/filter?sort=desc
+// giá thấp -> cao : /api/products/filter?sort=asc
+
