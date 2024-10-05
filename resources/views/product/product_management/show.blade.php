@@ -67,8 +67,8 @@
                         <div>
                             <label for="basiInput" class="form-label">Hình ảnh</label>
                             <img class="mb-3 pl-5" src="{{ $product->thumbnail }}" width=80 height=100 alt="">
-                            @foreach($images as $image)
-                            <img class="mb-3 pl-5" src="{{ $image->link_image }}" width=80 height=100 alt="">
+                            @foreach ($images as $image)
+                                <img class="mb-3 pl-5" src="{{ $image->link_image }}" width=80 height=100 alt="">
                             @endforeach
                         </div>
 
@@ -116,20 +116,20 @@
                                     </div>
                                     <div class="me-1">
                                         <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
-                                        <input value="{{ number_format($var->import_price) }}" name="import_price[]" type="number"
-                                            required min=0 class="form-control" id="price_in-${variantCounter}"
-                                            placeholder="Nhập giá nhập" disabled>
+                                        <input value="{{ number_format($var->import_price) }}" name="import_price[]"
+                                            type="number" required min=0 class="form-control"
+                                            id="price_in-${variantCounter}" placeholder="Nhập giá nhập" disabled>
                                     </div>
                                     <div class="me-1">
                                         <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
-                                        <input value="{{ number_format($var->list_price) }}" name="list_price[]" type="number" required
-                                            min=0 class="form-control" id="price_out-${variantCounter}"
-                                            placeholder="Nhập giá niêm yết" disabled>
+                                        <input value="{{ number_format($var->list_price) }}" name="list_price[]"
+                                            type="number" required min=0 class="form-control"
+                                            id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết" disabled>
                                     </div>
                                     <div class="me-1">
                                         <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                                        <input value="{{ number_format($var->selling_price) }}" name="selling_price[]" type="text"
-                                            class="form-control" id="sale_price-${variantCounter}"
+                                        <input value="{{ number_format($var->selling_price) }}" name="selling_price[]"
+                                            type="text" class="form-control" id="sale_price-${variantCounter}"
                                             placeholder="Nhập giá bán" disabled>
                                     </div>
                                     <div class="me-1">
@@ -140,7 +140,8 @@
                                     </div>
                                     <div class="me-1">
                                         <label for="image-${variantCounter}" class="form-label">Ảnh</label>
-                                        <a href="{{ route('images_product', ['id' => $product->id]) }}">Xem ảnh</a>
+                                        <img class="mb-3 pl-5" src="{{ $var->image_color}}" width=100 height=100
+                                            alt="">
                                     </div>
                                 </div>
                             @endforeach
@@ -153,7 +154,7 @@
     </div>
 @endsection
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
         let variantCounter = 1;
 
@@ -218,4 +219,4 @@
             }
         });
     </script>
-@endpush
+@endpush --}}
