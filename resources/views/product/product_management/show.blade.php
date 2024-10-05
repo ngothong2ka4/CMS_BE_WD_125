@@ -136,6 +136,10 @@
                                             min=0 class="form-control" id="quantity-${variantCounter}"
                                             placeholder="Nhập số lượng" disabled>
                                     </div>
+                                    <div class="me-1">
+                                        <label for="image-${variantCounter}" class="form-label">Ảnh</label>
+                                        <a href="{{ route('images_product', ['id' => $product->id]) }}">Xem ảnh</a>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>

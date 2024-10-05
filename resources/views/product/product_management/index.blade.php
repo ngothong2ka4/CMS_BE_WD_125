@@ -26,8 +26,6 @@
                             <th >Chất liệu</th>
                             <th >Đá</th>
                             <th> Đã bán</th>
-                            <th >Ngày tạo</th>
-                            <th >Ngày cập nhật</th>
                             <th >Hành động</th>
                         </tr>
                         </thead>
@@ -41,10 +39,7 @@
                                     <td>{{ $product->material?->name }}</td>
                                     <td>{{ $product->stone?->name }}</td>
                                     <td>{{ $product->sold }}</td>
-                                    <td>{{ $product->created_at }}</td>
-                                    <td>{{ $product->updated_at }}</td>
                                     <td>
-
                                         <a href="{{ route('product_management.show', $product->id) }}"><button class="btn btn-info">Chi tiết</button></a>
                                         <a href="{{ route('product_management.edit', $product->id) }}"><button class="btn btn-warning">Sửa</button></a>
                                         
