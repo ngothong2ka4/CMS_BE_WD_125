@@ -82,54 +82,54 @@ class ProductController extends Controller
     }
 
 
-    public function filterProductsByPrice(Request $request) //Sắp xếp theo giá
-    {
-        $sort = $request->input('sort', 'asc');
-        $products = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
-            ->get(['id', 'name', 'thumbnail'])
-            ->sortBy(function ($product) {
-                return $product->variants->min('selling_price');
-            });
+    // public function filterProductsByPrice(Request $request) //Sắp xếp theo giá
+    // {
+    //     $sort = $request->input('sort', 'asc');
+    //     $products = Product::with(['variants' => function ($query) {
+    //         $query->select('id_product', 'selling_price', 'list_price')
+    //             ->whereIn('id_product', function ($subQuery) {
+    //                 $subQuery->select('id_product')
+    //                     ->from('variants')
+    //                     ->whereNull('deleted_at')
+    //                     ->groupBy('id_product')
+    //                     ->havingRaw('selling_price = MIN(selling_price)');
+    //             });
+    //     }])
+    //         ->get(['id', 'name', 'thumbnail'])
+    //         ->sortBy(function ($product) {
+    //             return $product->variants->min('selling_price');
+    //         });
 
-        if ($request->input('sort') === 'desc') {
-            $products = $products->reverse();
-        }
+    //     if ($request->input('sort') === 'desc') {
+    //         $products = $products->reverse();
+    //     }
 
-        return response()->json($products, 200);
-    }
+    //     return response()->json($products, 200);
+    // }
 
 
-    public function filterProductsByName(Request $request) //Sắp xếp theo tên
-    {
-        $sort = $request->input('sort', 'asc');
-        $products = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
-            ->get(['id', 'name', 'thumbnail'])
-            ->sortBy('name');
+    // public function filterProductsByName(Request $request) //Sắp xếp theo tên
+    // {
+    //     $sort = $request->input('sort', 'asc');
+    //     $products = Product::with(['variants' => function ($query) {
+    //         $query->select('id_product', 'selling_price', 'list_price')
+    //             ->whereIn('id_product', function ($subQuery) {
+    //                 $subQuery->select('id_product')
+    //                     ->from('variants')
+    //                     ->whereNull('deleted_at')
+    //                     ->groupBy('id_product')
+    //                     ->havingRaw('selling_price = MIN(selling_price)');
+    //             });
+    //     }])
+    //         ->get(['id', 'name', 'thumbnail'])
+    //         ->sortBy('name');
 
-        if ($request->input('sort') === 'desc') {
-            $products = $products->reverse();
-        }
+    //     if ($request->input('sort') === 'desc') {
+    //         $products = $products->reverse();
+    //     }
 
-        return response()->json($products, 200);
-    }
+    //     return response()->json($products, 200);
+    // }
 
 
     public function filterProducts(Request $request)
@@ -167,7 +167,19 @@ class ProductController extends Controller
             $products = $products->reverse();
         }
 
-        return response()->json($products, 200);
+        $page = $request->input('page', 1); // Số trang
+        $perPage = $request->input('per_page', 12); // Số mục mỗi trang
+        $total = count($products); // Tổng số sản phẩm
+        $totalPages = ceil($total / $perPage); // Tính tổng số trang
+
+        // Chia sản phẩm thành các trang
+        $products = $products->slice(($page - 1) * $perPage, $perPage)->values();
+
+        return response()->json([
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'data' => $products,
+        ], 200);
     }
 
 
