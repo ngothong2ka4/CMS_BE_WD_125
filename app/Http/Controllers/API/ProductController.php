@@ -82,63 +82,11 @@ class ProductController extends Controller
     }
 
 
-    // public function filterProductsByPrice(Request $request) //Sắp xếp theo giá
-    // {
-    //     $sort = $request->input('sort', 'asc');
-    //     $products = Product::with(['variants' => function ($query) {
-    //         $query->select('id_product', 'selling_price', 'list_price')
-    //             ->whereIn('id_product', function ($subQuery) {
-    //                 $subQuery->select('id_product')
-    //                     ->from('variants')
-    //                     ->whereNull('deleted_at')
-    //                     ->groupBy('id_product')
-    //                     ->havingRaw('selling_price = MIN(selling_price)');
-    //             });
-    //     }])
-    //         ->get(['id', 'name', 'thumbnail'])
-    //         ->sortBy(function ($product) {
-    //             return $product->variants->min('selling_price');
-    //         });
-
-    //     if ($request->input('sort') === 'desc') {
-    //         $products = $products->reverse();
-    //     }
-
-    //     return response()->json($products, 200);
-    // }
-
-
-    // public function filterProductsByName(Request $request) //Sắp xếp theo tên
-    // {
-    //     $sort = $request->input('sort', 'asc');
-    //     $products = Product::with(['variants' => function ($query) {
-    //         $query->select('id_product', 'selling_price', 'list_price')
-    //             ->whereIn('id_product', function ($subQuery) {
-    //                 $subQuery->select('id_product')
-    //                     ->from('variants')
-    //                     ->whereNull('deleted_at')
-    //                     ->groupBy('id_product')
-    //                     ->havingRaw('selling_price = MIN(selling_price)');
-    //             });
-    //     }])
-    //         ->get(['id', 'name', 'thumbnail'])
-    //         ->sortBy('name');
-
-    //     if ($request->input('sort') === 'desc') {
-    //         $products = $products->reverse();
-    //     }
-
-    //     return response()->json($products, 200);
-    // }
-
-
-    public function filterProducts(Request $request)
+    public function filterProducts(Request $request) // Lọc sản phẩm
     {
-        // Lấy tham số 'sort_by' để xác định sắp xếp theo tên hay giá
-        $sortBy = $request->input('sort_by', 'price'); // Mặc định sắp xếp theo giá
-        $sortOrder = $request->input('sort', 'asc'); // Mặc định sắp xếp tăng dần
+        $sortBy = $request->input('sort_by', 'price');
+        $sortOrder = $request->input('sort', 'asc');
 
-        // Truy vấn sản phẩm
         $products = Product::with(['variants' => function ($query) {
             $query->select('id_product', 'selling_price', 'list_price')
                 ->whereIn('id_product', function ($subQuery) {
@@ -151,28 +99,23 @@ class ProductController extends Controller
         }])
             ->get(['id', 'name', 'thumbnail']);
 
-        // Sắp xếp sản phẩm
         if ($sortBy === 'price') {
-            // Sắp xếp theo giá bán thấp nhất của biến thể
             $products = $products->sortBy(function ($product) {
                 return $product->variants->min('selling_price');
             });
         } elseif ($sortBy === 'name') {
-            // Sắp xếp theo tên
             $products = $products->sortBy('name');
         }
 
-        // Kiểm tra nếu sắp xếp giảm dần
         if ($sortOrder === 'desc') {
             $products = $products->reverse();
         }
 
-        $page = $request->input('page', 1); // Số trang
-        $perPage = $request->input('per_page', 12); // Số mục mỗi trang
-        $total = count($products); // Tổng số sản phẩm
-        $totalPages = ceil($total / $perPage); // Tính tổng số trang
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 12);
+        $total = count($products);
+        $totalPages = ceil($total / $perPage);
 
-        // Chia sản phẩm thành các trang
         $products = $products->slice(($page - 1) * $perPage, $perPage)->values();
 
         return response()->json([
