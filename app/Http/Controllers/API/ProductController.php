@@ -13,7 +13,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)//tất cả sản phẩm
+    public function index(Request $request) //tất cả sản phẩm
     {
         $products = Product::with(['variants' => function ($query) {
             $query->select('id_product', 'selling_price', 'list_price')
@@ -107,6 +107,70 @@ class ProductController extends Controller
         return response()->json($products, 200);
     }
 
+
+    public function filterProductsByName(Request $request) //Sắp xếp theo tên
+    {
+        $sort = $request->input('sort', 'asc');
+        $products = Product::with(['variants' => function ($query) {
+            $query->select('id_product', 'selling_price', 'list_price')
+                ->whereIn('id_product', function ($subQuery) {
+                    $subQuery->select('id_product')
+                        ->from('variants')
+                        ->whereNull('deleted_at')
+                        ->groupBy('id_product')
+                        ->havingRaw('selling_price = MIN(selling_price)');
+                });
+        }])
+            ->get(['id', 'name', 'thumbnail'])
+            ->sortBy('name');
+
+        if ($request->input('sort') === 'desc') {
+            $products = $products->reverse();
+        }
+
+        return response()->json($products, 200);
+    }
+
+
+    public function filterProducts(Request $request)
+    {
+        // Lấy tham số 'sort_by' để xác định sắp xếp theo tên hay giá
+        $sortBy = $request->input('sort_by', 'price'); // Mặc định sắp xếp theo giá
+        $sortOrder = $request->input('sort', 'asc'); // Mặc định sắp xếp tăng dần
+
+        // Truy vấn sản phẩm
+        $products = Product::with(['variants' => function ($query) {
+            $query->select('id_product', 'selling_price', 'list_price')
+                ->whereIn('id_product', function ($subQuery) {
+                    $subQuery->select('id_product')
+                        ->from('variants')
+                        ->whereNull('deleted_at')
+                        ->groupBy('id_product')
+                        ->havingRaw('selling_price = MIN(selling_price)');
+                });
+        }])
+            ->get(['id', 'name', 'thumbnail']);
+
+        // Sắp xếp sản phẩm
+        if ($sortBy === 'price') {
+            // Sắp xếp theo giá bán thấp nhất của biến thể
+            $products = $products->sortBy(function ($product) {
+                return $product->variants->min('selling_price');
+            });
+        } elseif ($sortBy === 'name') {
+            // Sắp xếp theo tên
+            $products = $products->sortBy('name');
+        }
+
+        // Kiểm tra nếu sắp xếp giảm dần
+        if ($sortOrder === 'desc') {
+            $products = $products->reverse();
+        }
+
+        return response()->json($products, 200);
+    }
+
+
     // method: GET
     // API: /api/detailProduct/{id}
     // parram: (id)
@@ -117,17 +181,18 @@ class ProductController extends Controller
     //                "data": productDetail
     //            } 
 
-    public function detailProduct ($id){
+    public function detailProduct($id)
+    {
         $product = Product::with([
             'variants.color',
             'variants.size'
         ])->find($id);
-        
+
         if (!$product) {
             return $this->jsonResponse('Không tìm thấy sản phẩm');
         }
 
-        return $this->jsonResponse('Success',true, new ProductDetailResource($product));
+        return $this->jsonResponse('Success', true, new ProductDetailResource($product));
     }
 
     // method: GET
@@ -140,12 +205,12 @@ class ProductController extends Controller
     //                "data": relatedProducts
     //            } 
 
-    public function relatedProducts ($id){
+    public function relatedProducts($id)
+    {
         $relatedProducts = Product::where('id_category', $id)->with('variants')->limit(5)->get();
         if (!$relatedProducts) {
             return $this->jsonResponse('Không có sản phẩm liên quan');
         }
-        return $this->jsonResponse('Success',true, RelatedProductsResource::collection($relatedProducts));
+        return $this->jsonResponse('Success', true, RelatedProductsResource::collection($relatedProducts));
     }
-
 }
