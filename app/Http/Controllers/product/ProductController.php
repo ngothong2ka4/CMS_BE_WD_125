@@ -53,8 +53,8 @@ class ProductController extends Controller
         ], [
             'name.required' => 'Tên sản phẩm là bắt buộc.',
             'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
-            'name.min' => 'Tên danh mục phải có ít nhất 6 ký tự.',
-            'name.regex' => 'Tên danh mục chỉ được chứa chữ cái, số và khoảng trắng.',
+            'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
+            'name.regex' => 'Tên sản phẩm chỉ được chứa chữ cái, số và khoảng trắng.',
             'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
 
             'thumbnail.required' => 'Hình sản phẩm là bắt buộc.',
@@ -168,8 +168,8 @@ class ProductController extends Controller
         ], [
             'name.required' => 'Tên sản phẩm là bắt buộc.',
             'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
-            'name.min' => 'Tên danh mục phải có ít nhất 6 ký tự.',
-            'name.regex' => 'Tên danh mục chỉ được chứa chữ cái, số và khoảng trắng.',
+            'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
+            'name.regex' => 'Tên sản phẩm chỉ được chứa chữ cái, số và khoảng trắng.',
             'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
 
             'thumbnail.max' => 'Hình sản phẩm dung lượng vượt quá 2Mb.',
