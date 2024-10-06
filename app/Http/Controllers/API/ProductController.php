@@ -107,6 +107,16 @@ class ProductController extends Controller
         return response()->json($products, 200);
     }
 
+    // method: GET
+    // API: /api/detailProduct/{id}
+    // parram: (id)
+    // response:200
+    //            {
+    //                "status": true,
+    //                "message": "Success",
+    //                "data": productDetail
+    //            } 
+
     public function detailProduct ($id){
         $product = Product::with([
             'variants.color',
@@ -119,6 +129,16 @@ class ProductController extends Controller
 
         return $this->jsonResponse('Success',true, new ProductDetailResource($product));
     }
+
+    // method: GET
+    // API: /api/relatedProducts/{id category}
+    // parram: (id category)
+    // response:200
+    //            {
+    //                "status": true,
+    //                "message": "Success",
+    //                "data": relatedProducts
+    //            } 
 
     public function relatedProducts ($id){
         $relatedProducts = Product::where('id_category', $id)->with('variants')->limit(5)->get();
