@@ -6,6 +6,7 @@ use App\Http\Controllers\product\ProductColorController;
 use App\Http\Controllers\product\ProductController;
 use App\Http\Controllers\product\ProductSizeController;
 use App\Http\Controllers\product\ProductVariantController;
+use App\Http\Controllers\user\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +45,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
+    Route::resource('/user', UserController::class);
+    Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+    
+
 
     Route::prefix('products')->group(function () {
         Route::resource('/product_management', ProductController::class);
@@ -54,6 +59,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::post('/{id}/image', [ProductVariantController::class, 'addImage'])->name('addImage');
         Route::delete('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
     });
+    
    
 
     // });

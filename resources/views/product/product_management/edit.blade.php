@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="form-group me-1">
                                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                                        <select required name="id_attribute_size[]" class="form-select mb-3"
+                                        <select name="id_attribute_size[]" class="form-select mb-3"
                                             id="size-${variantCounter}" aria-label="Default select example">
                                             <option value="">Chọn kích thước</option>
                                             @foreach ($sizes as $size)
@@ -184,7 +184,9 @@
                     </div>
                     <div class="mt-3 ms-auto me-auto mb-2">
                         <button class="btn btn-success" type="submit">Lưu</button>
+                        <a href="{{route('product_management.index')}}" class="btn btn-outline-success">Quay lại</a> 
                     </div>
+                    
                 </div>
             </form>
         </div><!--end col-->
@@ -211,7 +213,7 @@
                     </div>
                     <div class="form-group me-1">
                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                        <select required name="new_id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
+                        <select name="new_id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
                             <option value="" >Chọn kích thước</option>
                            @foreach ($sizes as $size)
                                 <option value="{{ $size->id }}">{{ $size->name }}</option>

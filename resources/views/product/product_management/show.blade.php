@@ -140,15 +140,18 @@
                                     </div>
                                     <div class="me-1">
                                         <label for="image-${variantCounter}" class="form-label">Ảnh</label>
-                                        <img class="mb-3 pl-5" src="{{ $var->image_color}}" width=100 height=100
+                                        <img class="mb-3 pl-5" src="{{ $var->image_color }}" width=100 height=100
                                             alt="">
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
-
+                    <div class="mt-3 ms-auto me-auto mb-2">
+                        <a href="{{ route('product_management.index') }}" class="btn btn-success">Quay lại</a>
+                    </div>
                 </div>
+
             </form>
         </div><!--end col-->
     </div>
