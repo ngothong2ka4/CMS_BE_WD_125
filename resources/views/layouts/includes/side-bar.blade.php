@@ -84,8 +84,6 @@
                             <li class="nav-item">
 
                                 <a href="{{ route('product_size.index') }}"
-
-                           
                                     class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
                                     data-key="t-analytics">
                                     Quản lý kích thước </a>
@@ -99,7 +97,38 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('user*') ? 'active' : '' }}" href="{{ route('user.index') }}"
+                      role="button" aria-expanded="false" aria-controls="sidebarUser">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Người Dùng</span>
+                    </a>
+                    
+                    {{-- <div class="collapse menu-dropdown {{ Request::is('products*') ? 'show' : '' }}"
+                        id="sidebarProduct">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('product_management.index') }}"
+                                    class="nav-link {{ Request::is('products/product_management*') ? 'active' : '' }}"
+                                    data-key="t-analytics">
+                                    Quản lý Sản phẩm </a>
+                            </li>
+                            <li class="nav-item">
 
+                                <a href="{{ route('product_size.index') }}"
+                                    class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
+                                    data-key="t-analytics">
+                                    Quản lý kích thước </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('product_color.index') }}"
+                                    class="nav-link {{ Request::is('products/product_color*') ? 'active' : '' }}"
+                                    data-key="t-analytics">
+                                    Quản lý Màu sắc </a>
+                            </li>
+                        </ul>
+                    </div> --}}
+                </li>
+                
             </ul>
         </div>
         <!-- Sidebar -->

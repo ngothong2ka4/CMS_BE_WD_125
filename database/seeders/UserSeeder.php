@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => $faker->dateTime(),
             'password' => $faker->password,
             'address' => $faker->address,
-            'role' => rand(0,1),
+            'role' =>$faker->randomElement(['admin','user']),
             'status' => rand(0,1),
         ]);}
     }
