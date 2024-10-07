@@ -29,7 +29,7 @@ class ProductController extends Controller
             ->get(['id', 'name', 'thumbnail']);
 
         $page = $request->input('page', 1);
-        $perPage = $request->input('per_page', 2);
+        $perPage = $request->input('per_page', 12);
         $total = count($products);
         $totalPages = ceil($total / $perPage);
 
