@@ -52,9 +52,10 @@ class AuthController extends Controller
     // param: (email, password, password_confirmation )
     // example: 
     //            {
+    //              "name": "thongngo",
     //              "email": "thongngo2ka4@gmail.com",
-    //              "password": "thong15112004"
-    //              "password_confirmation": "thong15112004"
+    //              "password": "password"
+    //              "password_confirmation": "password"
     //            }
     // response:200
     //            {
@@ -66,6 +67,7 @@ class AuthController extends Controller
     {
         try {
             $user = User::create([
+                'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => 1,
