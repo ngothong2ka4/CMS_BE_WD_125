@@ -24,6 +24,7 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:8|max:32|confirmed',
         ];
@@ -32,6 +33,8 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'Name là trường bắt buộc.',
+            'name.max' => 'Name không được quá 255 ký tự.',
             'email.required' => 'Email là trường bắt buộc.',
             'email.email' => 'Email không hợp lệ.',
             'email.max' => 'Email không được quá 255 ký tự.',
