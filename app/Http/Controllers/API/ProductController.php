@@ -28,7 +28,18 @@ class ProductController extends Controller
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name', 'thumbnail']);
 
-        return response()->json($products, 200);
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 12);
+        $total = count($products);
+        $totalPages = ceil($total / $perPage);
+
+        $products = $products->slice(($page - 1) * $perPage, $perPage)->values();
+
+        return response()->json([
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'data' => $products,
+        ], 200);
     }
 
     /**
