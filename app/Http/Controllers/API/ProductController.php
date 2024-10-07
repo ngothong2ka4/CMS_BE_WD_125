@@ -151,7 +151,8 @@ class ProductController extends Controller
     {
         $product = Product::with([
             'variants.color',
-            'variants.size'
+            'variants.size',
+            'images',
         ])->find($id);
 
         if (!$product) {
