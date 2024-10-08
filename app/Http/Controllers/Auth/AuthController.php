@@ -34,11 +34,7 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
                 $token = $user->createToken('tokenAuth')->plainTextToken;
-                $data = [
-                    'user' => $user,
-                    'token' => $token,
-                ];
-                return $this->jsonResponse('Đăng nhập thành công', true, $data);
+                return $this->jsonResponse('Đăng nhập thành công', true, $token);
             }
 
             return $this->jsonResponse('Thông tin đăng nhập không chính xác');
