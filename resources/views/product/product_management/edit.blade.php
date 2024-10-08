@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="form-group me-1">
                                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                                        <select name="id_attribute_size[]" class="form-select mb-3"
+                                        <select required name="id_attribute_size[]" class="form-select mb-3"
                                             id="size-${variantCounter}" aria-label="Default select example">
                                             <option value="">Chọn kích thước</option>
                                             @foreach ($sizes as $size)
@@ -133,22 +133,22 @@
                                         </select>
                                     </div>
                                     <div class="me-1">
-                                        <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
-                                        <input value="{{ $var->import_price }}" name="import_price[]" type="number"
-                                            required min=0 class="form-control" id="price_in-${variantCounter}"
-                                            placeholder="Nhập giá nhập">
+                                        <label for="price_in-{$variantCounter}" class="form-label">Giá nhập</label>
+                                        <input value="{{ number_format($var->import_price, 0, '.', '') }}"
+                                            name="import_price[]" type="text" required min=0 class="form-control"
+                                            id="price_in-{$variantCounter}" placeholder="Nhập giá nhập">
                                     </div>
                                     <div class="me-1">
-                                        <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
-                                        <input value="{{ $var->list_price }}" name="list_price[]" type="number"
-                                            required min=0 class="form-control" id="price_out-${variantCounter}"
-                                            placeholder="Nhập giá niêm yết">
+                                        <label for="price_out-{$variantCounter}" class="form-label">Giá niêm yết</label>
+                                        <input value="{{ number_format($var->list_price, 0, '.', '') }}"
+                                            name="list_price[]" type="text" required min=0 class="form-control"
+                                            id="price_out-{$variantCounter}" placeholder="Nhập giá niêm yết">
                                     </div>
                                     <div class="me-1">
-                                        <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                                        <input value="{{ $var->selling_price }}" name="selling_price[]" type="text"
-                                            class="form-control" id="sale_price-${variantCounter}"
-                                            placeholder="Nhập giá bán">
+                                        <label for="sale_price-{$variantCounter}" class="form-label">Giá bán</label>
+                                        <input value="{{ number_format($var->selling_price, 0, '.', '') }}"
+                                            name="selling_price[]" type="text" required min=0 class="form-control"
+                                            id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
                                     </div>
                                     <div class="me-1">
                                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
@@ -161,8 +161,10 @@
                                         <input value="{{ $var->image_color }}" name="image_color[]" type="file"
                                             class="form-control" id="image_color-${variantCounter}"
                                             placeholder="Nhập số lượng">
-                                            <div class="m-1">
-                                        <img class="mb-3 pl-5" src="{{ $var->image_color}}" width=100 height=100  alt=""></div>
+                                        <div class="m-1">
+                                            <img class="mb-3 pl-5" src="{{ $var->image_color }}" width=100 height=100
+                                                alt="">
+                                        </div>
                                     </div>
                                     <div style="margin-top: 27px">
 
@@ -174,7 +176,7 @@
                                     </div>
                                 </div>
                             @endforeach
-                            
+
                         </div>
 
                         <div class="form-group">
@@ -184,9 +186,9 @@
                     </div>
                     <div class="mt-3 ms-auto me-auto mb-2">
                         <button class="btn btn-success" type="submit">Lưu</button>
-                        <a href="{{route('product_management.index')}}" class="btn btn-outline-success">Quay lại</a> 
+                        <a href="{{ route('product_management.index') }}" class="btn btn-outline-success">Quay lại</a>
                     </div>
-                    
+
                 </div>
             </form>
         </div><!--end col-->
@@ -212,15 +214,12 @@
                         </select>
                     </div>
                     <div class="form-group me-1">
-                        <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                        <select name="new_id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
+                        <label  for="size-${variantCounter}" class="form-label">Kích thước</label>
+                        <select required name="new_id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
                             <option value="" >Chọn kích thước</option>
                            @foreach ($sizes as $size)
                                 <option value="{{ $size->id }}">{{ $size->name }}</option>
                             @endforeach
-                           
-                        
-                               
                         </select>
                     </div>
                     <div class="me-1">
@@ -233,7 +232,7 @@
                     </div>
                     <div class="me-1">
                         <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                        <input name="new_selling_price[]" type="number" required min=0 type="text" class="form-control" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
+                        <input name="new_selling_price[]" type="number" required min=0 class="form-control" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
                     </div>
                     <div class="me-1">
                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
