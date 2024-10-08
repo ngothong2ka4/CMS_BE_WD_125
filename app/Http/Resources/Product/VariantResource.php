@@ -20,6 +20,7 @@ class VariantResource extends JsonResource
             'list_price' => $this->list_price,
             'selling_price' => $this->selling_price,
             'quantity' => $this->quantity,
+            'image_color' => $this->image_color,
             'colors' => new ColorResource($this->whenLoaded('color')),
             'sizes' => new SizeResource($this->whenLoaded('size')),
         ];
