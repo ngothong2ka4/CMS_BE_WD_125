@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->integer('id_product');
             $table->integer('id_attribute_color');
-            $table->integer('id_attribute_size');
-            $table->decimal('import_price',8);
-            $table->decimal('list_price',8);
-            $table->decimal('selling_price',8);
-            $table->string('image_color')->nullable();
+            $table->integer('id_attribute_size')->nullable();
+            $table->decimal('import_price',12,2);
+            $table->decimal('list_price',12,2);
+            $table->decimal('selling_price',12,2);
+            $table->string('image_color');
             $table->integer('quantity');
             $table->boolean('is_show')->default(true);
             $table->timestamps();

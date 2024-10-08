@@ -261,7 +261,7 @@ class ProductController extends Controller
 
 
         toastr()->success('Cập nhật sản phẩm thành công!');
-        return redirect()->route('product_management.index');
+        return redirect()->back();
 
 
     }

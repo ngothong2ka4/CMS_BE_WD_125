@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('order_detail', function (Blueprint $table) {
             $table->id();
             $table->integer('id_oder');
+            $table->integer('id_product');
             $table->integer('id_variant');
-            $table->decimal('import_price',8,0);
-            $table->decimal('list_price',8);
-            $table->decimal('selling_price',8);
+            $table->decimal('import_price',12,2);
+            $table->decimal('list_price',12,2);
+            $table->decimal('selling_price',12,2);
             $table->string('product_name');
             $table->string('product_image');
             $table->integer('quantity');
