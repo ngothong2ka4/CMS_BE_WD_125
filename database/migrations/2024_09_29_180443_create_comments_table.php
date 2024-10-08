@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('id_user');
             $table->string('content')->nullable();
             $table->date('posting_date');
-            $table->tinyInteger('status');
+            $table->boolean('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

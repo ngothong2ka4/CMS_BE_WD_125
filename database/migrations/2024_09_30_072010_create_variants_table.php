@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('import_price',8);
             $table->decimal('list_price',8);
             $table->decimal('selling_price',8);
-            $table->string('image_color');
+            $table->string('image_color')->nullable();
             $table->integer('quantity');
             $table->boolean('is_show')->default(true);
             $table->timestamps();

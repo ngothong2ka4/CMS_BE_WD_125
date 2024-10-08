@@ -81,16 +81,15 @@ class ProductController extends Controller
         ];
 
         $product = Product::create($data_pro);
+
         if ($request->id_attribute_color) {
             foreach ($request->id_attribute_color as $key => $color) {
 
-                if ($request->hasFile('image_color') && isset($request->file('image_color')[$key])) {
+                if ($request->hasFile('image_color')) {
                     $image = $request->file('image_color')[$key];  // Lấy file image_color tại vị trí $key
-                    $image_Color = time() . "." . $image->getClientOriginalExtension();
-                    $image->move('img/products/variant/', $image_Color);
-                } else {
-                    // Nếu không có ảnh, gán giá trị mặc định hoặc null
-                    $image_Color = null;
+                    $image_Color = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+                    $image->move('img/products/variant', $image_Color);
+                    $path = 'img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
@@ -101,9 +100,8 @@ class ProductController extends Controller
                     'list_price' => $request->list_price[$key],
                     'selling_price' => $request->selling_price[$key],
                     'quantity' => $request->quantity[$key],
-                    'image_color' => 'img/products/variant/' . $image_Color,
+                    'image_color' => $path,
                 ];
-
                 Variant::create($data_var);
             }
         }
@@ -121,7 +119,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::findOrFAil($id);
+        $product = Product::findOrFail($id);
         $variants = Variant::where('id_product', $id)->get();
         $categories = Category::all();
         $materials = Material::all();
@@ -140,7 +138,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFAil($id);
+        $product = Product::findOrFail($id);
         $variants = Variant::where('id_product', $id)->get();
         $categories = Category::all();
         $materials = Material::all();
@@ -210,15 +208,17 @@ class ProductController extends Controller
 
                 if ($request->hasFile('image_color') && isset($request->file('image_color')[$key])) {
                     $image = $request->file('image_color')[$key];
-                    $colorImage = time() . "." . $image->getClientOriginalExtension();
+                    $colorImage = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $colorImage);
                     $path = 'img/products/variant/' . $colorImage;
-                    if (file_exists(public_path($imgcolor_old))) {
-                        unlink(public_path($imgcolor_old));
+
+                    if (file_exists(($imgcolor_old))) {
+                        unlink(($imgcolor_old));
                     }
                 } else {
                     $path = $imgcolor_old;
                 }
+
                 $data_var = [
 
                     'id_attribute_color' => $request->id_attribute_color[$key],
@@ -238,26 +238,23 @@ class ProductController extends Controller
             foreach ($request->new_id_attribute_color as $key => $color) {
 
                 if ($request->hasFile('image_color') && isset($request->file('image_color')[$key])) {
-                    $image = $request->file('image_color')[$key];  // Lấy file image_color tại vị trí $key
-                    $image_Color = time() . "." . $image->getClientOriginalExtension();
-                    $image->move('img/products/variant/', $image_Color);
-                } else {
-                    // Nếu không có ảnh, gán giá trị mặc định hoặc null
-                    $image_Color = null;
+                    $image = $request->file('image_color')[$key];
+                    $image_Color = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+                    $image->move('img/products/variant', $image_Color);
+                    $path = 'img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
                     'id_product' => $product->id,
                     'id_attribute_color' => $color,
-                    'id_attribute_size' => $request->id_attribute_size[$key],
-                    'import_price' => $request->import_price[$key],
-                    'list_price' => $request->list_price[$key],
-                    'selling_price' => $request->selling_price[$key],
-                    'quantity' => $request->quantity[$key],
-                    'image_color' => 'img/products/variant/' . $image_Color,
+                    'id_attribute_size' => $request->new_id_attribute_size[$key],
+                    'import_price' => $request->new_import_price[$key],
+                    'list_price' => $request->new_list_price[$key],
+                    'selling_price' => $request->new_selling_price[$key],
+                    'quantity' => $request->new_quantity[$key],
+                    'image_color' => $path,
                 ];
-
-
+                // dd($path);
                 Variant::create($data_var);
             }
         }
@@ -274,7 +271,10 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        Product::findOrFail($id)->delete();
+        $product = Product::findOrFail($id);
+        $product->variants()->delete();
+        $product->delete();
+
         toastr()->success('Xoá thành công!');
         return redirect()->route('product_management.index');
     }

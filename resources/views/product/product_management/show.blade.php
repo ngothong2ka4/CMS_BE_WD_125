@@ -116,21 +116,21 @@
                                     </div>
                                     <div class="me-1">
                                         <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
-                                        <input value="{{ number_format($var->import_price) }}" name="import_price[]"
-                                            type="number" required min=0 class="form-control"
+                                        <input value="{{ number_format($var->import_price, 0, '.', '') }}"
+                                            name="import_price[]" type="text" required min=0 class="form-control"
                                             id="price_in-${variantCounter}" placeholder="Nhập giá nhập" disabled>
                                     </div>
                                     <div class="me-1">
                                         <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
-                                        <input value="{{ number_format($var->list_price) }}" name="list_price[]"
-                                            type="number" required min=0 class="form-control"
+                                        <input value="{{ number_format($var->list_price, 0, '.', '') }}"
+                                            name="list_price[]" type="text" required min=0 class="form-control"
                                             id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết" disabled>
                                     </div>
                                     <div class="me-1">
                                         <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                                        <input value="{{ number_format($var->selling_price) }}" name="selling_price[]"
-                                            type="text" class="form-control" id="sale_price-${variantCounter}"
-                                            placeholder="Nhập giá bán" disabled>
+                                        <input value="{{ number_format($var->selling_price, 0, '.', '') }}"
+                                            name="selling_price[]" type="text" required min=0 class="form-control"
+                                            id="sale_price-${variantCounter}" placeholder="Nhập giá bán" disabled>
                                     </div>
                                     <div class="me-1">
                                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
