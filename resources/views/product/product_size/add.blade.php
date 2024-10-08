@@ -17,7 +17,7 @@
                         @method('POST')
                         <div>
                             <label for="basiInput" class="form-label">Tên kích thước</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="basiInput"
+                            <input type="text" value="{{old('name')}}" class="form-control @error('name') is-invalid @enderror" id="basiInput"
                                 name="name">
                             @error('name')
                                 <div class="invalid-feedback">

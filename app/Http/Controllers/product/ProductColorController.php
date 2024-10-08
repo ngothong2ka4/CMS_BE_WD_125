@@ -36,6 +36,7 @@ class ProductColorController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        
         try {
             DB::beginTransaction();
             ProductColor::create($request->all());

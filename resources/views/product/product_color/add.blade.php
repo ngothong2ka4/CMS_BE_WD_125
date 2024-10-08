@@ -26,7 +26,7 @@
                         @csrf
                         <div>
                             <label for="basiInput" class="form-label">Màu sắc</label>
-                            <input type="text" class="form-control" id="basiInput" name="name">
+                            <input type="text" class="form-control" id="basiInput" name="name" value="{{old('name')}}" >
                         </div>
 
                         <div class="mt-3">
