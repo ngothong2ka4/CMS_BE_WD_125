@@ -12,9 +12,6 @@
         </a>
         <!-- Light Logo-->
         <a href="{{ route('dashboard') }}" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="{{ asset('admin/assets/images/logosm.png') }}" alt="" height="22">
-            </span>-
             <span class="logo-lg">
                 <img src="{{ asset('admin/assets/images/logo-light.png') }}" alt="" height="17">
             </span>
@@ -33,39 +30,11 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::is('categories*') ? 'active' : '' }}"
+                    <a class="nav-link menu-link {{ Request::is('category*') ? 'active' : '' }}"
                         href="{{ route('category.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Danh mục</span>
                     </a>
-                    {{-- <div class="collapse menu-dropdown" id="sidebarDashboards">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics">
-                                    Analytics </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-projects.html" class="nav-link" data-key="t-projects">
-                                    Projects </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
-                            </li>
-                        </ul>
-                    </div> --}}
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('products*') ? 'active' : '' }}" href="#sidebarProduct"
@@ -102,31 +71,6 @@
                       role="button" aria-expanded="false" aria-controls="sidebarUser">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Người Dùng</span>
                     </a>
-                    
-                    {{-- <div class="collapse menu-dropdown {{ Request::is('products*') ? 'show' : '' }}"
-                        id="sidebarProduct">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('product_management.index') }}"
-                                    class="nav-link {{ Request::is('products/product_management*') ? 'active' : '' }}"
-                                    data-key="t-analytics">
-                                    Quản lý Sản phẩm </a>
-                            </li>
-                            <li class="nav-item">
-
-                                <a href="{{ route('product_size.index') }}"
-                                    class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
-                                    data-key="t-analytics">
-                                    Quản lý kích thước </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('product_color.index') }}"
-                                    class="nav-link {{ Request::is('products/product_color*') ? 'active' : '' }}"
-                                    data-key="t-analytics">
-                                    Quản lý Màu sắc </a>
-                            </li>
-                        </ul>
-                    </div> --}}
                 </li>
                 
             </ul>

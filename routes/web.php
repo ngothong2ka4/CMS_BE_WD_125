@@ -21,46 +21,36 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('login');
-});
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Route::get('/login', function () {
+//     return view('auth.login');
+// })->name('login');
 
-Route::get('/signup', function () {
-    return view('auth.signup');
-})->name('signup');
+// Route::get('/signup', function () {
+//     return view('auth.signup');
+// })->name('signup');
 
-Route::get('/forgot', function () {
-    return view('auth.forgot');
-})->name('forgot');
+// Route::get('/forgot', function () {
+//     return view('auth.forgot');
+// })->name('forgot');
 
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
-    Route::resource('category', CategoryController::class);
-    Route::resource('/user', UserController::class);
-    Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+        Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+        Route::resource('category', CategoryController::class);
+        Route::resource('/user', UserController::class);
+        Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+
+        Route::prefix('products')->group(function () {
+            Route::resource('/product_management', ProductController::class);
+            Route::resource('/product_color', ProductColorController::class);
+            Route::resource('/product_size', ProductSizeController::class);
+            Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
+            Route::get('/{id}/image', [ProductVariantController::class, 'index'])->name('images_product');
+            Route::post('/{id}/image', [ProductVariantController::class, 'addImage'])->name('addImage');
+            Route::delete('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
+        });
     
-
-
-    Route::prefix('products')->group(function () {
-        Route::resource('/product_management', ProductController::class);
-        Route::resource('/product_color', ProductColorController::class);
-        Route::resource('/product_size', ProductSizeController::class);
-        Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
-        Route::get('/{id}/image', [ProductVariantController::class, 'index'])->name('images_product');
-        Route::post('/{id}/image', [ProductVariantController::class, 'addImage'])->name('addImage');
-        Route::delete('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
-    });
-    
-   
-
     // });
 });

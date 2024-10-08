@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\ImageResource;
 use App\Http\Resources\Product\VariantResource;
 use App\Models\Variant;
 use Illuminate\Http\Request;
@@ -22,6 +24,9 @@ class ProductDetailResource extends JsonResource
             'thumbnail' => $this->thumbnail,
             'variant' =>VariantResource::collection($this->whenLoaded('variants')),
             'description' => $this->description,
+            'images' =>ImageResource::collection($this->whenLoaded('images')),
+            'comments' =>CommentResource::collection($this->whenLoaded('comments')),
+
         ];
         return $data;
     }

@@ -153,6 +153,9 @@ class ProductController extends Controller
             'variants.color',
             'variants.size',
             'images',
+            'comments' => function ($query) {
+                $query->where('status', 1);
+            }
         ])->find($id);
 
         if (!$product) {
