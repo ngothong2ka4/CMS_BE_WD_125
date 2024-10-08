@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\product\ProductColorController;
@@ -33,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/forgot', function () {
 //     return view('auth.forgot');
 // })->name('forgot');
-
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Route::middleware(['auth'])->group(function () {

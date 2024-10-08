@@ -20,8 +20,7 @@
                     </a>
                 </div>
 
-                <button type="button"
-                    class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
+                <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
                     id="topnav-hamburger-icon">
                     <span class="hamburger-icon">
                         <span></span>
@@ -128,11 +127,10 @@
             <div class="d-flex align-items-center">
 
                 <div class="dropdown ms-sm-3 header-item topbar-user">
-                    <button type="button" class="btn" id="page-header-user-dropdown"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user"
-                                src="" alt="Header Avatar">
+                            <img class="rounded-circle header-profile-user" src="" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna
                                     Adame</span>
@@ -166,9 +164,12 @@
                         <a class="dropdown-item" href="auth-lockscreen-basic.html"><i
                                 class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Lock screen</span></a> --}}
-                        <a class="dropdown-item" id="logoutButton"><i
-                                class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle" data-key="t-logout">Logout</span></a>
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button class="dropdown-item" id="logoutButton" type="submit"><i
+                                    class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                                    class="align-middle" data-key="t-logout">Logout</span></button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -187,8 +188,7 @@
             <div class="modal-body">
                 <div class="mt-2 text-center">
                     <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
-                        colors="primary:#f7b84b,secondary:#f06548"
-                        style="width:100px;height:100px"></lord-icon>
+                        colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
                     <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                         <h4>Are you sure ?</h4>
                         <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
