@@ -73,11 +73,20 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => 1,
+                'status' => 1,
             ]);
-        
-            Auth::login($user);
-        
-            return $this->jsonResponse('Đăng ký thành công', true);
+
+            if ($user) {
+                Auth::login($user);
+                $token = $user->createToken('tokenAuth')->plainTextToken;
+                $data = [
+                    'role' => $user->role,
+                    'token' => $token,
+                ]; 
+                return $this->jsonResponse('Đăng ký thành công', true,$data);
+            } else {
+                return $this->jsonResponse('Đăng ký thất bại');
+            }
         } catch (\Exception $exception) {
             \DB::rollBack();
             \Log::error($exception->getMessage());
@@ -98,7 +107,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return $this->jsonResponse('Đăng Xuất thành công',true);
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+            
+            return $this->jsonResponse('Đăng Xuất thành công', true);
+        }
+    
+        return $this->jsonResponse('Người dùng không được xác thực');
     }
 }
