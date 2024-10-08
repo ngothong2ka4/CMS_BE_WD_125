@@ -158,6 +158,40 @@ class ProductController extends Controller
     }
 
 
+    public function searchProductsByName(Request $request)
+    {
+        $query = $request->input('name');
+        if (!$query) {
+            return response()->json([
+                'message' => 'Tên sản phẩm không được bỏ trống!'
+            ], 400);
+        }
+
+        $products = Product::with(['variants' => function ($query) {
+            $query->select('id_product', 'selling_price', 'list_price')
+                ->limit(1)
+                ->whereIn('id_product', function ($subQuery) {
+                    $subQuery->select('id_product')
+                        ->from('variants')
+                        ->whereNull('deleted_at')
+                        ->groupBy('id_product')
+                        ->havingRaw('selling_price = MIN(selling_price)');
+                });
+        }])
+            ->where('name', 'like', '%' . $query . '%')
+            ->get(['id', 'name', 'thumbnail']);
+
+        if ($products->isEmpty()) {
+            return response()->json([
+                'message' => 'Không tìm thấy sản phẩm nào!'
+            ], 404);
+        }
+
+        return response()->json($products, 200);
+    }
+
+
+
     // method: GET
     // API: /api/detailProduct/{id}
     // parram: (id)
