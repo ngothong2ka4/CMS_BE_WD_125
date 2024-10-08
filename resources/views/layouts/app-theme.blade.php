@@ -5,7 +5,9 @@
     @include('layouts.includes.theme-header');
     
     @stack('styles')
-
+    <script>
+        const PATH_ROOT = '{{ asset('admin') }}';
+    </script>
 <body>
 
     <!-- Begin page -->
