@@ -160,9 +160,10 @@ class ProductController extends Controller
         $stones = Stone::all();
         $colors = ProductColor::all();
         $sizes = ProductSize::all();
+        $images = ProductImage::where('id_product', $id)->get();
         return view(
             'product.product_management.edit',
-            compact('product', 'variants', 'categories', 'materials', 'stones', 'colors', 'sizes')
+            compact('product', 'variants', 'categories', 'materials', 'stones', 'colors', 'sizes','images')
         );
     }
 
@@ -215,6 +216,21 @@ class ProductController extends Controller
         ];
 
         $product->update($data_pro);
+
+        if ($request->hasFile('link_image')) {
+            foreach($request->file('link_image') as $key => $image){
+            // $image = $request->file('link_image');
+            $nameImage = time()."_".$image->getClientOriginalName();
+            $image->move('img/products/slide/', $nameImage);
+            $path = 'http://127.0.0.1:8000/img/products/slide/'. $nameImage;
+            $data = [
+                'id_product' => $product->id,
+                'link_image' => $path,
+            ];
+             
+           ProductImage::create($data);
+        }
+        }
 
         if ($request->id_var) {
             foreach ($request->id_var as $key => $item) {
