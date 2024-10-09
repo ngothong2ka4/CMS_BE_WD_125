@@ -23,9 +23,9 @@
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="name" class="form-label">Tên tài khoản</label>
-                                <input type="name" class="form-control  @error('name') is-invalid @enderror" id="name" name="name" placeholder="Tên" value="{{old('name')}}">
-                                @error('name')
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control  @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email" value="{{old('name')}}">
+                                @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -33,9 +33,9 @@
                             </div>
 
                             <div class="mb-3">
-                                <div class="float-end">
+                                {{-- <div class="float-end">
                                     <a href="{{ route('forgot') }}" class="text-muted">Quên mật khẩu?</a>
-                                </div>
+                                </div> --}}
                                 <label class="form-label" for="password">Mật khẩu</label>
                                 <div class="position-relative auth-pass-inputgroup mb-3">
                                     <input type="password" class="form-control pe-5 password @error('password')
@@ -53,10 +53,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-check">
+                            {{-- <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
                                 <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
-                            </div>
+                            </div> --}}
 
                             <div class="mt-4">
                                 <button class="btn btn-success w-100" type="submit">Đăng Nhập</button>

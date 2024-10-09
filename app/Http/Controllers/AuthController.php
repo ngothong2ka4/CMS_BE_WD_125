@@ -18,11 +18,11 @@ class AuthController extends Controller
 {
     // Validate dữ liệu
     $credentials = $request->validate([
-        'name' => 'required|min:3',
+        'email' => 'required|email',
         'password' => 'required|min:8',
     ], [
-        'name.required' => 'Tên người dùng là bắt buộc.',
-        'name.min' => 'Tên người dùng phải có ít nhất 3 ký tự.',
+        'email.required' => 'Email là bắt buộc.',
+        'email.min' => 'Email phải là định dạng email.',
         'password.required' => 'Mật khẩu là bắt buộc.',
         'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
     ]);
@@ -38,8 +38,8 @@ class AuthController extends Controller
 
     // Đăng nhập thất bại, trả về thông báo lỗi
     return back()->withErrors([
-        'login' => 'Tên đăng nhập hoặc mật khẩu không đúng.',
-    ])->onlyInput('name');
+        'login' => 'Email hoặc mật khẩu không đúng.',
+    ])->onlyInput('email');
 }
 
     // public function postLogin( Request $request)
