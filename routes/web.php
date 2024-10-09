@@ -47,7 +47,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
-    Route::middleware(['auth'])->group(function () {
+    // Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
     Route::resource('/user', UserController::class);
@@ -63,6 +63,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::delete('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
     });
 
-    });
+    // });
 
 });
