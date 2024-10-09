@@ -42,11 +42,6 @@
 
                                 
                                     <td>                                        
-<<<<<<< HEAD
-=======
-                                       
-
->>>>>>> 0ab63c190207585db7fdb0e2974fba2b4b12d74f
                                         <a href="{{ route('product_management.show', $product->id) }}"><button class="btn btn-info">Chi tiết</button></a>
                                         <a href="{{ route('product_management.edit', $product->id) }}"><button class="btn btn-warning">Sửa</button></a>
                                         
