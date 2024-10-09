@@ -5,7 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Product\ProductDetailResource;
 use App\Http\Resources\Product\RelatedProductsResource;
+use App\Models\Comment;
+use App\Models\OrderDetail;
 use App\Models\Product;
+use Auth;
+use DB;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -208,6 +212,8 @@ class ProductController extends Controller
             'variants.color',
             'variants.size',
             'images',
+            'material',
+            'stone',
             'comments' => function ($query) {
                 $query->where('status', 1);
             }
@@ -232,10 +238,48 @@ class ProductController extends Controller
 
     public function relatedProducts($id)
     {
-        $relatedProducts = Product::where('id_category', $id)->with('variants')->limit(5)->get();
-        if (!$relatedProducts) {
-            return $this->jsonResponse('Không có sản phẩm liên quan');
+        $currentProduct = Product::find($id);
+
+        if (!$currentProduct) {
+            return $this->jsonResponse('Sản phẩm không tồn tại', false);
         }
+
+        $relatedProducts = Product::where('id_category', $currentProduct->id_category)
+                                ->where('id', '!=', $id) 
+                                ->with('variants')
+                                ->limit(5)
+                                ->get();
+
         return $this->jsonResponse('Success', true, RelatedProductsResource::collection($relatedProducts));
     }
+
+    // public function addCommentProduct(Request $request)
+    // {
+    //     try {
+    //         $user = Auth::user();
+    //         $productId = $request->input('product_id');
+
+    //         if (!$user) {
+    //             return $this->jsonResponse('Bạn phải đăng nhập mới có thể bình luận');
+    //         }
+
+    //         $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user) {
+    //             $query->where('id_user', $user->id)
+    //                 ->where('status', 4); 
+    //         })->where('product_id', $productId)->exists();
+
+    //         if (!$hasPurchased) {
+    //             return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi bình luận.');
+    //         }
+
+    //         DB::beginTransaction();
+    //             $comment = Comment::create($request->all());
+    //         DB::commit();
+    //         return $this->jsonResponse('Success', true,$comment);
+    //     } catch (\Exception $exception) {
+    //         DB::rollBack();
+    //         \Log::error($exception->getMessage());
+    //         return $this->jsonResponse('Common Exception');
+    //     }
+    // }
 }
