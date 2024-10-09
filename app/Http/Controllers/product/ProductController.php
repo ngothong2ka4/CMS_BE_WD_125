@@ -77,7 +77,7 @@ class ProductController extends Controller
             'id_materials' => $request->id_materials,
             'id_stones' => $request->id_stones,
             'description' => $request->description,
-            'thumbnail' => 'img/products/' . $nameImage,
+            'thumbnail' => 'http://127.0.0.1:8000/img/products/' . $nameImage,
         ];
 
         $product = Product::create($data_pro);
@@ -89,7 +89,7 @@ class ProductController extends Controller
                     $image = $request->file('image_color')[$key];  // Lấy file image_color tại vị trí $key
                     $image_Color = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
-                    $path = 'img/products/variant/' . $image_Color;
+                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
@@ -181,7 +181,7 @@ class ProductController extends Controller
             $image = $request->file('thumbnail');
             $nameImage = time() . "." . $image->getClientOriginalExtension();
             $image->move('img/products', $nameImage);
-            $path = 'img/products/' . $nameImage;
+            $path = 'http://127.0.0.1:8000/img/products/' . $nameImage;
 
             if (file_exists(public_path($img_old))) {
                 unlink(public_path($img_old));
@@ -210,7 +210,7 @@ class ProductController extends Controller
                     $image = $request->file('image_color')[$key];
                     $colorImage = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $colorImage);
-                    $path = 'img/products/variant/' . $colorImage;
+                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $colorImage;
 
                     if (file_exists(($imgcolor_old))) {
                         unlink(($imgcolor_old));
@@ -241,7 +241,7 @@ class ProductController extends Controller
                     $image = $request->file('image_color')[$key];
                     $image_Color = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
-                    $path = 'img/products/variant/' . $image_Color;
+                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
