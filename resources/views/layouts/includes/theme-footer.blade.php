@@ -1,29 +1,4 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-
-    $(document).ready(function() {
-        $('#logoutButton').on('click', function(e) {
-            e.preventDefault(); 
-
-            $.ajax({
-                url: 'http://127.0.0.1:8000/api/logout',
-                type: 'POST', 
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.status) {
-                        window.location.href = 'http://localhost:5173/login'; 
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Logout failed:', error); 
-                }
-            });
-        });
-    });
-
-</script>
     <script src="{{ asset('admin/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('admin/assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('admin/assets/libs/node-waves/waves.min.js') }}"></script>
