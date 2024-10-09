@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255|unique:attribute_color,name'
+            'name' => 'required|min:2|max:255|regex:/^[a-zA-Z ]*$/|unique:attribute_color,name'
         ];
     }
 
@@ -31,7 +31,9 @@ class StoreRequest extends FormRequest
         return [
             'name.required' => 'Màu sản phẩm là bắt buộc.',
             'name.max' => 'Màu sản phẩm không được vượt quá :max ký tự.',
-            'name.unique' => 'Màu sản phẩm đã tồn tại'
+            'name.min' => 'Màu sản phẩm phải có ít nhất :min ký tự.',
+            'name.regex' => 'Tên màu sản phẩm không thể chứa số và ký tự đặc biệt',
+            'name.unique' => 'Màu sản phẩm đã tồn tại',
         ];
     }
 }

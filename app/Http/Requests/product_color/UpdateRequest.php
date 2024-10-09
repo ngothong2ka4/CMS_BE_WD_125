@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     public function rules(Request $request): array
     {
         return [
-            'name' => 'required|max:255|unique:attribute_color,name,' . $request->id
+            'name' => 'required|max:255|min:2|regex:/^[a-zA-Z ]*$/|unique:attribute_color,name,' . $request->id
         ];
     }
 
@@ -32,6 +32,8 @@ class UpdateRequest extends FormRequest
         return [
             'name.required' => 'Màu sản phẩm là bắt buộc.',
             'name.max' => 'Màu sản phẩm không được vượt quá :max ký tự.',
+            'name.min' => 'Màu sản phẩm phải có ít nhất :min ký tự.',
+            'name.regex' => 'Tên màu sản phẩm không thể chứa số và ký tự đặc biệt',
             'name.unique' => 'Màu sản phẩm đã tồn tại'
         ];
     }
