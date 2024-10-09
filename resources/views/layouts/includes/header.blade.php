@@ -125,7 +125,7 @@
             </div>
 
             <div class="d-flex align-items-center">
-
+                @auth
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -139,7 +139,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Xin chào !</h6>
+                        <h6 class="dropdown-header">Xin chào {{Auth::user()->name}}!</h6>
                         {{-- <a class="dropdown-item" href="pages-profile.html"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profile</span></a>
@@ -171,6 +171,7 @@
                         </form>
                     </div>
                 </div>
+                @endauth
             </div>
         </div>
     </div>

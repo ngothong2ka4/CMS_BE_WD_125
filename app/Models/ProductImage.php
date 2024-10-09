@@ -10,7 +10,6 @@ class ProductImage extends Model
 {
     use HasFactory, SoftDeletes;
 
-    
     protected $table = 'product_images';
     protected $guarded = [];
 }
