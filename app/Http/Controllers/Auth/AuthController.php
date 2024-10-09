@@ -27,49 +27,28 @@ class AuthController extends Controller
     //                "message": "Đăng nhập thành công",
     //                "data": "6|FZVmV7xSkh4PLYcLxunNCHElZjvDy3IUTA3YjFbybb7edd39"
     //            }
-    public function login()
+    public function login(LoginRequest $request)
     {
+        try {
+            $credentials = $request->only('email', 'password');
 
-        return view('auth.login');
-    }
-    public function postLogin(LoginRequest $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|min:3|email|unique:users',
-            'password' => 'required|min:8'
-        ]);
-        if(Auth::attempt( $credentials)){
-            $request->session()->regenerate();
-            
-            // if(Auth::user()->isAdmin()){
-            //     return redirect()->intended('dashboard');
-            // }
-            return redirect()->intended('dashboard');
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('tokenAuth')->plainTextToken;
+                $data = [
+                    'role' => $user->role,
+                    'token' => $token,
+                    'user' => $user
+                ];
+                return $this->jsonResponse('Đăng nhập thành công', true, $data);
+            }
 
-
+            return $this->jsonResponse('Thông tin đăng nhập không chính xác');
+        } catch (\Exception $exception) {
+            \DB::rollBack();
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse('Common Exception');
         }
-        return back()->withErrors([
-            'email'=>'Chưa có tài khoản',
-        ])->onlyInput('email');
-        // try {
-        //     $credentials = $request->only('email', 'password');
-
-        //     if (Auth::attempt($credentials)) {
-        //         $user = Auth::user();
-        //         $token = $user->createToken('tokenAuth')->plainTextToken;
-        //         $data = [
-        //             'role' => $user->role,
-        //             'token' => $token,
-        //         ];
-        //         return $this->jsonResponse('Đăng nhập thành công', true, $data);
-        //     }
-
-        //     return $this->jsonResponse('Thông tin đăng nhập không chính xác');
-        // } catch (\Exception $exception) {
-        //     \DB::rollBack();
-        //     \Log::error($exception->getMessage());
-        //     return $this->jsonResponse('Common Exception');
-        // }
     }
 
     // method: POST
@@ -88,49 +67,37 @@ class AuthController extends Controller
     //                "message": "Đăng ký thành công",
     //                "data": null
     //            }
-    public function register()
+    public function register(RegisterRequest $request)
     {
+        try {
+            DB::beginTransaction();
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'role' => 1,
+                    'status' => 1,
+                ]);
+            DB::commit();
 
-        return view('auth.signup');
-    }
-    public function postRegister(RegisterRequest $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|min:3|unique:users',
-            'email' => 'required|unique:users|email',
-            'password' => 'required|min:8|confirmed'
-        ]);
-        $user = User::query()->create($data);
-        Auth::login($user);
-        $request->session()->regenerate();
-        return redirect()->route('dashboard');
-        // dd($data);
-        // try {
-        //     $user = User::create([
-        //         'name' => $request->name,
-        //         'email' => $request->email,
-        //         'password' => Hash::make($request->password),
-        //         'role' => 1,
-        //         'status' => 1,
-        //     ]);
-
-        //     if ($user) {
-        //         Auth::login($user);
-        //         $token = $user->createToken('tokenAuth')->plainTextToken;
-        //         $data = [
-        //             'role' => $user->role,
-        //             'token' => $token,
-        //         ];
-        //         return $this->jsonResponse('Đăng ký thành công', true, $data);
-        //     } else {
-        //         return $this->jsonResponse('Đăng ký thất bại');
-        //     }
-        // } catch (\Exception $exception) {
-        //     \DB::rollBack();
-        //     \Log::error($exception->getMessage());
-        //     return $this->jsonResponse('Common Exception');
-        // }
-
+            if ($user) {
+                Auth::login($user);
+                $token = $user->createToken('tokenAuth')->plainTextToken;
+                $data = [
+                    'role' => $user->role,
+                    'token' => $token,
+                    'user' => $user
+                ]; 
+                
+                return $this->jsonResponse('Đăng ký thành công', true,$data);
+            } else {
+                return $this->jsonResponse('Đăng ký thất bại');
+            }
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse('Common Exception');
+        }
     }
 
 
@@ -146,18 +113,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-        // if ($request->user()) {
-        //     $request->user()->currentAccessToken()->delete();
-
-        //     return $this->jsonResponse('Đăng Xuất thành công', true);
-        // }
-
-        // return $this->jsonResponse('Người dùng không được xác thực');
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+            
+            return $this->jsonResponse('Đăng Xuất thành công', true);
+        }
+    
+        return $this->jsonResponse('Người dùng không được xác thực');
     }
 }
