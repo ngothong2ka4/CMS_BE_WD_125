@@ -240,7 +240,7 @@
                     </div>
                     <div class="me-1">
                         <label for="image_color-${variantCounter}" class="form-label">Ảnh</label>
-                        <input name="image_color[]" type="file" required min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
+                        <input name="new_image_color[]" type="file" required min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
                     </div>
                     <div style="margin-top: 27px">
                         <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-${variantCounter}" type="button">Xoá</button>

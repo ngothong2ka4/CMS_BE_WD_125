@@ -68,8 +68,9 @@ class ProductController extends Controller
         ]);
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
-            $nameImage = time() . "." . $image->getClientOriginalExtension();
+            $nameImage =  time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
             $image->move('img/products', $nameImage);
+            $path='img/products/' . $nameImage;
         }
         $data_pro = [
             'name' => $request->name,
@@ -77,17 +78,31 @@ class ProductController extends Controller
             'id_materials' => $request->id_materials,
             'id_stones' => $request->id_stones,
             'description' => $request->description,
-            'thumbnail' => 'img/products/' . $nameImage,
+            'thumbnail' => url($path),
         ];
 
         $product = Product::create($data_pro);
+
+        // if ($request->hasFile('images') ) {
+        //     foreach ($request->file('images') as $image) {
+        //         // $imagePath = $image->store('products'); // Lưu ảnh
+        //         $image = $request->file('images');
+        //         $nameImage =  time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+        //         $image->move('img/products', $nameImage);
+        //         $path='img/products/' . $nameImage;
+        //         ProductImage::create([
+        //             'id_product' => $product->id,
+        //             'link_img' => url($path),
+        //         ]);
+        //     }
+        // }
 
         if ($request->id_attribute_color) {
             foreach ($request->id_attribute_color as $key => $color) {
 
                 if ($request->hasFile('image_color')) {
                     $image = $request->file('image_color')[$key];  // Lấy file image_color tại vị trí $key
-                    $image_Color = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+                    $image_Color =$product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
                     $path = 'img/products/variant/' . $image_Color;
                 }
@@ -100,7 +115,7 @@ class ProductController extends Controller
                     'list_price' => $request->list_price[$key],
                     'selling_price' => $request->selling_price[$key],
                     'quantity' => $request->quantity[$key],
-                    'image_color' => $path,
+                    'image_color' => url($path),
                 ];
                 Variant::create($data_var);
             }
@@ -179,7 +194,7 @@ class ProductController extends Controller
         ]);
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
-            $nameImage = time() . "." . $image->getClientOriginalExtension();
+            $nameImage =$product->id .time() . "_" . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
             $image->move('img/products', $nameImage);
             $path = 'img/products/' . $nameImage;
 
@@ -196,7 +211,7 @@ class ProductController extends Controller
             'id_materials' => $request->id_materials,
             'id_stones' => $request->id_stones,
             'description' => $request->description,
-            'thumbnail' => $path,
+            'thumbnail' => url($path),
         ];
 
         $product->update($data_pro);
@@ -208,10 +223,9 @@ class ProductController extends Controller
 
                 if ($request->hasFile('image_color') && isset($request->file('image_color')[$key])) {
                     $image = $request->file('image_color')[$key];
-                    $colorImage = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+                    $colorImage = $product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $colorImage);
                     $path = 'img/products/variant/' . $colorImage;
-
                     if (file_exists(($imgcolor_old))) {
                         unlink(($imgcolor_old));
                     }
@@ -227,7 +241,7 @@ class ProductController extends Controller
                     'list_price' => $request->list_price[$key],
                     'selling_price' => $request->selling_price[$key],
                     'quantity' => $request->quantity[$key],
-                    'image_color' => $path,
+                    'image_color' => url($path),
                 ];
 
                 $variant->update($data_var);
@@ -237,9 +251,9 @@ class ProductController extends Controller
         if ($request->new_id_attribute_color) {
             foreach ($request->new_id_attribute_color as $key => $color) {
 
-                if ($request->hasFile('image_color') && isset($request->file('image_color')[$key])) {
-                    $image = $request->file('image_color')[$key];
-                    $image_Color = time() . "." . $key . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+                if ($request->hasFile('new_image_color') && isset($request->file('new_image_color')[$key])) {
+                    $image = $request->file('new_image_color')[$key];
+                    $image_Color = $product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
                     $path = 'img/products/variant/' . $image_Color;
                 }
@@ -252,7 +266,7 @@ class ProductController extends Controller
                     'list_price' => $request->new_list_price[$key],
                     'selling_price' => $request->new_selling_price[$key],
                     'quantity' => $request->new_quantity[$key],
-                    'image_color' => $path,
+                    'image_color' => url($path),
                 ];
                 // dd($path);
                 Variant::create($data_var);
