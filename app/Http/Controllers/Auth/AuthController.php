@@ -88,7 +88,7 @@ class AuthController extends Controller
                     'token' => $token,
                     'user' => $user
                 ]; 
-                dd($data);
+                
                 return $this->jsonResponse('Đăng ký thành công', true,$data);
             } else {
                 return $this->jsonResponse('Đăng ký thất bại');
