@@ -98,7 +98,16 @@
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
-                            <textarea class="form-control" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{old('description')}}</textarea>
+                            <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{old('description')}}</textarea>
+                        </div>
+                        <div>
+                            <label for="basiInput" class="form-label">Hình ảnh cho slide(chọn nhiều ảnh)</label>
+                            <input  accept="image/x-png,image/gif,image/jpeg" type="file" name="link_image[]" multiple id="" class="form-control mb-3">
+                            @error('thumbnail')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -183,7 +192,7 @@
                     </div>
                     <div class="form-group me-1">
                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                        <select required name="id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
+                        <select name="id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
                             <option value="" >Chọn kích thước</option>
                            @foreach ($sizes as $size)
                                 <option value="{{ $size->id }}">{{ $size->name }}</option>

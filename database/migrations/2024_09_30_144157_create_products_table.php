@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id_materials');
             $table->integer('id_stones')->nullable();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('thumbnail');
             $table->integer('sold')->default(0);
             $table->timestamps();

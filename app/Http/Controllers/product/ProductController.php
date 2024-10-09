@@ -78,24 +78,29 @@ class ProductController extends Controller
             'id_materials' => $request->id_materials,
             'id_stones' => $request->id_stones,
             'description' => $request->description,
-            'thumbnail' => url($path),
+
+            'thumbnail' => 'http://127.0.0.1:8000/img/products/' . $nameImage,
+
         ];
 
         $product = Product::create($data_pro);
 
-        // if ($request->hasFile('images') ) {
-        //     foreach ($request->file('images') as $image) {
-        //         // $imagePath = $image->store('products'); // Lưu ảnh
-        //         $image = $request->file('images');
-        //         $nameImage =  time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
-        //         $image->move('img/products', $nameImage);
-        //         $path='img/products/' . $nameImage;
-        //         ProductImage::create([
-        //             'id_product' => $product->id,
-        //             'link_img' => url($path),
-        //         ]);
-        //     }
-        // }
+
+        if ($request->hasFile('link_image')) {
+            foreach($request->file('link_image') as $key => $image){
+            // $image = $request->file('link_image');
+            $nameImage = time()."_".$image->getClientOriginalName();
+            $image->move('img/products/slide/', $nameImage);
+            $path = 'http://127.0.0.1:8000/img/products/slide/'. $nameImage;
+            $data = [
+                'id_product' => $product->id,
+                'link_image' => $path,
+            ];
+             
+           ProductImage::create($data);
+        }
+        }
+
 
         if ($request->id_attribute_color) {
             foreach ($request->id_attribute_color as $key => $color) {
@@ -104,7 +109,7 @@ class ProductController extends Controller
                     $image = $request->file('image_color')[$key];  // Lấy file image_color tại vị trí $key
                     $image_Color =$product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
-                    $path = 'img/products/variant/' . $image_Color;
+                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
@@ -160,9 +165,10 @@ class ProductController extends Controller
         $stones = Stone::all();
         $colors = ProductColor::all();
         $sizes = ProductSize::all();
+        $images = ProductImage::where('id_product', $id)->get();
         return view(
             'product.product_management.edit',
-            compact('product', 'variants', 'categories', 'materials', 'stones', 'colors', 'sizes')
+            compact('product', 'variants', 'categories', 'materials', 'stones', 'colors', 'sizes','images')
         );
     }
 
@@ -196,7 +202,7 @@ class ProductController extends Controller
             $image = $request->file('thumbnail');
             $nameImage =$product->id .time() . "_" . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
             $image->move('img/products', $nameImage);
-            $path = 'img/products/' . $nameImage;
+            $path = 'http://127.0.0.1:8000/img/products/' . $nameImage;
 
             if (file_exists(public_path($img_old))) {
                 unlink(public_path($img_old));
@@ -216,6 +222,21 @@ class ProductController extends Controller
 
         $product->update($data_pro);
 
+        if ($request->hasFile('link_image')) {
+            foreach($request->file('link_image') as $key => $image){
+            // $image = $request->file('link_image');
+            $nameImage = time()."_".$image->getClientOriginalName();
+            $image->move('img/products/slide/', $nameImage);
+            $path = 'http://127.0.0.1:8000/img/products/slide/'. $nameImage;
+            $data = [
+                'id_product' => $product->id,
+                'link_image' => $path,
+            ];
+             
+           ProductImage::create($data);
+        }
+        }
+
         if ($request->id_var) {
             foreach ($request->id_var as $key => $item) {
                 $variant = Variant::findOrFail($item);
@@ -225,7 +246,10 @@ class ProductController extends Controller
                     $image = $request->file('image_color')[$key];
                     $colorImage = $product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $colorImage);
-                    $path = 'img/products/variant/' . $colorImage;
+
+                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $colorImage;
+
+
                     if (file_exists(($imgcolor_old))) {
                         unlink(($imgcolor_old));
                     }
@@ -255,7 +279,7 @@ class ProductController extends Controller
                     $image = $request->file('new_image_color')[$key];
                     $image_Color = $product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
-                    $path = 'img/products/variant/' . $image_Color;
+                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [

@@ -47,7 +47,8 @@ Route::get('/forgot', [LoginController::class, 'forgot'])->name('forgot');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
-    Route::middleware(['auth'])->group(function () {
+
+    // Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
     Route::resource('/user', UserController::class);
@@ -61,5 +62,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
     });
 
-    });
+    // });
+
 });
