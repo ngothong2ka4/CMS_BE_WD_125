@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:2|max:255|regex:/^[a-zA-Z ]*$/|unique:attribute_color,name'
+            'name' => 'required|min:2|max:255|regex:/^[\p{L}\s]+$/u|unique:attribute_color,name'
         ];
     }
 
