@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -37,6 +38,7 @@ class AuthController extends Controller
                 $data = [
                     'role' => $user->role,
                     'token' => $token,
+                    'user' => $user
                 ];
                 return $this->jsonResponse('Đăng nhập thành công', true, $data);
             }
@@ -68,13 +70,15 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         try {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role' => 1,
-                'status' => 1,
-            ]);
+            DB::beginTransaction();
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'role' => 1,
+                    'status' => 1,
+                ]);
+            DB::commit();
 
             if ($user) {
                 Auth::login($user);
@@ -82,13 +86,15 @@ class AuthController extends Controller
                 $data = [
                     'role' => $user->role,
                     'token' => $token,
+                    'user' => $user
                 ]; 
+                dd($data);
                 return $this->jsonResponse('Đăng ký thành công', true,$data);
             } else {
                 return $this->jsonResponse('Đăng ký thất bại');
             }
         } catch (\Exception $exception) {
-            \DB::rollBack();
+            DB::rollBack();
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Common Exception');
         }
