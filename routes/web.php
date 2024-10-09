@@ -48,9 +48,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::resource('/product_color', ProductColorController::class);
             Route::resource('/product_size', ProductSizeController::class);
             Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
-            Route::get('/{id}/image', [ProductVariantController::class, 'index'])->name('images_product');
-            Route::post('/{id}/image', [ProductVariantController::class, 'addImage'])->name('addImage');
-            Route::delete('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
+ 
+            Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
         });
     
     // });
