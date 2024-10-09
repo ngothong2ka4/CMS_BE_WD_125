@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     public function rules(Request $request): array
     {
         return [
-            'name' => 'required|max:255|min:2|regex:/^[a-zA-Z ]*$/|unique:attribute_color,name,' . $request->id
+            'name' => 'required|max:255|min:2|regex:/^[\p{L}\s]+$/u|unique:attribute_color,name,' . $request->id
         ];
     }
 
