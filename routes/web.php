@@ -34,23 +34,35 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/forgot', function () {
 //     return view('auth.forgot');
 // })->name('forgot');
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'postLogin']);
+
+Route::get('/signup', [AuthController::class, 'register'])->name('signup');
+Route::post('/signup', [AuthController::class, 'postRegister']);
+
+Route::get('/forgot', [AuthController::class, 'forgot'])->name('forgot');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
-    // Route::middleware(['auth'])->group(function () {
-        Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
-        Route::resource('category', CategoryController::class);
-        Route::resource('/user', UserController::class);
-        Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
 
-        Route::prefix('products')->group(function () {
-            Route::resource('/product_management', ProductController::class);
-            Route::resource('/product_color', ProductColorController::class);
-            Route::resource('/product_size', ProductSizeController::class);
-            Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
- 
-            Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
-        });
-    
-    // });
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+    Route::resource('category', CategoryController::class);
+    Route::resource('/user', UserController::class);
+    Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+
+    Route::prefix('products')->group(function () {
+        Route::resource('/product_management', ProductController::class);
+        Route::resource('/product_color', ProductColorController::class);
+        Route::resource('/product_size', ProductSizeController::class);
+        Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
+        Route::get('/{id}/image', [ProductVariantController::class, 'index'])->name('images_product');
+        Route::post('/{id}/image', [ProductVariantController::class, 'addImage'])->name('addImage');
+        Route::delete('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
+    });
+
+    });
+
 });
