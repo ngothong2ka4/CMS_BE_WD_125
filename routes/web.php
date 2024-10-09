@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\AuthController as LoginController;
 use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\product\ProductColorController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\product\ProductSizeController;
 use App\Http\Controllers\product\ProductVariantController;
 use App\Http\Controllers\user\UserController;
 use Illuminate\Support\Facades\Route;
-
+// use App\Http\Controllers\AuthController as LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,19 +36,19 @@ use Illuminate\Support\Facades\Route;
 //     return view('auth.forgot');
 // })->name('forgot');
 
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'postLogin']);
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'postLogin']);
 
-Route::get('/signup', [AuthController::class, 'register'])->name('signup');
-Route::post('/signup', [AuthController::class, 'postRegister']);
+// Route::get('/signup', [LoginController::class, 'register'])->name('signup');
+// Route::post('/signup', [LoginController::class, 'postRegister']);
 
-Route::get('/forgot', [AuthController::class, 'forgot'])->name('forgot');
+Route::get('/forgot', [LoginController::class, 'forgot'])->name('forgot');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
-    // Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
     Route::resource('/user', UserController::class);
@@ -61,6 +62,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
     });
 
-    // });
+    });
 
 });

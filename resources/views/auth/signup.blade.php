@@ -33,6 +33,7 @@
                                 <div class="invalid-feedback">
                                     Nhập tên
                                 </div>
+                                
                             </div>
                             <div class="mb-3">
                                 <label for="mail" class="form-label">Email <span class="text-danger">*</span></label>

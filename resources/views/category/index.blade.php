@@ -7,6 +7,12 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
+            <form action="{{route('logout')}}" method="post">
+                @csrf
+                <button class="dropdown-item" id="logoutButton" type="submit"><i
+                        class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                        class="align-middle" data-key="t-logout">Đăng xuất</span></button>
+            </form>
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Quản lý danh mục</h5>
