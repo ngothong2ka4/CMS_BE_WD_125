@@ -218,6 +218,16 @@ class ProductController extends Controller
                 $query->where('status', 1);
             }
         ])->find($id);
+        $imageLinks = $product->images->pluck('link_image')->toArray();
+        foreach ($product->variants as $variant) {
+            if (!empty($variant->image_color)) {
+                $imageLinks[] = $variant->image_color;  
+            }
+        }
+        
+        $product->slideImages = collect($imageLinks)->map(function($link) {
+            return ['link_image' => $link]; 
+        });
 
         if (!$product) {
             return $this->jsonResponse('Không tìm thấy sản phẩm');

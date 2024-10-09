@@ -91,7 +91,11 @@
                                 </div>
                             @enderror
                         </div>
-
+                        <div class="">
+                            {{-- <label for="images">Chọn ảnh sản phẩm</label>
+                            <input type="file" name="images[]" multiple class="form-control" id="images"> --}}
+                            {{-- @include('product.product_management.product_images.index') --}}
+                        </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
                             <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{old('description')}}</textarea>
