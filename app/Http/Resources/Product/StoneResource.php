@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CommentResource extends JsonResource
+class StoneResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,10 @@ class CommentResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'id_user' => $this->id_user,
-            'content' => $this->content,
-            'posting_date' => $this->posting_date,
-            'status' => $this->status
+            'id' => $this->id,
+            'name' => $this->name,
         ];
+
         return $data;
     }
 }

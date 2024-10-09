@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\Auth\AuthController;
@@ -37,3 +38,11 @@ Route::get('/products', [ProductController::class, 'index']);
 
 Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);
 Route::get('/relatedProducts/{id}',[ProductController::class, 'relatedProducts']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
+
+    Route::get('/listCart',[CartController::class, 'listProductInCart']);
+    Route::post('/addCart',[CartController::class, 'addProductToCart']);
+    Route::post('/deleteCart',[CartController::class, 'deleteProductInCart']);
+});

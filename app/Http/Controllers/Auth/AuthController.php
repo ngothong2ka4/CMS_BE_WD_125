@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +29,7 @@ class AuthController extends Controller
     //            }
     public function login()
     {
+
         return view('auth.login');
     }
     public function postLogin(LoginRequest $request)
@@ -43,6 +45,7 @@ class AuthController extends Controller
             //     return redirect()->intended('dashboard');
             // }
             return redirect()->intended('dashboard');
+
 
         }
         return back()->withErrors([
@@ -87,6 +90,7 @@ class AuthController extends Controller
     //            }
     public function register()
     {
+
         return view('auth.signup');
     }
     public function postRegister(RegisterRequest $request)
@@ -126,6 +130,7 @@ class AuthController extends Controller
         //     \Log::error($exception->getMessage());
         //     return $this->jsonResponse('Common Exception');
         // }
+
     }
 
 

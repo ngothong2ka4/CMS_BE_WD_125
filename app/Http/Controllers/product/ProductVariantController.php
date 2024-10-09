@@ -37,7 +37,7 @@ class ProductVariantController extends Controller
             $image = $request->file('image');
             $nameImage = time()."_".$image->getClientOriginalName();
             $image->move('img/products', $nameImage);
-            $path = 'img/products/'. $nameImage;
+            $path = 'http://127.0.0.1:8000/img/products/'. $nameImage;
             $data = [
                 'id_product' => $id,
                 'id_attribute_color' => $request->id_attribute_color,
