@@ -103,7 +103,7 @@ class ProductController extends Controller
 
         $products_cate = Product::with(['variants' => function ($query) {
             $query->select('id_product', 'selling_price', 'list_price')
-                ->limit(1)
+                // ->limit(1)
                 ->whereIn('id_product', function ($subQuery) {
                     $subQuery->select('id_product')
                         ->from('variants')
@@ -117,7 +117,7 @@ class ProductController extends Controller
 
         $products = Product::with(['variants' => function ($query) {
             $query->select('id_product', 'selling_price', 'list_price')
-                ->limit(1)
+                // ->limit(1)
                 ->whereIn('id_product', function ($subQuery) {
                     $subQuery->select('id_product')
                         ->from('variants')

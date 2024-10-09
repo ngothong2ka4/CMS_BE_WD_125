@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="form-group me-1">
                                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                                        <select required name="id_attribute_size[]" class="form-select mb-3"
+                                        <select name="id_attribute_size[]" class="form-select mb-3"
                                             id="size-${variantCounter}" aria-label="Default select example">
                                             <option value="">Chọn kích thước</option>
                                             @foreach ($sizes as $size)
