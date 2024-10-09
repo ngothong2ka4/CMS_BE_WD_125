@@ -42,7 +42,7 @@
 
                                 
                                     <td>                                        
-                                        <a href="{{ route('images_product', $product->id) }}"><button class="btn btn-dark">Hình ảnh</button></a>
+                                       
 
                                         <a href="{{ route('product_management.show', $product->id) }}"><button class="btn btn-info">Chi tiết</button></a>
                                         <a href="{{ route('product_management.edit', $product->id) }}"><button class="btn btn-warning">Sửa</button></a>
