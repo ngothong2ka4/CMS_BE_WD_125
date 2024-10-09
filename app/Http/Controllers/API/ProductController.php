@@ -98,11 +98,8 @@ class ProductController extends Controller
         return response()->json($products, 200);
     }
 
-
-    public function filterProducts(Request $request) // Lọc sản phẩm
+    public function productByCate(Request $request) 
     {
-        $sortBy = $request->input('sort_by', 'price');
-        $sortOrder = $request->input('sort', 'asc');
         $cate = $request->input('cate');
 
         $products_cate = Product::with(['variants' => function ($query) {
@@ -118,6 +115,14 @@ class ProductController extends Controller
         }])
             ->where('id_category', $cate)
             ->get(['id', 'name', 'thumbnail']);
+
+        return response()->json($products_cate, 200);
+    }
+
+    public function filterProducts(Request $request) // Lọc sản phẩm
+    {
+        $sortBy = $request->input('sort_by', 'price');
+        $sortOrder = $request->input('sort', 'asc');
 
         $products = Product::with(['variants' => function ($query) {
             $query->select('id_product', 'selling_price', 'list_price')
@@ -156,7 +161,6 @@ class ProductController extends Controller
             'total_pages' => $totalPages,
             'data' => [
                 'products' => $products,  // Danh sách sản phẩm
-                'products_cate' => $products_cate  // Danh sách sản phẩm theo danh mục
             ],
         ], 200);
     }
