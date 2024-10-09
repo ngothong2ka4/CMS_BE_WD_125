@@ -96,6 +96,15 @@
                             <label for="basiInput" class="form-label">Mô tả</label>
                             <textarea class="form-control" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{old('description')}}</textarea>
                         </div>
+                        <div>
+                            <label for="basiInput" class="form-label">Hình ảnh cho slide(chọn nhiều ảnh)</label>
+                            <input type="file" name="link_image[]" multiple id="" class="form-control mb-3">
+                            @error('thumbnail')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
                 </div>
                 <div class="card mt-2">
