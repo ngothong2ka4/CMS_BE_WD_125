@@ -31,11 +31,10 @@ Route::apiResource('category',CategoryController::class);
 // API sản phẩm mới (5 cái)
 Route::get('/products/new', [ProductController::class, 'getNewProducts']);
 
-Route::get('/products/search', [ProductController::class, 'searchProductsByName']);
-Route::get('/products/filter_cate', [ProductController::class, 'productByCate']);
-Route::get('/products/filter', [ProductController::class, 'filterProducts']);
-// lọc theo giá: /api/products/filter?sort_by=price
-// lọc theo tên : /api/products/filter?sort_by=name
+// Route::get('/products/search', [ProductController::class, 'searchProductsByName']);
+// Route::get('/products/filter_cate', [ProductController::class, 'productByCate']);
+// Route::get('/products/filter', [ProductController::class, 'filterProducts']);
+
 Route::get('/products', [ProductController::class, 'index']);
 
 Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);

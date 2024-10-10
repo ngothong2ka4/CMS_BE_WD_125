@@ -17,8 +17,12 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) //tất cả sản phẩm
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+        $id_category = $request->input('id_category');
+        $sortBy = $request->input('sort_by', 'price');
+        $sortOrder = $request->input('sort', 'asc');
         $products = Product::with(['variants' => function ($query) {
             $query->select('id_product', 'selling_price', 'list_price')
                 // ->limit(1)
@@ -30,8 +34,26 @@ class ProductController extends Controller
                         ->havingRaw('selling_price = MIN(selling_price)');
                 });
         }])
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");  // Tìm kiếm theo tên sản phẩm
+            })
+            ->when($id_category, function ($query, $id_category) {
+                return $query->where('id_category', $id_category);  // Lọc theo danh mục
+            })
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name', 'thumbnail']);
+
+        if ($sortBy === 'price') {
+            $products = $products->sortBy(function ($product) {
+                return $product->variants->min('selling_price');
+            });
+        } elseif ($sortBy === 'name') {
+            $products = $products->sortBy('name');
+        }
+
+        if ($sortOrder === 'desc') {
+            $products = $products->reverse();
+        }
 
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page', 12);
@@ -98,105 +120,105 @@ class ProductController extends Controller
         return response()->json($products, 200);
     }
 
-    public function productByCate(Request $request) 
-    {
-        $cate = $request->input('cate');
+    // public function productByCate(Request $request)
+    // {
+    //     $cate = $request->input('cate');
 
-        $products_cate = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                // ->limit(1)
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
-            ->where('id_category', $cate)
-            ->get(['id', 'name', 'thumbnail']);
+    //     $products_cate = Product::with(['variants' => function ($query) {
+    //         $query->select('id_product', 'selling_price', 'list_price')
+    //             // ->limit(1)
+    //             ->whereIn('id_product', function ($subQuery) {
+    //                 $subQuery->select('id_product')
+    //                     ->from('variants')
+    //                     ->whereNull('deleted_at')
+    //                     ->groupBy('id_product')
+    //                     ->havingRaw('selling_price = MIN(selling_price)');
+    //             });
+    //     }])
+    //         ->where('id_category', $cate)
+    //         ->get(['id', 'name', 'thumbnail']);
 
-        return response()->json($products_cate, 200);
-    }
+    //     return response()->json($products_cate, 200);
+    // }
 
-    public function filterProducts(Request $request) // Lọc sản phẩm
-    {
-        $sortBy = $request->input('sort_by', 'price');
-        $sortOrder = $request->input('sort', 'asc');
+    // public function filterProducts(Request $request) // Lọc sản phẩm
+    // {
+    //     $sortBy = $request->input('sort_by', 'price');
+    //     $sortOrder = $request->input('sort', 'asc');
 
-        $products = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                // ->limit(1)
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
-            ->get(['id', 'name', 'thumbnail']);
+    //     $products = Product::with(['variants' => function ($query) {
+    //         $query->select('id_product', 'selling_price', 'list_price')
+    //             // ->limit(1)
+    //             ->whereIn('id_product', function ($subQuery) {
+    //                 $subQuery->select('id_product')
+    //                     ->from('variants')
+    //                     ->whereNull('deleted_at')
+    //                     ->groupBy('id_product')
+    //                     ->havingRaw('selling_price = MIN(selling_price)');
+    //             });
+    //     }])
+    //         ->get(['id', 'name', 'thumbnail']);
 
-        if ($sortBy === 'price') {
-            $products = $products->sortBy(function ($product) {
-                return $product->variants->min('selling_price');
-            });
-        } elseif ($sortBy === 'name') {
-            $products = $products->sortBy('name');
-        }
+    //     if ($sortBy === 'price') {
+    //         $products = $products->sortBy(function ($product) {
+    //             return $product->variants->min('selling_price');
+    //         });
+    //     } elseif ($sortBy === 'name') {
+    //         $products = $products->sortBy('name');
+    //     }
 
-        if ($sortOrder === 'desc') {
-            $products = $products->reverse();
-        }
+    //     if ($sortOrder === 'desc') {
+    //         $products = $products->reverse();
+    //     }
 
-        $page = $request->input('page', 1);
-        $perPage = $request->input('per_page', 12);
-        $total = count($products);
-        $totalPages = ceil($total / $perPage);
+    //     $page = $request->input('page', 1);
+    //     $perPage = $request->input('per_page', 12);
+    //     $total = count($products);
+    //     $totalPages = ceil($total / $perPage);
 
-        $products = $products->slice(($page - 1) * $perPage, $perPage)->values();
+    //     $products = $products->slice(($page - 1) * $perPage, $perPage)->values();
 
-        return response()->json([
-            'current_page' => $page,
-            'total_pages' => $totalPages,
-            'data' => [
-                'products' => $products,  // Danh sách sản phẩm
-            ],
-        ], 200);
-    }
+    //     return response()->json([
+    //         'current_page' => $page,
+    //         'total_pages' => $totalPages,
+    //         'data' => [
+    //             'products' => $products,  // Danh sách sản phẩm
+    //         ],
+    //     ], 200);
+    // }
 
 
-    public function searchProductsByName(Request $request)
-    {
-        $query = $request->input('name');
-        if (!$query) {
-            return response()->json([
-                'message' => 'Tên sản phẩm không được bỏ trống!'
-            ], 400);
-        }
+    // public function searchProductsByName(Request $request)
+    // {
+    //     $query = $request->input('name');
+    //     if (!$query) {
+    //         return response()->json([
+    //             'message' => 'Tên sản phẩm không được bỏ trống!'
+    //         ], 400);
+    //     }
 
-        $products = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                // ->limit(1)
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
-            ->where('name', 'like', '%' . $query . '%')
-            ->get(['id', 'name', 'thumbnail']);
+    //     $products = Product::with(['variants' => function ($query) {
+    //         $query->select('id_product', 'selling_price', 'list_price')
+    //             // ->limit(1)
+    //             ->whereIn('id_product', function ($subQuery) {
+    //                 $subQuery->select('id_product')
+    //                     ->from('variants')
+    //                     ->whereNull('deleted_at')
+    //                     ->groupBy('id_product')
+    //                     ->havingRaw('selling_price = MIN(selling_price)');
+    //             });
+    //     }])
+    //         ->where('name', 'like', '%' . $query . '%')
+    //         ->get(['id', 'name', 'thumbnail']);
 
-        if ($products->isEmpty()) {
-            return response()->json([
-                'message' => 'Không tìm thấy sản phẩm nào!'
-            ], 404);
-        }
+    //     if ($products->isEmpty()) {
+    //         return response()->json([
+    //             'message' => 'Không tìm thấy sản phẩm nào!'
+    //         ], 404);
+    //     }
 
-        return response()->json($products, 200);
-    }
+    //     return response()->json($products, 200);
+    // }
 
 
 
@@ -225,12 +247,12 @@ class ProductController extends Controller
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
             if (!empty($variant->image_color)) {
-                $imageLinks[] = $variant->image_color;  
+                $imageLinks[] = $variant->image_color;
             }
         }
-        
-        $product->slideImages = collect($imageLinks)->map(function($link) {
-            return ['link_image' => $link]; 
+
+        $product->slideImages = collect($imageLinks)->map(function ($link) {
+            return ['link_image' => $link];
         });
 
         if (!$product) {
@@ -259,10 +281,10 @@ class ProductController extends Controller
         }
 
         $relatedProducts = Product::where('id_category', $currentProduct->id_category)
-                                ->where('id', '!=', $id) 
-                                ->with('variants')
-                                ->limit(5)
-                                ->get();
+            ->where('id', '!=', $id)
+            ->with('variants')
+            ->limit(5)
+            ->get();
 
         return $this->jsonResponse('Success', true, RelatedProductsResource::collection($relatedProducts));
     }
