@@ -13,7 +13,6 @@ class Order extends Model
         'id_user',
         'email',
         'recipient_name',
-        'email',
         'phone_number',
         'recipient_address',
         'order_date',

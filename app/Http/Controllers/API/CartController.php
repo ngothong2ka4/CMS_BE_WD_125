@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Models\Variant;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -30,13 +31,29 @@ class CartController extends Controller
     public function addProductToCart(Request $request) 
     {
         try {
-            $data = $request->all();
-            $data['id_user'] = Auth::id();
-
+            $id_variant = $request->id_variant;
+            $quantity = $request->quantity;
+            $id_user = Auth::id();
+    
             DB::beginTransaction();
-                $cart = Cart::create($data);
+            
+            $cart = Cart::where('id_variant', $id_variant)
+                        ->where('id_user', $id_user)
+                        ->first();
+    
+            if ($cart) {
+                $cart->quantity += $quantity;
+                $cart->save();
+            } else {
+                $cart = Cart::create([
+                    'id_variant' => $id_variant,
+                    'quantity' => $quantity,
+                    'id_user' => $id_user,
+                ]);
+            }
+    
             DB::commit();
-
+    
             return $this->jsonResponse('Thêm vào giỏ hàng thành công', true, $cart);
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -139,6 +156,7 @@ class CartController extends Controller
                 'variant.size',
                 ])->where("id_user", $user)->get();
             
+            
             return $this->jsonResponse('Lấy sản phẩm trong giỏ hàng thành công', 
                                         true, 
                                         CartResource::collection($productInCart));
@@ -179,14 +197,23 @@ class CartController extends Controller
                 return $this->jsonResponse('Bạn chưa đăng nhập');
             }
     
-            $data = array_map(function($item) use ($userId) {
+            $valid = collect($cartItems)->every(function ($item) {
+                $variant = Variant::find($item['id_variant']);
+                return $variant && $item['quantity'] <= $variant->quantity;
+            });
+            
+            if (!$valid) {
+                return $this->jsonResponse('Số lượng sản phẩm không đủ.', false);
+            }
+            
+            $data = collect($cartItems)->map(function ($item) use ($userId) {
                 return [
-                    'id' => $item['cart_id'],  
-                    'id_variant' => $item['id_variant'],  
-                    'id_user' => $userId,    
-                    'quantity' => $item['quantity'], 
+                    'id' => $item['cart_id'],
+                    'id_variant' => $item['id_variant'],
+                    'id_user' => $userId,
+                    'quantity' => $item['quantity'],
                 ];
-            }, $cartItems);
+            })->toArray();
     
             Cart::upsert($data, ['id', 'id_user', 'id_variant'], ['quantity', 'updated_at']);
     

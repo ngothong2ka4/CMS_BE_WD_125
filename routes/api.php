@@ -50,6 +50,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/deleteMutipleCart',[CartController::class, 'deleteMutipleProductInCart']);
 
     Route::put('/choseProductInCart',[CartController::class, 'choseProductInCart']);
-    // Route::get('/listInformationOrder',[OrderController::class, 'listInformationOrder']);
+    Route::get('/listInformationOrder',[OrderController::class, 'listInformationOrder']);
 
 });
