@@ -11,6 +11,22 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    // method: POST
+    // require: authToken
+    // API: /api/addCart
+    // parram: (id_variant,quantity)
+    // example: 
+    //     {
+    //         "id_variant": 9,
+    //         "quantity": 10
+        
+    //     }
+    // response:200
+    //            {
+    //                "status": true,
+    //                "message": "Success",
+    //                "data": cart
+    //            } 
     public function addProductToCart(Request $request) 
     {
         try {
@@ -29,13 +45,27 @@ class CartController extends Controller
         }
     }
 
+    // method: DELETE
+    // require: authToken
+    // API: /api/deleteCart
+    // parram: (id_cart)
+    // example: 
+    //     {
+    //         "id" : 6
+    //     }
+    // response:200
+    //             {
+    //                 "status": true,
+    //                 "message": "Xoá sản phẩm trong giỏ hàng thành công",
+    //                 "data": null
+    //             }
     public function deleteProductInCart(Request $request) 
     {
         try {
-            $user = Auth::id();
+            $userId = Auth::id();
             $productInCart = Cart::find($request->id);
 
-            if (!$productInCart || $productInCart->id_user != $user) {
+            if (!$productInCart || $productInCart->id_user != $userId) {
                 return $this->jsonResponse('Bạn không có sản phẩm này trong giỏ hàng');
             }
     
@@ -49,6 +79,51 @@ class CartController extends Controller
         }
     }
 
+    // method: DELETE
+    // require: authToken
+    // API: /api/deleteMutipleCart
+    // parram: (cart_ids(mảng id cần xoá), id_user)
+    // example: 
+    //          {
+    //            "cart_ids" :[4,5],
+    //            "id_user" : 5
+    //          }
+    // response:200
+    //             {
+    //                 "status": true,
+    //                 "message": "Xóa sản phẩm được chọn thành công",
+    //                 "data": null
+    //             }
+    public function deleteMutipleProductInCart(Request $request){
+        $cartIds = $request->input('cart_ids', []);
+        $userId = Auth::id();
+        $userIdCart =  $request->input('id_user');
+        try {
+            if ($userIdCart != $userId) {
+                return $this->jsonResponse('Bạn không có sản phẩm này trong giỏ hàng');
+            }
+
+            if (empty($cartIds)) {
+                return $this->jsonResponse('Không có sản phẩm nào được xoá!');
+            }
+    
+            Cart::whereIn('id', $cartIds)->where('id_user', $userId)->delete();
+            return $this->jsonResponse('Xóa sản phẩm được chọn thành công', true);
+        } catch (\Exception $exception) {
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse('Common Exception');
+        }
+    }
+
+    // method: GET
+    // require: authToken
+    // API: /api/listCart
+    // response:200
+    //             {
+    //                 "status": true,
+    //                 "message": "Lấy sản phẩm trong giỏ hàng thành công",
+    //                 "data": list cart
+    //             }
     public function listProductInCart() 
     {
         try {
@@ -71,6 +146,56 @@ class CartController extends Controller
             DB::rollBack();
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Common Exception');
+        }
+    }
+    // method: PUT
+    // require: authToken
+    // API: /api/choseProductInCart
+    // parram: (cartItems(mảng các product đã chọn và thay đổi số lượng cần xoá))
+    // example:
+    //          {
+    //              "cartItems": [
+    //                  {
+    //                  "cart_id": 3,
+    //                  "id_variant": 2, 
+    //                  "quantity": 8
+    //                  }
+    //              ]
+    //          }
+    // response:200
+    //             {
+    //                 "status": true,
+    //                 "message": "Cập nhật giỏ hàng thành công",
+    //                 "data": null
+    //             }
+    public function choseProductInCart(Request $request) 
+    {
+        try {
+            DB::beginTransaction();
+            $cartItems = $request->input('cartItems');
+            $userId = Auth::id();
+
+            if (!$userId) {
+                return $this->jsonResponse('Bạn chưa đăng nhập');
+            }
+    
+            $data = array_map(function($item) use ($userId) {
+                return [
+                    'id' => $item['cart_id'],  
+                    'id_variant' => $item['id_variant'],  
+                    'id_user' => $userId,    
+                    'quantity' => $item['quantity'], 
+                ];
+            }, $cartItems);
+    
+            Cart::upsert($data, ['id', 'id_user', 'id_variant'], ['quantity', 'updated_at']);
+    
+            DB::commit();
+            return $this->jsonResponse('Cập nhật giỏ hàng thành công', true);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse('Có lỗi xảy ra, vui lòng thử lại sau.');
         }
     }
 }

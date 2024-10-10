@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
@@ -45,5 +46,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/listCart',[CartController::class, 'listProductInCart']);
     Route::post('/addCart',[CartController::class, 'addProductToCart']);
-    Route::post('/deleteCart',[CartController::class, 'deleteProductInCart']);
+    Route::delete('/deleteCart',[CartController::class, 'deleteProductInCart']);
+    Route::delete('/deleteMutipleCart',[CartController::class, 'deleteMutipleProductInCart']);
+
+    Route::put('/choseProductInCart',[CartController::class, 'choseProductInCart']);
+    // Route::get('/listInformationOrder',[OrderController::class, 'listInformationOrder']);
+
 });
