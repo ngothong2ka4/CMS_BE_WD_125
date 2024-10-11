@@ -52,6 +52,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
 
     Route::middleware(['auth',AdminMiddleware::class])->group(function () {
+    Route::redirect('','dashboard');
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
     Route::resource('order', OrderController::class);
