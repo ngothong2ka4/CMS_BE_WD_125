@@ -29,14 +29,9 @@ class AuthController extends Controller
 
     // Thử đăng nhập
     if (Auth::attempt($credentials)) {
-        // Regenerate session
         $request->session()->regenerate();
-        
-        // Điều hướng sau khi đăng nhập thành công
         return redirect()->intended('dashboard');
     }
-
-    // Đăng nhập thất bại, trả về thông báo lỗi
     return back()->withErrors([
         'login' => 'Email hoặc mật khẩu không đúng.',
     ])->onlyInput('email');
@@ -71,23 +66,23 @@ class AuthController extends Controller
     // }
 
    
-    // public function register()
-    // {
-    //     return view('auth.signup');
-    // }
-    // public function postRegister(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'name' => 'required|min:3|unique:users',
-    //         'email' => 'required|unique:users|email',
-    //         'password' => 'required|min:8|confirmed'
-    //     ]);
-    //     $user=User::query()->create($data);
-    //     Auth::login($user);
-    //     $request->session()->regenerate();
-    //     return redirect()->route('dashboard');
+    public function register()
+    {
+        return view('auth.signup');
+    }
+    public function postRegister(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|min:3|unique:users',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|min:8|confirmed'
+        ]);
+        $user=User::query()->create($data);
+        Auth::login($user);
+        $request->session()->regenerate();
+        return redirect()->route('dashboard');
        
-    // }
+    }
 
 
     public function logout(Request $request)

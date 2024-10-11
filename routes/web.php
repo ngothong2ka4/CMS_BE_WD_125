@@ -9,6 +9,7 @@ use App\Http\Controllers\product\ProductController;
 use App\Http\Controllers\product\ProductSizeController;
 use App\Http\Controllers\product\ProductVariantController;
 use App\Http\Controllers\user\UserController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\AuthController as LoginController;
 /*
@@ -39,8 +40,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin']);
 
-// Route::get('/signup', [LoginController::class, 'register'])->name('signup');
-// Route::post('/signup', [LoginController::class, 'postRegister']);
+Route::get('/signup', [LoginController::class, 'register'])->name('signup');
+Route::post('/signup', [LoginController::class, 'postRegister']);
 
 Route::get('/forgot', [LoginController::class, 'forgot'])->name('forgot');
 
@@ -48,7 +49,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth',AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
     Route::resource('/user', UserController::class);
