@@ -129,13 +129,13 @@ toastr()->error($error);
                     <h4 class="mb-0">Danh sách biến thể</h4>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body variant-row">
                     <div id="variant-container">
                         @foreach ($variants as $var)
                         <input type="hidden" name="id_var[]" value="{{ $var->id }}">
                         <div class="form-group d-flex" id="">
                             <div class="form-group me-1">
-                                <label for="color-${variantCounter}" class="form-label">Màu sắc</label>
+                                <label for="color-${variantCounter}" class="form-label variant-select color-select">Màu sắc</label>
                                 <select required name="id_attribute_color[]" class="form-select mb-3"
                                     id="color-${variantCounter}" aria-label="Default select example">
                                     <option value="">Chọn màu sắc</option>
@@ -147,34 +147,31 @@ toastr()->error($error);
                             </div>
                             <div class="form-group me-1">
                                 <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                                <select name="id_attribute_size[]" class="form-select mb-3"
+                                <select name="id_attribute_size[]" class="form-select mb-3 variant-select size-select"
                                     id="size-${variantCounter}" aria-label="Default select example">
                                     <option value="">Chọn kích thước</option>
                                     @foreach ($sizes as $size)
                                     <option {{ $size->id === $var->id_attribute_size ? 'selected' : '' }}
                                         value="{{ $size->id }}">{{ $size->name }}</option>
                                     @endforeach
-
-
-
                                 </select>
                             </div>
                             <div class="me-1">
                                 <label for="price_in-{$variantCounter}" class="form-label">Giá nhập</label>
                                 <input value="{{ number_format($var->import_price, 0, '.', '') }}"
-                                    name="import_price[]" type="text" required min=0 class="form-control"
+                                    name="import_price[]" type="number" required min=0 class="form-control price-validate price_in"
                                     id="price_in-{$variantCounter}" placeholder="Nhập giá nhập">
                             </div>
                             <div class="me-1">
                                 <label for="price_out-{$variantCounter}" class="form-label">Giá niêm yết</label>
                                 <input value="{{ number_format($var->list_price, 0, '.', '') }}"
-                                    name="list_price[]" type="text" required min=0 class="form-control"
+                                    name="list_price[]" type="number" required min=0 class="form-control price-validate price_out"
                                     id="price_out-{$variantCounter}" placeholder="Nhập giá niêm yết">
                             </div>
                             <div class="me-1">
                                 <label for="sale_price-{$variantCounter}" class="form-label">Giá bán</label>
                                 <input value="{{ number_format($var->selling_price, 0, '.', '') }}"
-                                    name="selling_price[]" type="text" required min=0 class="form-control"
+                                    name="selling_price[]" type="number" required min=0 class="form-control price-validate sale_price"
                                     id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
                             </div>
                             <div class="me-1">
@@ -230,10 +227,10 @@ toastr()->error($error);
         variantCounter++;
 
         let newVariant = `
-                <div class="form-group d-flex" id="variant-${variantCounter}">
+                <div class="form-group d-flex variant-row" id="variant-${variantCounter}">
                     <div class="form-group me-1">
                         <label for="color-${variantCounter}" class="form-label">Màu sắc</label>
-                        <select required name="new_id_attribute_color[]" class="form-select mb-3" id="color-${variantCounter}" aria-label="Default select example">
+                        <select required name="new_id_attribute_color[]" class="form-select mb-3 variant-select color-select " id="color-${variantCounter}" aria-label="Default select example">
                             <option value="">Chọn màu sắc</option>
                             @foreach ($colors as $color)
                                 <option value="{{ $color->id }}">{{ $color->name }}</option>
@@ -242,7 +239,7 @@ toastr()->error($error);
                     </div>
                     <div class="form-group me-1">
                         <label  for="size-${variantCounter}" class="form-label">Kích thước</label>
-                        <select name="new_id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
+                        <select name="new_id_attribute_size[]" class="form-select mb-3 variant-select size-select" id="size-${variantCounter}" aria-label="Default select example">
                             <option value="" >Chọn kích thước</option>
                            @foreach ($sizes as $size)
                                 <option value="{{ $size->id }}">{{ $size->name }}</option>
@@ -251,15 +248,15 @@ toastr()->error($error);
                     </div>
                     <div class="me-1">
                         <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
-                        <input name="new_import_price[]" type="number" required min=0 class="form-control" id="price_in-${variantCounter}" placeholder="Nhập giá nhập">
+                        <input name="new_import_price[]" type="number" required min=0 class="form-control price-validate price_in" id="price_in-${variantCounter}" placeholder="Nhập giá nhập">
                     </div>
                     <div class="me-1">
                         <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
-                        <input name="new_list_price[]" type="number" required min=0 class="form-control" id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết">
+                        <input name="new_list_price[]" type="number" required min=0 class="form-control price-validate price_out" id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết">
                     </div>
                     <div class="me-1">
                         <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                        <input name="new_selling_price[]" type="number" required min=0 class="form-control" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
+                        <input name="new_selling_price[]" type="number" required min=0 class="form-control price-validate sale_price" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
                     </div>
                     <div class="me-1">
                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
@@ -287,5 +284,63 @@ toastr()->error($error);
             $('#' + variantId).remove();
         }
     });
+    $(document).on('input', '.price-validate', function() {
+            let variantId = $(this).closest('.variant-row').attr('id');
+
+            let import_price = parseFloat($('#' + variantId + ' .price_in').val()) ;
+            let list_price = parseFloat($('#' + variantId + ' .price_out').val()) ;
+            let selling_price = parseFloat($('#' + variantId + ' .sale_price').val()) ;
+
+            let price = parseFloat($(this).val()) ;
+
+            if (price < 0) {
+                $(this).addClass('is-invalid');
+                $(this).after('<div class="invalid-feedback">Giá phải lớn hơn hoặc bằng 0.</div>');
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).next('.invalid-feedback').remove();
+            }
+
+            if (list_price <= import_price) {
+                $('#' + variantId + ' .price_out').addClass('is-invalid');
+                $('#' + variantId + ' .price_out').next('.invalid-feedback').remove();
+                $('#' + variantId + ' .price_out').after(
+                    '<div class="invalid-feedback">Giá niêm yết phải lớn hơn giá nhập.</div>');
+            } else {
+                $('#' + variantId + ' .price_out').removeClass('is-invalid');
+                $('#' + variantId + ' .price_out').next('.invalid-feedback').remove();
+            }
+
+            if (selling_price <= import_price) {
+                $('#' + variantId + ' .sale_price').addClass('is-invalid');
+                $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
+                $('#' + variantId + ' .sale_price').after(
+                    '<div class="invalid-feedback">Giá bán phải lớn hơn giá nhập.</div>');
+            } else if (selling_price < list_price) {
+                $('#' + variantId + ' .sale_price').addClass('is-invalid');
+                $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
+                $('#' + variantId + ' .sale_price').after(
+                    '<div class="invalid-feedback">Giá bán phải lớn hơn hoặc bằng giá niêm yết.</div>');
+            } else {
+                $('#' + variantId + ' .sale_price').removeClass('is-invalid');
+                $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
+            }
+        });
+
+        $(document).on('change', '.variant-select', function() {
+            let selectedVariants = [];
+            $('.variant-row').each(function() {
+                let color = $(this).find('.color-select').val();
+                let size = $(this).find('.size-select').val();
+                let variant = color + '-' + size;
+                if (selectedVariants.includes(variant) && color && size) {
+                    alert('Màu và kích thước này đã tồn tại. Vui lòng chọn màu hoặc kích thước khác.');
+                    $(this).find('.color-select').val('');
+                    $(this).find('.size-select').val('');
+                } else {
+                    selectedVariants.push(variant);
+                }
+            });
+        });
 </script>
 @endpush
