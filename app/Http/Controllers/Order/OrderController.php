@@ -77,8 +77,13 @@ class OrderController extends Controller
 
                 };
             }
-            $data = ['status' => $request->to_status];
+            if($request->to_status == 'Đã giao hàng thành công'){
 
+            }
+            $data = ['status' => $request->to_status];
+            if($request->to_status == 'Giao hàng thành công'){
+              $data['status_payment']  = 'Đã thanh toán';
+            };
             $data_his = [
                 'id_order' => $order->id,
                 'id_user' => $user->id,
