@@ -1,7 +1,7 @@
 <?php
 
+use App\Common\Common;
 use App\Http\Controllers\Order\OrderController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AuthController as LoginController;
 use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
@@ -12,6 +12,8 @@ use App\Http\Controllers\product\ProductVariantController;
 use App\Http\Controllers\user\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
+
+Common::autoUpdateStatus();
 // use App\Http\Controllers\AuthController as LoginController;
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +28,8 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// Route::get('/login', function () {
-//     return view('auth.login');
+// Route::get('/test', function () {
+//     return view('test');
 // })->name('login');
 
 // Route::get('/signup', function () {
