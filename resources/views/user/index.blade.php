@@ -36,14 +36,17 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td> <img src="{{ $item->image }}" alt="" width="80"></td>
-                                    <td>{{ $item->role }}</td>
+                                    <td>{{ $item->role ==1 ?'user': 'admin'}}</td>
                                     <td>
-                                        <form action="{{ route('user_status', $item->id) }}" method="POST"
+                                        @if ($item->role == 1)
+                                            <form action="{{ route('user_status', $item->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Bạn có đồng ý {{ $item->status ? 'dừng kích hoạt' : 'kích hoạt'  }} không?')">
                                             @csrf
                                             @method('PATCH')
                                             <button class="btn btn-danger">{{ $item->status ? 'Kích hoạt' : 'Dừng kích hoạt'  }}</button>
                                         </form>
+                                        @endif
+                                        
                                         
                                     </td>
                                     <td>
