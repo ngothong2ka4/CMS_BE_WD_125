@@ -31,17 +31,14 @@
                                     </div>
                                 @enderror
                             </div>
-
                             <div class="mb-3">
                                 {{-- <div class="float-end">
                                     <a href="{{ route('forgot') }}" class="text-muted">Quên mật khẩu?</a>
                                 </div> --}}
                                 <label class="form-label" for="password">Mật khẩu</label>
                                 <div class="position-relative auth-pass-inputgroup mb-3">
-                                    <input type="password" class="form-control pe-5 password @error('password')
-                                       is-invalid 
-                                    @enderror " placeholder="Mật khẩu"
-                                        id="password" name="password">
+                                    <input type="password" class="form-control pe-5 password-input @error('password') is-invalid @enderror"
+                                                            placeholder="Mật khẩu" id="password" name="password">
                                     <button
                                         class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                         type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
@@ -53,10 +50,10 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="auth-remember-check">
                                 <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
-                            </div> --}}
+                            </div>
 
                             <div class="mt-4">
                                 <button class="btn btn-success w-100" type="submit">Đăng Nhập</button>
