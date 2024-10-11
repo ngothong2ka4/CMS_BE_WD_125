@@ -68,15 +68,56 @@ class OrderController extends Controller
     }
 
 
-    public function purchasedOrders()
+    public function purchasedOrders(Request $request)
     {
         $id_user = Auth::id();
         if (!$id_user) {
-            return $this->jsonResponse('Bạn chưa đăng nhập ');
+            return $this->jsonResponse('Bạn chưa đăng nhập');
         }
         $orders = Order::with('orderDetail')
             ->where('id_user', $id_user)
             ->get();
+        if ($orders->isEmpty()) {
+            return response()->json(['message' => 'Không có đơn hàng nào'], 404);
+        }
+
+        if ($request->has('cancel_id')) {
+            $cancel_id = $request->input('cancel_id');
+            $order = $orders->where('id', $cancel_id)->first();
+
+            if (!$order) {
+                return response()->json(['message' => 'Đơn hàng không tồn tại'], 404);
+            } else {
+                if ($order->status == 'Đã xác nhận') {
+                    return response()->json(['message' => 'Đơn hàng đã xác nhận, không thể huỷ'], 400);
+                }
+                if ($order->status == 'Đã huỷ') {
+                    return response()->json(['message' => 'Đơn hàng đã bị huỷ trước đó'], 400);
+                }
+                if ($order->status == 'Đang giao') {
+                    return response()->json(['message' => 'Đơn hàng đang giao đến bạn, không thể huỷ'], 400);
+                }
+
+                if ($order->status == 'Giao hàng thành công') {
+                    return response()->json(['message' => 'Đơn hàng đã giao thành công, không thể huỷ'], 400);
+                }
+
+                if ($order->status == 'Giao hàng thất bại') {
+                    return response()->json(['message' => 'Đơn hàng đã giao thất bại, không thể huỷ'], 400);
+                }
+
+                if ($order->status == 'Hoàn thành') {
+                    return response()->json(['message' => 'Đơn hàng đã hoàn thành, không thể huỷ'], 400);
+                }
+
+
+                if ($order->status == 'Chờ xác nhận') {
+                    $order->status = 'Đã huỷ';
+                    $order->save();
+                    return response()->json(['message' => 'Đơn hàng đã được hủy thành công']);
+                }
+            }
+        }
         return response()->json($orders);
     }
 }
