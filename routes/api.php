@@ -50,5 +50,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::put('/choseProductInCart',[CartController::class, 'choseProductInCart']);
     Route::get('/listInformationOrder',[OrderController::class, 'listInformationOrder']);
-
+    Route::get('/purchasedOrders',[OrderController::class, 'purchasedOrders']);
 });

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function listInformationOrder(Request $request) 
+    public function listInformationOrder(Request $request)
     {
         $cartIds = $request->input('cartIds');
         $user = Auth::user();
@@ -25,8 +25,8 @@ class OrderController extends Controller
             'variant.product',
             'variant.color',
             'variant.size'
-            ])->whereIn('id',$cartIds)->where('id_user', $user->id)->get();
-        
+        ])->whereIn('id', $cartIds)->where('id_user', $user->id)->get();
+
         if ($productInCart->isEmpty()) {
             return $this->jsonResponse('Không tìm thấy sản phẩm trong giỏ hàng.');
         }
@@ -34,7 +34,7 @@ class OrderController extends Controller
         $totalAmount = $productInCart->map(function ($item) {
             return $item->variant->selling_price * $item->quantity;
         })->sum();
-        
+
         $data = [
             "productInCart" => $productInCart,
             "totalAmount" => $totalAmount,
@@ -68,4 +68,15 @@ class OrderController extends Controller
     }
 
 
+    public function purchasedOrders()
+    {
+        $id_user = Auth::id();
+        if (!$id_user) {
+            return $this->jsonResponse('Bạn chưa đăng nhập ');
+        }
+        $orders = Order::with('orderDetail')
+            ->where('id_user', $id_user)
+            ->get();
+        return response()->json($orders);
+    }
 }

@@ -21,12 +21,13 @@ class Order extends Model
         'status',
         'total_payment'
     ];
-
-    public function orderDetail(){
-        return $this->hasOne(OrderDetail::class,'id','id_order');
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'id_oder');
     }
 
-    public function orderHistory(){
-        return $this->hasMany(OrderHistory::class,'id_order','id');
+    public function orderHistory()
+    {
+        return $this->hasMany(OrderHistory::class, 'id_order', 'id');
     }
 }
