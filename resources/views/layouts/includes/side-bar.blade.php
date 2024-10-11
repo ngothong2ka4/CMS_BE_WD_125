@@ -57,7 +57,7 @@
                                     data-key="t-analytics">
                                     Quản lý kích thước </a>
                             </li>
-                            <li class="nav  -item">
+                            <li class="nav-item">
                                 <a href="{{ route('product_color.index') }}"
                                     class="nav-link {{ Request::is('products/product_color*') ? 'active' : '' }}"
                                     data-key="t-analytics">
