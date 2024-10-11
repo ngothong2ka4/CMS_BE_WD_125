@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AuthController as LoginController;
 use App\Http\Controllers\category\CategoryController;
@@ -49,9 +50,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
+
     Route::middleware(['auth',AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoryController::class);
+    Route::resource('order', OrderController::class);
     Route::resource('/user', UserController::class);
     Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
 

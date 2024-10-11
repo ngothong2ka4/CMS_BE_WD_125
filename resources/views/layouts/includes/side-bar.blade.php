@@ -72,7 +72,14 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Người Dùng</span>
                     </a>
                 </li>
-                
+             
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('order*') ? 'active' : '' }}"
+                        href="{{ route('order.index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Đơn hàng</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->

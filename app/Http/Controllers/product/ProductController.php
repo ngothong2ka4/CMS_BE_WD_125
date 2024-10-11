@@ -12,6 +12,8 @@ use App\Models\ProductSize;
 use App\Models\Stone;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ProductController extends Controller
 {
@@ -45,6 +47,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        try {
+        DB::beginTransaction();
+       
         $request->validate([
             'name' => 'required|max:255|min:6|regex:/^[\p{L}\p{N}\s]+$/u|unique:products,name,',
             'thumbnail' => 'required|file|image|max:2048',
@@ -63,7 +68,6 @@ class ProductController extends Controller
 
             'id_category.required' => 'Danh mục của sản phẩm là bắt buộc.',
             'id_materials.required' => 'Chất liệu của sản phẩm là bắt buộc.',
-            // 'id_stones.required' => 'Hình sản phẩm là bắt buộc.',
 
         ]);
         if ($request->hasFile('thumbnail')) {
@@ -127,10 +131,13 @@ class ProductController extends Controller
         }
 
 
-
+        DB::commit();
         toastr()->success('Thêm mới sản phẩm thành công!');
         return redirect()->route('product_management.index');
-
+    } catch (\Exception $e) {
+        toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+        return redirect()->back();
+    }
 
     }
 
@@ -177,6 +184,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        try{
+        DB::beginTransaction();
         $product = Product::findOrFail($id);
         $img_old = $product->thumbnail;
         $request->validate([
@@ -297,9 +306,13 @@ class ProductController extends Controller
             }
         }
 
-
+        DB::commit();
         toastr()->success('Cập nhật sản phẩm thành công!');
         return redirect()->back();
+    } catch (\Exception $e) {
+        toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+        return redirect()->back();
+    }
 
 
     }

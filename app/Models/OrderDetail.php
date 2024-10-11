@@ -24,4 +24,9 @@ class OrderDetail extends Model
     public function order(){
         return $this->belongsTo(Order::class,'id_oder','id');
     }
+
+    public function orderVariant(){
+        return $this->hasOne(Variant::class,'id','id_variant');
+    }
+
 }
