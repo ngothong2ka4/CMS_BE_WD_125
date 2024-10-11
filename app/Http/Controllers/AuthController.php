@@ -29,14 +29,9 @@ class AuthController extends Controller
 
     // Thử đăng nhập
     if (Auth::attempt($credentials)) {
-        // Regenerate session
         $request->session()->regenerate();
-        
-        // Điều hướng sau khi đăng nhập thành công
         return redirect()->intended('dashboard');
     }
-
-    // Đăng nhập thất bại, trả về thông báo lỗi
     return back()->withErrors([
         'login' => 'Email hoặc mật khẩu không đúng.',
     ])->onlyInput('email');

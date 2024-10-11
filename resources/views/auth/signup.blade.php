@@ -69,7 +69,7 @@
                                         class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                         type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                     <div class="invalid-feedback">
-                                        Nhập mật khẩu
+                                        Nhập lại mật khẩu
                                     </div>
                                 </div>
                             </div>
