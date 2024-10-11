@@ -73,7 +73,8 @@
                                 <option value="">Chọn đá</option>
                                 @foreach ($stones as $stone)
                                     <option value="{{ $stone->id }}"
-                                        {{ old('id_stones') == $stone->id ? 'selected' : '' }}>{{ $stone->name }}</option>
+                                        {{ old('id_stones') == $stone->id ? 'selected' : '' }}>{{ $stone->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('id_stones')
@@ -98,11 +99,12 @@
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
-                            <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{old('description')}}</textarea>
+                            <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Hình ảnh cho slide(chọn nhiều ảnh)</label>
-                            <input  accept="image/x-png,image/gif,image/jpeg" type="file" name="link_image[]" multiple id="" class="form-control mb-3">
+                            <input accept="image/x-png,image/gif,image/jpeg" type="file" name="link_image[]" multiple
+                                id="" class="form-control mb-3">
                             @error('thumbnail')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -118,44 +120,44 @@
                     <div class="card-body">
                         <div id="variant-container">
                             <!-- <div class="form-group d-flex" id="variant-0">
-                                                <div class="form-group me-1">
-                                                    <label for="color-0" class="form-label">Màu sắc</label>
-                                                    <select class="form-select mb-3" id="color-0" name="colors[]" aria-label="Default select example">
-                                                        <option selected>Chọn màu sắc</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group me-1">
-                                                    <label for="size-0" class="form-label">Kích thước</label>
-                                                    <select class="form-select mb-3" id="size-0" name="sizes[]" aria-label="Default select example">
-                                                        <option selected>Chọn kích thước</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="me-1">
-                                                    <label for="price_in-0" class="form-label">Giá nhập</label>
-                                                    <input type="text" class="form-control" id="price_in-0" name="price_in[]" placeholder="Nhập giá nhập">
-                                                </div>
-                                                <div class="me-1">
-                                                    <label for="price_out-0" class="form-label">Giá niêm yết</label>
-                                                    <input type="text" class="form-control" id="price_out-0" name="price_out[]" placeholder="Nhập giá niêm yết">
-                                                </div>
-                                                <div class="me-1">
-                                                    <label for="sale_price-0" class="form-label">Giá bán</label>
-                                                    <input type="text" class="form-control" id="sale_price-0" name="sale_price[]" placeholder="Nhập giá bán">
-                                                </div>
-                                                <div class="me-1">
-                                                    <label for="quantity-0" class="form-label">Số lượng</label>
-                                                    <input type="number" class="form-control" id="quantity-0" name="quantity[]" placeholder="Nhập số lượng">
-                                                </div>
-                                                <div style="margin-top: 27px">
-                                                    <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-0" type="button">Xoá</button>
-                                                </div>
-                                            </div> -->
+                                                                                <div class="form-group me-1">
+                                                                                    <label for="color-0" class="form-label">Màu sắc</label>
+                                                                                    <select class="form-select mb-3" id="color-0" name="colors[]" aria-label="Default select example">
+                                                                                        <option selected>Chọn màu sắc</option>
+                                                                                        <option value="1">One</option>
+                                                                                        <option value="2">Two</option>
+                                                                                        <option value="3">Three</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group me-1">
+                                                                                    <label for="size-0" class="form-label">Kích thước</label>
+                                                                                    <select class="form-select mb-3" id="size-0" name="sizes[]" aria-label="Default select example">
+                                                                                        <option selected>Chọn kích thước</option>
+                                                                                        <option value="1">One</option>
+                                                                                        <option value="2">Two</option>
+                                                                                        <option value="3">Three</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="me-1">
+                                                                                    <label for="price_in-0" class="form-label">Giá nhập</label>
+                                                                                    <input type="text" class="form-control" id="price_in-0" name="price_in[]" placeholder="Nhập giá nhập">
+                                                                                </div>
+                                                                                <div class="me-1">
+                                                                                    <label for="price_out-0" class="form-label">Giá niêm yết</label>
+                                                                                    <input type="text" class="form-control" id="price_out-0" name="price_out[]" placeholder="Nhập giá niêm yết">
+                                                                                </div>
+                                                                                <div class="me-1">
+                                                                                    <label for="sale_price-0" class="form-label">Giá bán</label>
+                                                                                    <input type="text" class="form-control" id="sale_price-0" name="sale_price[]" placeholder="Nhập giá bán">
+                                                                                </div>
+                                                                                <div class="me-1">
+                                                                                    <label for="quantity-0" class="form-label">Số lượng</label>
+                                                                                    <input type="number" class="form-control" id="quantity-0" name="quantity[]" placeholder="Nhập số lượng">
+                                                                                </div>
+                                                                                <div style="margin-top: 27px">
+                                                                                    <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-0" type="button">Xoá</button>
+                                                                                </div>
+                                                                            </div> -->
                         </div>
 
                         <div class="form-group">
@@ -180,19 +182,19 @@
             variantCounter++;
 
             let newVariant = `
-                <div class="form-group d-flex" id="variant-${variantCounter}">
+                <div class="form-group d-flex variant-row" id="variant-${variantCounter}">
                     <div class="form-group me-1">
-                        <label for="color-${variantCounter}" class="form-label">Màu sắc</label>
-                        <select required name="id_attribute_color[]" class="form-select mb-3" id="color-${variantCounter}" aria-label="Default select example">
+                        <label for="color-${variantCounter} " class="form-label">Màu sắc</label>
+                        <select required name="id_attribute_color[]" class="form-select mb-3 variant-select color-select " id="color-${variantCounter}" aria-label="Default select example">
                             <option value="">Chọn màu sắc</option>
                             @foreach ($colors as $color)
-                                <option value="{{ $color->id }}">{{ $color->name }}</option>
+                                <option value="{{ $color->id }}">{{ $color->name }} </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group me-1">
                         <label for="size-${variantCounter}" class="form-label">Kích thước</label>
-                        <select name="id_attribute_size[]" class="form-select mb-3" id="size-${variantCounter}" aria-label="Default select example">
+                        <select name="id_attribute_size[]" class="form-select mb-3 variant-select size-select " id="size-${variantCounter}" aria-label="Default select example">
                             <option value="" >Chọn kích thước</option>
                            @foreach ($sizes as $size)
                                 <option value="{{ $size->id }}">{{ $size->name }}</option>
@@ -201,15 +203,15 @@
                     </div>
                     <div class="me-1">
                         <label for="price_in-${variantCounter}" class="form-label">Giá nhập</label>
-                        <input name="import_price[]" type="number" required min=0 class="form-control" id="price_in-${variantCounter}" placeholder="Nhập giá nhập">
+                        <input name="import_price[]" type="number" required min=0 class="form-control price-validate price_in" id="price_in-${variantCounter}" placeholder="Nhập giá nhập">
                     </div>
                     <div class="me-1">
                         <label for="price_out-${variantCounter}" class="form-label">Giá niêm yết</label>
-                        <input name="list_price[]" type="number" required min=0 class="form-control" id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết">
+                        <input name="list_price[]" type="number" required min=0 class="form-control price-validate price_out" id="price_out-${variantCounter}" placeholder="Nhập giá niêm yết">
                     </div>
                     <div class="me-1">
                         <label for="sale_price-${variantCounter}" class="form-label">Giá bán</label>
-                        <input name="selling_price[]" type="number" required min=0  class="form-control" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
+                        <input name="selling_price[]" type="number" required min=0  class="form-control price-validate sale_price" id="sale_price-${variantCounter}" placeholder="Nhập giá bán">
                     </div>
                     <div class="me-1">
                         <label for="quantity-${variantCounter}" class="form-label">Số lượng</label>
@@ -217,7 +219,7 @@
                     </div>
                     <div class="me-1">
                         <label for="image_color-${variantCounter}" class="form-label">Ảnh</label>
-                        <input name="image_color[]" type="file" required min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
+                        <input name="image_color[]" type="file" min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
                     </div>
                     <div style="margin-top: 27px">
                         <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-${variantCounter}" type="button">Xoá</button>
@@ -236,6 +238,67 @@
                 let variantId = $(this).data('variant-id');
                 $('#' + variantId).remove();
             }
+
+        });
+
+       
+        $(document).on('input', '.price-validate', function() {
+            let variantId = $(this).closest('.variant-row').attr('id');
+
+            let import_price = parseFloat($('#' + variantId + ' .price_in').val()) ;
+            let list_price = parseFloat($('#' + variantId + ' .price_out').val()) ;
+            let selling_price = parseFloat($('#' + variantId + ' .sale_price').val()) ;
+
+            let price = parseFloat($(this).val()) ;
+
+            if (price < 0) {
+                $(this).addClass('is-invalid');
+                $(this).after('<div class="invalid-feedback">Giá phải lớn hơn hoặc bằng 0.</div>');
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).next('.invalid-feedback').remove();
+            }
+
+            if (list_price <= import_price) {
+                $('#' + variantId + ' .price_out').addClass('is-invalid');
+                $('#' + variantId + ' .price_out').next('.invalid-feedback').remove();
+                $('#' + variantId + ' .price_out').after(
+                    '<div class="invalid-feedback">Giá niêm yết phải lớn hơn giá nhập.</div>');
+            } else {
+                $('#' + variantId + ' .price_out').removeClass('is-invalid');
+                $('#' + variantId + ' .price_out').next('.invalid-feedback').remove();
+            }
+
+            if (selling_price <= import_price) {
+                $('#' + variantId + ' .sale_price').addClass('is-invalid');
+                $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
+                $('#' + variantId + ' .sale_price').after(
+                    '<div class="invalid-feedback">Giá bán phải lớn hơn giá nhập.</div>');
+            } else if (selling_price < list_price) {
+                $('#' + variantId + ' .sale_price').addClass('is-invalid');
+                $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
+                $('#' + variantId + ' .sale_price').after(
+                    '<div class="invalid-feedback">Giá bán phải lớn hơn hoặc bằng giá niêm yết.</div>');
+            } else {
+                $('#' + variantId + ' .sale_price').removeClass('is-invalid');
+                $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
+            }
+        });
+
+        $(document).on('change', '.variant-select', function() {
+            let selectedVariants = [];
+            $('.variant-row').each(function() {
+                let color = $(this).find('.color-select').val();
+                let size = $(this).find('.size-select').val();
+                let variant = color + '-' + size;
+                if (selectedVariants.includes(variant) && color && size) {
+                    alert('Màu và kích thước này đã tồn tại. Vui lòng chọn màu hoặc kích thước khác.');
+                    $(this).find('.color-select').val('');
+                    $(this).find('.size-select').val('');
+                } else {
+                    selectedVariants.push(variant);
+                }
+            });
         });
     </script>
 @endpush

@@ -25,5 +25,8 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, 'id_oder');
     }
-    
+
+    public function orderHistory(){
+        return $this->hasMany(OrderHistory::class,'id_order','id');
+    }
 }

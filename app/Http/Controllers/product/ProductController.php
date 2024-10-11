@@ -12,6 +12,8 @@ use App\Models\ProductSize;
 use App\Models\Stone;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ProductController extends Controller
 {
@@ -45,6 +47,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        try {
+        DB::beginTransaction();
+       
         $request->validate([
             'name' => 'required|max:255|min:6|regex:/^[\p{L}\p{N}\s]+$/u|unique:products,name,',
             'thumbnail' => 'required|file|image|max:2048',
@@ -63,7 +68,6 @@ class ProductController extends Controller
 
             'id_category.required' => 'Danh mục của sản phẩm là bắt buộc.',
             'id_materials.required' => 'Chất liệu của sản phẩm là bắt buộc.',
-            // 'id_stones.required' => 'Hình sản phẩm là bắt buộc.',
 
         ]);
         if ($request->hasFile('thumbnail')) {
@@ -79,7 +83,7 @@ class ProductController extends Controller
             'id_stones' => $request->id_stones,
             'description' => $request->description,
 
-            'thumbnail' => 'http://127.0.0.1:8000/img/products/' . $nameImage,
+            'thumbnail' => url('img/products/' . $nameImage),
 
         ];
 
@@ -91,10 +95,10 @@ class ProductController extends Controller
             // $image = $request->file('link_image');
             $nameImage = time()."_".$image->getClientOriginalName();
             $image->move('img/products/slide/', $nameImage);
-            $path = 'http://127.0.0.1:8000/img/products/slide/'. $nameImage;
+            $path = '/img/products/slide/'. $nameImage;
             $data = [
                 'id_product' => $product->id,
-                'link_image' => $path,
+                'link_image' => url($path),
             ];
              
            ProductImage::create($data);
@@ -109,7 +113,7 @@ class ProductController extends Controller
                     $image = $request->file('image_color')[$key];  // Lấy file image_color tại vị trí $key
                     $image_Color =$product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
-                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $image_Color;
+                    $path = 'img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
@@ -127,10 +131,13 @@ class ProductController extends Controller
         }
 
 
-
+        DB::commit();
         toastr()->success('Thêm mới sản phẩm thành công!');
         return redirect()->route('product_management.index');
-
+    } catch (\Exception $e) {
+        toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+        return redirect()->back();
+    }
 
     }
 
@@ -177,6 +184,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        try{
+        DB::beginTransaction();
         $product = Product::findOrFail($id);
         $img_old = $product->thumbnail;
         $request->validate([
@@ -202,7 +211,7 @@ class ProductController extends Controller
             $image = $request->file('thumbnail');
             $nameImage =$product->id .time() . "_" . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
             $image->move('img/products', $nameImage);
-            $path = 'http://127.0.0.1:8000/img/products/' . $nameImage;
+            $path = 'img/products/' . $nameImage;
 
             if (file_exists(public_path($img_old))) {
                 unlink(public_path($img_old));
@@ -227,10 +236,10 @@ class ProductController extends Controller
             // $image = $request->file('link_image');
             $nameImage = time()."_".$image->getClientOriginalName();
             $image->move('img/products/slide/', $nameImage);
-            $path = 'http://127.0.0.1:8000/img/products/slide/'. $nameImage;
+            $path = 'img/products/slide/'. $nameImage;
             $data = [
                 'id_product' => $product->id,
-                'link_image' => $path,
+                'link_image' => url($path),
             ];
              
            ProductImage::create($data);
@@ -247,7 +256,7 @@ class ProductController extends Controller
                     $colorImage = $product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $colorImage);
 
-                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $colorImage;
+                    $path = 'img/products/variant/' . $colorImage;
 
 
                     if (file_exists(($imgcolor_old))) {
@@ -279,7 +288,7 @@ class ProductController extends Controller
                     $image = $request->file('new_image_color')[$key];
                     $image_Color = $product->id .time() . "_" . $key . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
                     $image->move('img/products/variant', $image_Color);
-                    $path = 'http://127.0.0.1:8000/img/products/variant/' . $image_Color;
+                    $path = 'img/products/variant/' . $image_Color;
                 }
 
                 $data_var = [
@@ -297,9 +306,13 @@ class ProductController extends Controller
             }
         }
 
-
+        DB::commit();
         toastr()->success('Cập nhật sản phẩm thành công!');
         return redirect()->back();
+    } catch (\Exception $e) {
+        toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+        return redirect()->back();
+    }
 
 
     }

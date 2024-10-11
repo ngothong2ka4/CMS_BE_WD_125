@@ -66,15 +66,43 @@
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Hình ảnh</label>
-                            <img class="mb-3 pl-5" src="{{ $product->thumbnail }}" width=80 height=100 alt="">
-                            @foreach ($images as $image)
-                                <img class="mb-3 pl-5" src="{{ $image->link_image }}" width=80 height=100 alt="">
-                            @endforeach
+                            <img class="mb-3 pl-5" src="{{ $product->thumbnail }}" width=80 alt="">
+                            @error('thumbnail')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
 
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
                             <textarea class="form-control" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả" disabled>{{ $product->description }}</textarea>
+                        </div>
+                        <div class="text-break">
+
+                            <label for="basiInput" class="form-label">Hình ảnh cho slide:</label>
+                        <br>
+                            @foreach($images as $image)
+                            <div class=" d-inline-block mr-2 mb-2" style=" width: 8%;">
+    
+                                <a href="{{route('delImage',$image->id)}}"> <button type="button"
+                                        onclick="return confirm('Bạn có muốn xóa không?')"
+                                        class="btn btn-sm btn-outline-danger border-0 position-absolute">
+                                        X
+    
+                                    </button></a>
+    
+                                <div style="width: 80px; height: 80px; overflow: hidden;">
+                                    <img width="100%" src="{{$image->link_image}}"
+                                        alt="Image">
+                                </div>
+                        </div>
+                            @endforeach
+                            @error('thumbnail')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
                     </div>
                 </div>
