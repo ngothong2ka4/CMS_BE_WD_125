@@ -15,7 +15,7 @@ class Order extends Model
         'recipient_name',
         'phone_number',
         'recipient_address',
-        'order_date',
+        'note',
         'payment_role',
         'status_payment',
         'status',

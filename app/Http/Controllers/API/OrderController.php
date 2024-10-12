@@ -67,6 +67,7 @@ class OrderController extends Controller
                 'cartIds' => $request->cartIds,
                 'recipient_name' => $request->recipient_name,
                 'email' => $request->email,
+                'note' => $request->note,
                 'phone_number' => $request->phone_number,
                 'recipient_address' => $request->recipient_address,
                 'total_payment' => $request->total_payment,
@@ -89,6 +90,7 @@ class OrderController extends Controller
             'cartIds' => $request->cartIds,
             'recipient_name' => $request->recipient_name,
             'email' => $request->email,
+            'note' => $request->note,
             'phone_number' => $request->phone_number,
             'recipient_address' => $request->recipient_address,
             'total_payment' => $request->total_payment,
@@ -226,7 +228,7 @@ class OrderController extends Controller
                 'email' => $data['email'],
                 'phone_number' => $data['phone_number'],
                 'recipient_address' => $data['recipient_address'],
-                'order_date' => now(),
+                'note' => $data['note'],
                 'total_payment' => $data['total_payment'],
                 'payment_role' => $data['payment_role'],
                 'status_payment' => $data['status_payment'],
@@ -235,7 +237,7 @@ class OrderController extends Controller
 
             $insertData = $productPayment->map(function ($cart) use ($order) {
                 return [
-                    'id_oder' => $order->id,
+                    'id_order' => $order->id,
                     'id_product' => $cart->variant->id_product,
                     'id_variant' => $cart->variant->id,
                     'import_price' => $cart->variant->import_price,
