@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('order', function (Blueprint $table) {
             $table->dropColumn('status_payment');  
             $table->dropColumn('status');
+            $table->dropColumn('payment_role');
         
     });
 }
