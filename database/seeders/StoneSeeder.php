@@ -16,7 +16,9 @@ class StoneSeeder extends Seeder
     {
         $faker = Faker::create();
         DB::table('stones')->insert([
+            ['name'=>'Kim Cương'],
             ['name'=>'Đá Thạch Anh'],
+            ['name'=>'Đá CZ'],
             ['name'=>'Đá Ngọc lam'],
             ['name'=>'Đá Moonstone'],
 
