@@ -70,19 +70,17 @@ class OrderController extends Controller
             ],[
                 'to_status.required' => 'Vui lòng chọn trạng thái'
             ]);
-            if($request->to_status == 'Đã hủy'){
+            if($request->to_status == 7){
                 if($request->note == '' || $request->note == null){
                     toastr()->error('Phải có ghi chú hủy đơn' );
                  return redirect()->back();
 
                 };
             }
-            if($request->to_status == 'Đã giao hàng thành công'){
-
-            }
+    
             $data = ['status' => $request->to_status];
-            if($request->to_status == 'Giao hàng thành công'){
-              $data['status_payment']  = 'Đã thanh toán';
+            if($request->to_status == 4){
+              $data['status_payment']  = 2;
             };
             $data_his = [
                 'id_order' => $order->id,
