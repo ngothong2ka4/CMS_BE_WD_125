@@ -28,11 +28,11 @@ class DatabaseSeeder extends Seeder
             MaterialSeeder::class,
             // OrderDetailSeeder::class,
             // OrderSeeder::class,
-            // ProductImageSeeder::class,
-            // ProductSeeder::class,
+            ProductImageSeeder::class,
+            ProductSeeder::class,
             StoneSeeder::class,
             UserSeeder::class,
-            // VariantSeeder::class,
+            VariantSeeder::class,
 
 
         ]);
