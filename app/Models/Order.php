@@ -36,7 +36,7 @@ class Order extends Model
     const STATUS_CANCELED = 4;
     public function orderDetail()
     {
-        return $this->hasMany(OrderDetail::class, 'id_oder');
+        return $this->hasMany(OrderDetail::class, 'id_order');
     }
 
     public function orderHistory()
