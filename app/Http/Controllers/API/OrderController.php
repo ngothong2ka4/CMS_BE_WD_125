@@ -29,7 +29,7 @@ class OrderController extends Controller
     //                 "message": "Lấy thông tin thành công",
     //                 "data": order information
     //             }
-    public function listInformationOrder(Request $request) 
+    public function listInformationOrder(Request $request)
     {
         $cartIds = $request->input('cartIds');
         $user = Auth::user();
@@ -72,7 +72,7 @@ class OrderController extends Controller
                 'total_payment' => $request->total_payment,
                 'status_payment' => $request->status_payment,
             ];
-    
+
             $res = $this->payment($data);
             return $this->jsonResponse('Đặt hàng thành công', true, $res);
         } catch (\Exception $exception) {
@@ -102,27 +102,28 @@ class OrderController extends Controller
             DB::commit();
             return $this->jsonResponse('Đặt hàng thành công', true, $url);
         } catch (\Exception $exception) {
-            DB::rollBack(); 
+            DB::rollBack();
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Common Exception');
         }
     }
 
-    public function createPaymentUrl($res) {
-    
+    public function createPaymentUrl($res)
+    {
+
         $vnp_Url = env('VNP_URL');
         $vnp_Returnurl = env('VNP_RETURNURL');
         $vnp_TmnCode = env('VNP_TMNCODE');
         $vnp_HashSecret = env('VNP_HASHSECRET');
-    
+
         $vnp_TxnRef = $res['id_order'];
         $vnp_OrderInfo = "Thanh toán hoá đơn";
         $vnp_OrderType = "Shine Shop";
-        $vnp_Amount = $res['totalAmount'] * 100; 
+        $vnp_Amount = $res['totalAmount'] * 100;
         $vnp_Locale = "VN";
         $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-    
+
         $inputData = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $vnp_TmnCode,
@@ -137,33 +138,33 @@ class OrderController extends Controller
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef
         );
-    
+
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
         }
-    
+
         ksort($inputData);
-    
+
         $query = "";
         $hashdata = "";
-    
+
         foreach ($inputData as $key => $value) {
             $hashdata .= urlencode($key) . "=" . urlencode($value) . '&';
             $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
-    
+
         $hashdata = rtrim($hashdata, '&');
         $query = rtrim($query, '&');
-    
+
         if (isset($vnp_HashSecret)) {
             $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
             $vnp_Url .= "?" . $query . '&vnp_SecureHash=' . $vnpSecureHash;
         }
-    
+
         \Log::info('Hash Data: ' . $hashdata);
         \Log::info('Secure Hash: ' . $vnpSecureHash);
         \Log::info('Payment URL: ' . $vnp_Url);
-    
+
         return $vnp_Url;
     }
 
@@ -217,8 +218,8 @@ class OrderController extends Controller
             DB::beginTransaction();
             $productPayment = Cart::with([
                 'variant.product'
-            ])->whereIn('id',$cartIds)->get();
-            
+            ])->whereIn('id', $cartIds)->get();
+
             $order = Order::create([
                 'id_user' => $id_user,
                 'recipient_name' => $data['recipient_name'],
@@ -231,7 +232,7 @@ class OrderController extends Controller
                 'status_payment' => $data['status_payment'],
                 'status' => Order::STATUS_PENDING,
             ]);
-    
+
             $insertData = $productPayment->map(function ($cart) use ($order) {
                 return [
                     'id_oder' => $order->id,
@@ -247,8 +248,8 @@ class OrderController extends Controller
                     'updated_at' => now(),
                 ];
             })->toArray();
-            
-            OrderDetail::insert($insertData);   
+
+            OrderDetail::insert($insertData);
             Cart::whereIn('id', $cartIds)->delete();
             DB::commit();
             return [
@@ -262,7 +263,8 @@ class OrderController extends Controller
         }
     }
 
-    public function cancelOrder (Request $request) {
+    public function cancelOrder(Request $request)
+    {
         $id_order = $request->id;
         $note = $request->note;
         $id_user = Auth::id();
@@ -270,8 +272,8 @@ class OrderController extends Controller
         if (!$note) {
             return $this->jsonResponse('Vui lòng nhập lý do huỷ đơn hàng !!');
         }
-        
-        $order = Order::where('id',$id_user)->find($id_order);
+
+        $order = Order::where('id', $id_user)->find($id_order);
 
         if (!$order || $order->status != Order::STATUS_PENDING) {
             return $this->jsonResponse('Không thể huỷ đơn hàng này!');
@@ -295,13 +297,13 @@ class OrderController extends Controller
     {
         $id_order = $request->id;
         $id_user = Auth::id();
-        
-        $orderHistory = OrderHistory::where('id_order',$id_order)->orWhere('id_user',$id_user)->get();
+
+        $orderHistory = OrderHistory::where('id_order', $id_order)->orWhere('id_user', $id_user)->get();
 
         if (!$orderHistory) {
             return $this->jsonResponse('Không tìm thấy lịch sử đơn hàng này!');
         }
-        
+
         return $this->jsonResponse('Lấy lịch sử thay đổi trạng thái đơn hàng thành công', true, $orderHistory);
     }
 
@@ -309,11 +311,23 @@ class OrderController extends Controller
     {
         $id_user = Auth::id();
         if (!$id_user) {
-            return $this->jsonResponse('Bạn chưa đăng nhập');
+            return response()->json(['message' => 'Bạn chưa đăng nhập']);
         }
-        $orders = Order::with('orderDetail')
+        $orders = Order::with(['orderDetail' => function ($query) {
+            $query->select('id', 'id_order', 'id_product', 'id_variant', 'import_price', 'list_price', 'selling_price', 'product_name', 'product_image', 'quantity')
+                ->with(['productVariant' => function ($query) {
+                    $query->select('id', 'id_attribute_color', 'id_attribute_size')
+                        ->with(['color' => function ($query) {
+                            $query->select('id', 'name');
+                        }, 'size' => function ($query) {
+                            $query->select('id', 'name');
+                        }]);
+                }]);
+        }])
+            ->select('id', 'id_user', 'recipient_name', 'email', 'phone_number', 'recipient_address', 'note', 'total_payment', 'payment_role', 'status_payment', 'status')
             ->where('id_user', $id_user)
             ->get();
+
         if ($orders->isEmpty()) {
             return response()->json(['message' => 'Không có đơn hàng nào'], 404);
         }
@@ -325,36 +339,37 @@ class OrderController extends Controller
             if (!$order) {
                 return response()->json(['message' => 'Đơn hàng không tồn tại'], 404);
             } else {
-                if ($order->status == 'Đã xác nhận') {
+                if ($order->status == 2) {
                     return response()->json(['message' => 'Đơn hàng đã xác nhận, không thể huỷ'], 400);
                 }
-                if ($order->status == 'Đã huỷ') {
+                if ($order->status == 7) {
                     return response()->json(['message' => 'Đơn hàng đã bị huỷ trước đó'], 400);
                 }
-                if ($order->status == 'Đang giao') {
+                if ($order->status == 3) {
                     return response()->json(['message' => 'Đơn hàng đang giao đến bạn, không thể huỷ'], 400);
                 }
 
-                if ($order->status == 'Giao hàng thành công') {
+                if ($order->status == 4) {
                     return response()->json(['message' => 'Đơn hàng đã giao thành công, không thể huỷ'], 400);
                 }
 
-                if ($order->status == 'Giao hàng thất bại') {
+                if ($order->status == 5) {
                     return response()->json(['message' => 'Đơn hàng đã giao thất bại, không thể huỷ'], 400);
                 }
 
-                if ($order->status == 'Hoàn thành') {
+                if ($order->status == 6) {
                     return response()->json(['message' => 'Đơn hàng đã hoàn thành, không thể huỷ'], 400);
                 }
 
 
-                if ($order->status == 'Chờ xác nhận') {
-                    $order->status = 'Đã huỷ';
+                if ($order->status == 1) {
+                    $order->status = 7;
                     $order->save();
                     return response()->json(['message' => 'Đơn hàng đã được hủy thành công']);
                 }
             }
         }
+
         return response()->json($orders);
     }
 }
