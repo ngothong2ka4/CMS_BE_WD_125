@@ -369,7 +369,15 @@ class OrderController extends Controller
                         return response()->json(['message' => 'Lý do huỷ không được để trống'], 400);
                     }
                     $order->status = 7;
-                    $order->note = $note;
+                    // $order->note = $note;
+                    OrderHistory::create([
+                        'id_order' => $order->id,
+                        'from_status' => 1,
+                        'to_status' => 7,
+                        'note' => $note,
+                        'id_user' => $id_user,
+                        'created_at' => now(),
+                    ]);
                     $order->save();
                     return response()->json(['message' => 'Đơn hàng đã được hủy thành công với lý do: ' . $note]);
                 }
