@@ -16,19 +16,73 @@ class VariantSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        for ($i = 0; $i < 20; $i++) {
-            DB::table('variants')->insert([
-                'id_product'=> rand(1, 20),
-                'id_attribute_color' => rand(1, 6),
-                'id_attribute_size' => rand(1, 6),
-                'import_price' => $faker->randomFloat(2, 100, 500),
-                'list_price' => $faker->randomFloat(2, 500, 1000),
-                'selling_price' => $faker->randomFloat(2, 400, 900),
-                'image_color'=>$faker->imageUrl() ,
-                'quantity' => rand(1, 1000),
-                'is_show' => $faker->boolean(),
-
-            ]);
-        }
+        DB::table('variants')->insert([
+            [
+                'id_product' => 1,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => 1,
+                'import_price' => 1000000,
+                'list_price' => 2000000,
+                'selling_price' => 1599000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344802/nc4318-2_1716438677.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ],
+            [
+                'id_product' => 1,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => 2,
+                'import_price' => 1000000,
+                'list_price' => 2000000,
+                'selling_price' => 1599000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344802/nc4318-2_1716438677.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ],
+            [
+                'id_product' => 2,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => 1,
+                'import_price' => 2000000,
+                'list_price' => 3000000,
+                'selling_price' => 1999000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1717212823/nc852kc-vv-1_1727491436.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ],
+            [
+                'id_product' => 3,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => 2,
+                'import_price' => 1500000,
+                'list_price' => 2000000,
+                'selling_price' => 1799000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344805/nc7967_1716438373.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ],
+            [
+                'id_product' => 3,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => 3,
+                'import_price' => 1600000,
+                'list_price' => 2000000,
+                'selling_price' => 1899000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344805/nc7967_1716438373.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ],
+            [
+                'id_product' => 4,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => null,
+                'import_price' => 1600000,
+                'list_price' => 3000000,
+                'selling_price' => 1999000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1713754546/dcptb3663_1715662062.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ],
+        ]);
     }
 }
