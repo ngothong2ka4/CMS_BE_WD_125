@@ -44,7 +44,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $order = Order::findOrFail($id);
-        $orderdetails = OrderDetail::where('id_oder', $id)->get();
+        $orderdetails = OrderDetail::where('id_order', $id)->get();
         $orderhistories = OrderHistory::where('id_order', $id)->get();
         return view('order.show', compact('order','orderdetails','orderhistories','user'));
     }

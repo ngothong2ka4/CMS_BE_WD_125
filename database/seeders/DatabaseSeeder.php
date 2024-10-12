@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             // ProductImageSeeder::class,
             // ProductSeeder::class,
             StoneSeeder::class,
-            // UserSeeder::class,
+            UserSeeder::class,
             // VariantSeeder::class,
 
 

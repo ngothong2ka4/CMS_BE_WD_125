@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone_number');
             $table->string('recipient_address');
-            $table->date('order_date');
+            $table->text('note')->nullable();
             $table->decimal('total_payment',10,2);
-            $table->enum('payment_role',['Trả tiền khi nhận hàng','Thanh toán bằng ví điện tử / QR','Thanh Toán bằng MoMo'])->default('Trả tiền khi nhận hàng');
-            $table->enum('status_payment',['Đang chờ xử lý','Đã hoàn thành','Đã hủy'])->default('Đang chờ xử lý');
-            $table->enum('status',['Đang chờ xử lý','Đang vận chuyển','Đang chờ giao hàng','Đã hủy'])->default('Đang chờ xử lý');
+            $table->integer('payment_role')->default(1)->comment('Phương thức thanh toán (1: COD, 2: VNPay, 3: MoMo)');
+            $table->integer('status_payment')->default(1)->comment('Trạng thái thanh toán (1: Chưa thanh toán, 2: Đã thanh toán)');
+            $table->integer('status')->default(1)->comment('Trạng thái đơn hàng (1: Chờ xác nhận, 2: Đã xác nhận, 3: Đang giao, 4: Giao hàng thành công, 5: Giao hàng thất bại, 6: Hoàn thành, 7: Đã hủy)');
             $table->timestamps();
             $table->softDeletes();
         });
