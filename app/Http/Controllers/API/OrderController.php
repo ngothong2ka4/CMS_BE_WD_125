@@ -309,7 +309,9 @@ class OrderController extends Controller
 
     public function purchasedOrders(Request $request)
     {
+
         $id_user = Auth::id();
+        $note = $request->note;
         if (!$id_user) {
             return response()->json(['message' => 'Bạn chưa đăng nhập']);
         }
@@ -363,9 +365,13 @@ class OrderController extends Controller
 
 
                 if ($order->status == 1) {
+                    if (empty($note)) {
+                        return response()->json(['message' => 'Lý do huỷ không được để trống'], 400);
+                    }
                     $order->status = 7;
+                    $order->note = $note;
                     $order->save();
-                    return response()->json(['message' => 'Đơn hàng đã được hủy thành công']);
+                    return response()->json(['message' => 'Đơn hàng đã được hủy thành công với lý do: ' . $note]);
                 }
             }
         }
