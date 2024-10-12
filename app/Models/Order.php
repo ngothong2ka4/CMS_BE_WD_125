@@ -21,6 +21,19 @@ class Order extends Model
         'status',
         'total_payment'
     ];
+
+    const PAYMENT_ROLE_COD = 1;
+    const PAYMENT_ROLE_VN_PAY = 2;
+    const PAYMENT_ROLE_MOMO = 3;
+
+    const STATUS_PAYMENT_PENDING = 1;
+    const STATUS_PAYMENT_COMPLETED = 2;
+    const STATUS_PAYMENT_CANCELED = 3;
+
+    const STATUS_PENDING = 1;
+    const STATUS_SHIPPING = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_CANCELED = 4;
     public function orderDetail()
     {
         return $this->hasMany(OrderDetail::class, 'id_oder');

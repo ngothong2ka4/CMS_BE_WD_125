@@ -41,15 +41,15 @@ class CartController extends Controller
                         ->where('id_user', $id_user)
                         ->first();
     
-            if ($cart) {
-                $cart->quantity += $quantity;
-                $cart->save();
-            } else {
+            if (!$cart) {
                 $cart = Cart::create([
                     'id_variant' => $id_variant,
                     'quantity' => $quantity,
                     'id_user' => $id_user,
                 ]);
+            } else {
+                $cart->quantity += $quantity;
+                $cart->save();
             }
     
             DB::commit();
