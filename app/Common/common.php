@@ -2,6 +2,7 @@
 namespace App\Common;
 
 use App\Models\Order;
+use App\Models\OrderHistory;
 
 class Common {
 
@@ -17,7 +18,14 @@ public static function autoUpdateStatus() {
 
         $time = floor($diff/60);
         if($time>=2){       //sau 2 phút đổi trạng thái sang hoàn thành
+            OrderHistory::create([
+                'id_order' => $order->id,
+                'id_user' => 0,
+                'from_status' => $order->status,
+                'to_status'=> 6
+            ]);
             $order->update(['status'=>6]);
+           
         }
     }
 

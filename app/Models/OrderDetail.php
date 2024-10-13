@@ -28,7 +28,7 @@ class OrderDetail extends Model
 
     public function orderVariant()
     {
-        return $this->hasOne(Variant::class, 'id', 'id_variant');
+        return $this->hasOne(Variant::class,'id', 'id_variant');
     }
 
     public function productVariant()

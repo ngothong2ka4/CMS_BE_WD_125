@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $user = Auth::user();
+        $orderDetail = $order->orderDetail;
         try {
             DB::beginTransaction();
             $request->validate([
@@ -76,6 +78,11 @@ class OrderController extends Controller
                  return redirect()->back();
 
                 };
+                if($orderDetail != [] && $orderDetail){
+                    foreach($orderDetail as $variant){
+                        Variant::where('id',$variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
+                    }
+                }
             }
     
             $data = ['status' => $request->to_status];
