@@ -8,20 +8,26 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
+use App\Models\Variant;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-
     // method: GET
     // require: authToken
     // API: /api/listInformationOrder
-    // parram: (cart_ids(mảng id cart thanh toán))
+    // parram: (cart_ids(mảng id cart thanh toán) || id_variant,quantity)
     // example: 
+    //          Mua ở giỏ hàng
     //          {
     //            "cart_ids" : [4,5]
+    //          }
+    //          mua ở trang chi tiết
+    //          {
+    //            "variantId" : 7
+    //            "quantity" : 2
     //          }
     // response:200
     //             {
@@ -31,83 +37,227 @@ class OrderController extends Controller
     //             }
     public function listInformationOrder(Request $request)
     {
-        $cartIds = $request->input('cartIds');
+        $cartIds = $request->input('cartIds'); 
+        $variantId = $request->input('variantId'); 
+        $quantity = $request->input('quantity'); 
         $user = Auth::user();
 
         if (!$user) {
-            return $this->jsonResponse('Bạn chưa đăng nhập ');
+            return $this->jsonResponse('Bạn chưa đăng nhập');
         }
 
-        $productInCart = Cart::with([
-            'variant.product',
-            'variant.color',
-            'variant.size'
-        ])->whereIn('id', $cartIds)->where('id_user', $user->id)->get();
+        $productInCart = []; 
+        $totalAmount = 0; 
 
-        if ($productInCart->isEmpty()) {
-            return $this->jsonResponse('Không tìm thấy sản phẩm trong giỏ hàng.');
+        if ($cartIds) {
+            $productInCart = Cart::with([
+                'variant.product',
+                'variant.color',
+                'variant.size'
+            ])->whereIn('id', $cartIds)->where('id_user', $user->id)->get();
+
+            if ($productInCart->isEmpty()) {
+                return $this->jsonResponse('Không tìm thấy sản phẩm trong giỏ hàng.');
+            }
+
+            $totalAmount = $productInCart->map(function ($item) {
+                return $item->variant->selling_price * $item->quantity;
+            })->sum();
+
+            $productInCart = $productInCart->map(function ($item) {
+                return [
+                    'variant' => $item->variant,
+                    'quantity' => $item->quantity,
+                ];
+            })->values()->toArray(); 
+        } elseif ($variantId) {
+            $product = Variant::with(['product', 'color', 'size'])
+                ->where('id', $variantId)
+                ->first();
+
+            if (!$product) {
+                return $this->jsonResponse('Không tìm thấy sản phẩm.');
+            }
+
+            $totalAmount = $product->selling_price * $quantity;
+
+            $productInCart = [new OrderResource((object)[
+                'variant' => $product,
+                'quantity' => $quantity,
+            ])]; 
         }
-
-        $totalAmount = $productInCart->map(function ($item) {
-            return $item->variant->selling_price * $item->quantity;
-        })->sum();
 
         $data = [
-            "productInCart" => $productInCart,
+            "productpayment" => $productInCart,
             "totalAmount" => $totalAmount,
         ];
-        return $this->jsonResponse('Lấy thông tin thành công', true, new OrderResource((object) $data));
+
+        return $this->jsonResponse('Lấy thông tin thành công', true, $data);
     }
 
-    public function paymentCOD(Request $request)
+    
+    // method: POST
+    // require: authToken
+    // API: /api/payment
+    // example: 
+    //       Mua ở giỏ hàng(truyền payment_role thích hợp )
+    //          {
+    //              "cartIds": [6, 7],
+    //              "recipient_name": "Nguyễn Văn A",
+    //              "email": "example@example.com",
+    //              "phone_number": "0123456789",
+    //              "recipient_address": "123 Đường ABC, Quận 1, TP HCM",
+    //              "note": "Giao hàng vào buổi chiều",
+    //              "total_payment": 500000,
+    //              "payment_role": payment_role
+    //          }
+    //        mua ở trang chi tiết(truyền payment_role thích hợp )
+    //          {
+    //              "variantId": 5,
+    //              "quantity": 2,
+    //              "recipient_name": "Nguyễn Văn A",
+    //              "email": "example@example.com",
+    //              "phone_number": "0123456789",
+    //              "recipient_address": "123 Đường ABC, Quận 1, TP HCM",
+    //              "note": "Giao hàng vào buổi chiều",
+    //              "total_payment": 200000,
+    //              "payment_role": payment_role
+    //          }
+    // response:200
+    //             {
+    //                 "status": true,  
+    //                 "message": "Lấy thông tin thành công",
+    //                 "data": order information
+    //             }
+    public function payment(Request $request)
     {
-        try {
-            $data = [
-                'payment_role' => $request->payment_role,
-                'cartIds' => $request->cartIds,
-                'recipient_name' => $request->recipient_name,
-                'email' => $request->email,
-                'note' => $request->note,
-                'phone_number' => $request->phone_number,
-                'recipient_address' => $request->recipient_address,
-                'total_payment' => $request->total_payment,
-                'status_payment' => $request->status_payment,
-            ];
-
-            $res = $this->payment($data);
-            return $this->jsonResponse('Đặt hàng thành công', true, $res);
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            \Log::error($exception->getMessage());
-            return $this->jsonResponse('Common Exception');
+        $user = Auth::user();
+        if (!$user) {
+            return $this->jsonResponse('Bạn chưa đăng nhập');
         }
-    }
 
-    public function paymentOnline(Request $request)
-    {
-        $data = [
-            'payment_role' => $request->payment_role,
-            'cartIds' => $request->cartIds,
-            'recipient_name' => $request->recipient_name,
-            'email' => $request->email,
-            'note' => $request->note,
-            'phone_number' => $request->phone_number,
-            'recipient_address' => $request->recipient_address,
-            'total_payment' => $request->total_payment,
-            'status_payment' => $request->status_payment,
-        ];
+        $data = $request->all();
 
         try {
             DB::beginTransaction();
-            $res = $this->payment($data);
-            $url = $this->createPaymentUrl($res);
-            DB::commit();
-            return $this->jsonResponse('Đặt hàng thành công', true, $url);
+
+            if (!empty($data['cartIds'])) {
+
+                $res = $this->processCartPayment($data, $user->id);
+                if ($res['payment_role'] == 2) {
+                    $url = $this->createPaymentUrl($res);
+                    return$this->jsonResponse('Đặt hàng thành công',true, $url);
+                }
+
+                return $this->jsonResponse('Đặt hàng thành công',true,data: $res);
+            } elseif (!empty($data['variantId']) && !empty($data['quantity'])) {
+
+                $res = $this->processDirectPayment($data, $user->id);
+                if ($res['payment_role'] == 2) {
+                    $url = $this->createPaymentUrl($res);
+                    return$this->jsonResponse('Đặt hàng thành công',true, $url);
+                }
+
+                return $this->jsonResponse('Đặt hàng thành công',true,$res);
+            } else {
+                return $this->jsonResponse('Thiếu dữ liệu cần thiết để thanh toán');
+            }
         } catch (\Exception $exception) {
             DB::rollBack();
             \Log::error($exception->getMessage());
-            return $this->jsonResponse('Common Exception');
+            return $this->jsonResponse('Đã xảy ra lỗi trong quá trình thanh toán');
         }
+    }
+
+    private function processCartPayment($data, $userId)
+    {
+        $productPayment = Cart::with(['variant.product'])
+            ->whereIn('id', $data['cartIds'])
+            ->where('id_user', $userId)
+            ->get();
+
+        $order = Order::create([
+            'id_user' => $userId,
+            'recipient_name' => $data['recipient_name'],
+            'email' => $data['email'],
+            'phone_number' => $data['phone_number'],
+            'recipient_address' => $data['recipient_address'],
+            'note' => $data['note'],
+            'total_payment' => $data['total_payment'],
+            'payment_role' => $data['payment_role'],
+            'status_payment' => Order::STATUS_PAYMENT_PENDING,
+            'status' => Order::STATUS_PENDING,
+        ]);
+
+        $insertData = $productPayment->map(function ($cart) use ($order) {
+            return [
+                'id_order' => $order->id,
+                'id_product' => $cart->variant->id_product,
+                'id_variant' => $cart->variant->id,
+                'import_price' => $cart->variant->import_price,
+                'list_price' => $cart->variant->list_price,
+                'selling_price' => $cart->variant->selling_price,
+                'product_name' => $cart->variant->product->name,
+                'product_image' => $cart->variant->product->thumbnail,
+                'quantity' => $cart->quantity,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        })->toArray();
+
+        OrderDetail::insert($insertData);
+        Cart::whereIn('id', $data['cartIds'])->delete(); 
+        DB::commit();
+        
+        return [
+            'id_order' => $order->id,
+            'payment_role' => $order->payment_role,
+            'totalAmount' => $order->total_payment,
+        ];
+    }
+
+    private function processDirectPayment($data, $userId)
+    {
+        $variant = Variant::with('product')->find($data['variantId']);
+        if (!$variant) {
+            return $this->jsonResponse('Sản phẩm không tồn tại', false);
+        }
+
+        $order = Order::create([
+            'id_user' => $userId,
+            'recipient_name' => $data['recipient_name'],
+            'email' => $data['email'],
+            'phone_number' => $data['phone_number'],
+            'recipient_address' => $data['recipient_address'],
+            'note' => $data['note'],
+            'total_payment' => $data['total_payment'],
+            'payment_role' => $data['payment_role'],
+            'status_payment' => Order::STATUS_PAYMENT_PENDING,
+            'status' => Order::STATUS_PENDING,
+        ]);
+
+        $insertData = [
+            'id_order' => $order->id,
+            'id_product' => $variant->id_product,
+            'id_variant' => $variant->id,
+            'import_price' => $variant->import_price,
+            'list_price' => $variant->list_price,
+            'selling_price' => $variant->selling_price,
+            'product_name' => $variant->product->name,
+            'product_image' => $variant->product->thumbnail,
+            'quantity' => $data['quantity'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        OrderDetail::create($insertData);
+        DB::commit();
+        
+        return [
+            'id_order' => $order->id,
+            'payment_role' => $order->payment_role,
+            'totalAmount' => $order->total_payment,
+        ];
     }
 
     public function createPaymentUrl($res)
@@ -170,6 +320,10 @@ class OrderController extends Controller
         return $vnp_Url;
     }
 
+    // method: GET
+    // require: authToken
+    // API: /api/paymentResult
+
     public function paymentResult(Request $request)
     {
         // $vnp_SecureHash = $request->input('vnp_SecureHash');
@@ -211,59 +365,6 @@ class OrderController extends Controller
         }
     }
 
-    public function payment($data)
-    {
-        $id_user = Auth::id();
-        $cartIds = $data['cartIds'];
-
-        try {
-            DB::beginTransaction();
-            $productPayment = Cart::with([
-                'variant.product'
-            ])->whereIn('id', $cartIds)->get();
-
-            $order = Order::create([
-                'id_user' => $id_user,
-                'recipient_name' => $data['recipient_name'],
-                'email' => $data['email'],
-                'phone_number' => $data['phone_number'],
-                'recipient_address' => $data['recipient_address'],
-                'note' => $data['note'],
-                'total_payment' => $data['total_payment'],
-                'payment_role' => $data['payment_role'],
-                'status_payment' => $data['status_payment'],
-                'status' => Order::STATUS_PENDING,
-            ]);
-
-            $insertData = $productPayment->map(function ($cart) use ($order) {
-                return [
-                    'id_order' => $order->id,
-                    'id_product' => $cart->variant->id_product,
-                    'id_variant' => $cart->variant->id,
-                    'import_price' => $cart->variant->import_price,
-                    'list_price' => $cart->variant->list_price,
-                    'selling_price' => $cart->variant->selling_price,
-                    'product_name' => $cart->variant->product->name,
-                    'product_image' => $cart->variant->product->thumbnail,
-                    'quantity' => $cart->quantity,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            })->toArray();
-
-            OrderDetail::insert($insertData);
-            Cart::whereIn('id', $cartIds)->delete();
-            DB::commit();
-            return [
-                "id_order" => $order->id,
-                "totalAmount" => $order->total_payment,
-            ];
-        } catch (\Exception $exception) {
-            DB::rollBack();
-            \Log::error($exception->getMessage());
-            return $this->jsonResponse('Common Exception');
-        }
-    }
 
     public function cancelOrder(Request $request)
     {
