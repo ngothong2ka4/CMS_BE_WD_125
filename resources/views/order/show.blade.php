@@ -189,7 +189,11 @@ toastr()->error($error);
                                         Đã hủy
                                         @endif </td>
                                 <td>{{$orderhis->note}}</td>
-                                <td>{{$user->name}}</td>
+                                <td>{{$orderhis->idUser?->name}}
+                                    @if($orderhis->id_user == 0)
+                                        Hệ thống
+                                    @endif
+                                </td>
                                 <td>{{$orderhis->created_at}}</td>
                             </tr>
                     @endforeach
