@@ -206,6 +206,32 @@ class OrderController extends Controller
         })->toArray();
 
         OrderDetail::insert($insertData);
+
+        $stockUpdateData = $productPayment->map(function ($cart) {
+            $newStockQuantity = $cart->variant->quantity - $cart->quantity;
+
+            if ($newStockQuantity < 0) {
+                DB::rollBack();
+                throw new \Exception('Sản phẩm ' . $cart->variant->product->name . ' không đủ hàng trong kho.');
+            }
+
+            return [
+                'id' => $cart->variant->id, 
+                'id_product' => $cart->variant->id_product, 
+                'id_attribute_color' => $cart->variant->id_attribute_color, 
+                'id_attribute_size' => $cart->variant->id_attribute_size, 
+                'import_price' => $cart->variant->import_price, 
+                'list_price' => $cart->variant->list_price, 
+                'selling_price' => $cart->variant->selling_price, 
+                'image_color' => $cart->variant->image_color, 
+                'is_show' => $cart->variant->is_show, 
+                'quantity' => $newStockQuantity, 
+                'updated_at' => now(),
+            ];
+        })->toArray();
+        
+        Variant::upsert($stockUpdateData, ['id'], ['quantity', 'updated_at']);
+
         Cart::whereIn('id', $data['cartIds'])->delete(); 
         DB::commit();
         
@@ -251,6 +277,10 @@ class OrderController extends Controller
         ];
 
         OrderDetail::create($insertData);
+        $quantityInStock = $variant->quantity - $data['quantity'];
+        $variant->update([
+            "quantity" => $quantityInStock
+        ]);
         DB::commit();
         
         return [
