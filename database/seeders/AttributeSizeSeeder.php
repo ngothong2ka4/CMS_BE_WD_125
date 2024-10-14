@@ -17,6 +17,7 @@ class AttributeSizeSeeder extends Seeder
     {
         $faker = Faker::create();
         DB::table('attribute_size')->insert([
+            ['name' => 'Over Size'],
             ['name' => '1.5'],
             ['name' => '1.6'],
             ['name' => '1.7'],

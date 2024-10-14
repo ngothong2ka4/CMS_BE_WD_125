@@ -119,7 +119,7 @@ class ProductController extends Controller
                 $data_var = [
                     'id_product' => $product->id,
                     'id_attribute_color' => $color,
-                    'id_attribute_size' => $request->id_attribute_size[$key],
+                    'id_attribute_size' => $request->id_attribute_size[$key] ? $request->id_attribute_size[$key] : 1,
                     'import_price' => $request->import_price[$key],
                     'list_price' => $request->list_price[$key],
                     'selling_price' => $request->selling_price[$key],
@@ -269,7 +269,7 @@ class ProductController extends Controller
                 $data_var = [
 
                     'id_attribute_color' => $request->id_attribute_color[$key],
-                    'id_attribute_size' => $request->id_attribute_size[$key],
+                    'id_attribute_size' => $request->id_attribute_size[$key] ? $request->id_attribute_size[$key] : 1,
                     'import_price' => $request->import_price[$key],
                     'list_price' => $request->list_price[$key],
                     'selling_price' => $request->selling_price[$key],
@@ -294,7 +294,7 @@ class ProductController extends Controller
                 $data_var = [
                     'id_product' => $product->id,
                     'id_attribute_color' => $color,
-                    'id_attribute_size' => $request->new_id_attribute_size[$key],
+                    'id_attribute_size' => $request->new_id_attribute_size[$key] ? $request->new_id_attribute_size[$key] : 1 ,
                     'import_price' => $request->new_import_price[$key],
                     'list_price' => $request->new_list_price[$key],
                     'selling_price' => $request->new_selling_price[$key],

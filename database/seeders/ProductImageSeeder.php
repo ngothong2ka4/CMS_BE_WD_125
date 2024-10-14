@@ -54,14 +54,26 @@ class ProductImageSeeder extends Seeder
             ],
             [
                 'id_product' => 4,
+                'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344737/nc4689_1716450463.png',
+            ],
+            [
+                'id_product' => 4,
+                'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344738/nc46810_1716450494.png',
+            ],
+            [
+                'id_product' => 4,
+                'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344736/nc4688_1716450597.png',
+            ],
+            [
+                'id_product' => 5,
                 'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1713754546/dcptb3663_1715662062.png',
             ],
             [
-                'id_product' => 4,
+                'id_product' => 5,
                 'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1713754546/dcptb3661_1716263545.jpg',
             ],
             [
-                'id_product' => 4,
+                'id_product' => 5,
                 'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1713754546/dcptb3662_1715662186.jpg',
             ],
         ]);

@@ -41,6 +41,14 @@ class ProductSeeder extends Seeder
 
             ],
             [
+                'id_category' => 1,
+                'id_materials' => 1,
+                'id_stones' => 5,
+                'name' => 'Nhẫn cưới Vàng 14K đá Moonstone',
+                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344736/nc4688_1716450597.png',
+
+            ],
+            [
                 'id_category' => 2,
                 'id_materials' => 1,
                 'id_stones' => 3,

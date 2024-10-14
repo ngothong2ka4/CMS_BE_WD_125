@@ -20,7 +20,7 @@ class VariantSeeder extends Seeder
             [
                 'id_product' => 1,
                 'id_attribute_color' => 1,
-                'id_attribute_size' => 1,
+                'id_attribute_size' => 3,
                 'import_price' => 1000000,
                 'list_price' => 2000000,
                 'selling_price' => 1599000,
@@ -42,7 +42,7 @@ class VariantSeeder extends Seeder
             [
                 'id_product' => 2,
                 'id_attribute_color' => 1,
-                'id_attribute_size' => 1,
+                'id_attribute_size' => 3,
                 'import_price' => 2000000,
                 'list_price' => 3000000,
                 'selling_price' => 1999000,
@@ -75,7 +75,17 @@ class VariantSeeder extends Seeder
             [
                 'id_product' => 4,
                 'id_attribute_color' => 1,
-                'id_attribute_size' => null,
+                'id_attribute_size' => 2,
+                'import_price' => 1600000,
+                'list_price' => 3000000,
+                'selling_price' => 1999000,
+                'image_color' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344736/nc4688_1716450597.png',
+                'quantity' => 10,
+                'is_show' => 0,
+            ], [
+                'id_product' => 5,
+                'id_attribute_color' => 1,
+                'id_attribute_size' => 1,
                 'import_price' => 1600000,
                 'list_price' => 3000000,
                 'selling_price' => 1999000,
