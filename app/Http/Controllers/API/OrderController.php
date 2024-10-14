@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Cart;
 use App\Models\Order;
@@ -81,10 +82,10 @@ class OrderController extends Controller
 
             $totalAmount = $product->selling_price * $quantity;
 
-            $productInCart = [new OrderResource((object)[
+            $productInCart = [
                 'variant' => $product,
                 'quantity' => $quantity,
-            ])]; 
+            ]; 
         }
 
         $data = [
@@ -129,7 +130,7 @@ class OrderController extends Controller
     //                 "message": "Lấy thông tin thành công",
     //                 "data": order information
     //             }
-    public function payment(Request $request)
+    public function payment(OrderRequest $request)
     {
         $user = Auth::user();
         if (!$user) {
@@ -162,6 +163,8 @@ class OrderController extends Controller
             } else {
                 return $this->jsonResponse('Thiếu dữ liệu cần thiết để thanh toán');
             }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->jsonResponse('Dữ liệu không hợp lệ', false, $e->errors());
         } catch (\Exception $exception) {
             DB::rollBack();
             \Log::error($exception->getMessage());
