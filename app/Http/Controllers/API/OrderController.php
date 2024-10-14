@@ -517,6 +517,17 @@ class OrderController extends Controller
             }
         }
 
-        return response()->json($orders);
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 2);
+        $total = count($orders);
+        $totalPages = ceil($total / $perPage);
+
+        $orders = $orders->slice(($page - 1) * $perPage, $perPage)->values();
+
+        return response()->json([
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'data' => $orders,
+        ], 200);
     }
 }
