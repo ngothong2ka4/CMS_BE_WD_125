@@ -82,10 +82,10 @@ class OrderController extends Controller
 
             $totalAmount = $product->selling_price * $quantity;
 
-            $productInCart = [
-                'variant' => $product,
-                'quantity' => $quantity,
-            ]; 
+            $productInCart = [[
+                        'variant' => $product,
+                        'quantity' => $quantity,
+            ]]; 
         }
 
         $data = [
