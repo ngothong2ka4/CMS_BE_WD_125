@@ -21,7 +21,7 @@ class ProductSeeder extends Seeder
                 'id_materials' => 1,
                 'id_stones' => 1,
                 'name' => 'Nhẫn cưới Vàng 14K Kim cương tự nhiên',
-                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344802/nc4318-2_1716438677.png',
+                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344803/nc4319-2_1716438595.png',
 
             ],
             [
@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 'id_materials' => 1,
                 'id_stones' => 1,
                 'name' => 'Nhẫn cưới Vàng 14K Kim cương thiên nhiên',
-                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1717212823/nc852kc-vv-1_1727491436.png',
+                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344677/nc852kcw-vv-1_1727491573.png',
 
             ],
             [
@@ -37,7 +37,7 @@ class ProductSeeder extends Seeder
                 'id_materials' => 1,
                 'id_stones' => 1,
                 'name' => 'Nhẫn cưới Vàng 18K& Platinum 950 Kim cương tự nhiên',
-                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344805/nc7967_1716438373.png',
+                'thumbnail' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1723542896/nc796m6_1723543779.png',
 
             ],
             [

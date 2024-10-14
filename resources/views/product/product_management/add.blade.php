@@ -274,11 +274,11 @@
                 $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
                 $('#' + variantId + ' .sale_price').after(
                     '<div class="invalid-feedback">Giá bán phải lớn hơn giá nhập.</div>');
-            } else if (selling_price < list_price) {
+            } else if (selling_price > list_price) {
                 $('#' + variantId + ' .sale_price').addClass('is-invalid');
                 $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
                 $('#' + variantId + ' .sale_price').after(
-                    '<div class="invalid-feedback">Giá bán phải lớn hơn hoặc bằng giá niêm yết.</div>');
+                    '<div class="invalid-feedback">Giá bán phải nhỏ hơn hoặc bằng giá niêm yết.</div>');
             } else {
                 $('#' + variantId + ' .sale_price').removeClass('is-invalid');
                 $('#' + variantId + ' .sale_price').next('.invalid-feedback').remove();
