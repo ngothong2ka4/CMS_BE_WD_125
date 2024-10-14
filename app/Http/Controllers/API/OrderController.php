@@ -462,7 +462,7 @@ class OrderController extends Controller
                         }]);
                 }]);
         }])
-            ->select('id', 'id_user', 'recipient_name', 'email', 'phone_number', 'recipient_address', 'note', 'total_payment', 'payment_role', 'status_payment', 'status')
+            ->select('id', 'id_user', 'recipient_name', 'email', 'phone_number', 'recipient_address', 'note', 'total_payment', 'payment_role', 'status_payment', 'status', 'created_at')
             ->where('id_user', $id_user)
             ->get();
 
