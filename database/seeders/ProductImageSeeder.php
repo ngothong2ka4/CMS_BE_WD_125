@@ -18,7 +18,7 @@ class ProductImageSeeder extends Seeder
         DB::table('product_images')->insert([
             [
                 'id_product' => 1,
-                'link_image' => ' https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344803/nc4319-2_1716438595.png',
+                'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344803/nc4319-2_1716438595.png',
             ],
             [
                 'id_product' => 1,
@@ -30,7 +30,7 @@ class ProductImageSeeder extends Seeder
             ],
             [
                 'id_product' => 2,
-                'link_image' => ' https://huythanhjewelry.vn/storage/photos/shares/01upload/1717212823/nc852kc-vv-1_1727491436.png',
+                'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1717212823/nc852kc-vv-1_1727491436.png',
             ],
             [
                 'id_product' => 2,
@@ -42,7 +42,7 @@ class ProductImageSeeder extends Seeder
             ],
             [
                 'id_product' => 3,
-                'link_image' => ' https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344807/nc796kcw6_1716438335.png',
+                'link_image' => 'https://huythanhjewelry.vn/storage/photos/shares/01upload/1716344807/nc796kcw6_1716438335.png',
             ],
             [
                 'id_product' => 3,
