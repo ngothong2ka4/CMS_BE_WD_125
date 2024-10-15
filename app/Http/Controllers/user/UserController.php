@@ -19,7 +19,7 @@ class UserController extends Controller
         $user= User::findOrFail($id);
         return view('user.show',compact('user'));
     }
-    public function status(Request $request, $id)
+    public function status($id)
     {
         $user=User::findOrFail($id);
         $user->status=!$user->status;

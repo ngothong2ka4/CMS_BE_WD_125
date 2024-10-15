@@ -28,7 +28,13 @@ class AuthController extends Controller
     ]);
 
     // Thử đăng nhập
-    if (Auth::attempt($credentials)) {
+    if (Auth::attempt($credentials, $request->filled('remember'))) {
+        if(Auth::user()->status ==0){
+            Auth::logout();
+            return back()->withErrors([
+                'login' => 'Tài khoản của bạn đã bị vô hiệu hóa.',
+            ])->onlyInput('email');
+        }
         $request->session()->regenerate();
         return redirect()->intended('dashboard');
     }
@@ -37,33 +43,7 @@ class AuthController extends Controller
     ])->onlyInput('email');
 }
 
-    // public function postLogin( Request $request)
-    // {
-    //     // $data=$request->only(['name','password']);
-    //     // if(Auth::attempt($data)){
-    //     //     return redirect()->intended('dashboard');
-    //     // }else{
-    //     //     return redirect()->back();
-    //     // }
-    //     $credentials = $request->validate([
-    //         'name' => 'required|min:3|unique:users',
-    //         'password' => 'required|min:8'
-    //     ]);
-    //     $credentials = $request->only(['name','password']);
-    //     if(Auth::attempt( $credentials)){
-    //         $request->session()->regenerate();
-            
-    //         // if(Auth::user()->isAdmin()){
-    //         //     return redirect()->intended('dashboard');
-    //         // }
-    //         return redirect()->intended('dashboard');
-
-    //     } 
-    //     return back()->withErrors([
-    //         'name'=>'Chưa có tài khoản',
-    //     ])->onlyInput('name');
-       
-    // }
+    
 
    
     // public function register()

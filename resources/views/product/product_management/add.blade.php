@@ -92,11 +92,6 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class="">
-                            {{-- <label for="images">Chọn ảnh sản phẩm</label>
-                            <input type="file" name="images[]" multiple class="form-control" id="images"> --}}
-                            {{-- @include('product.product_management.product_images.index') --}}
-                        </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
                             <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
@@ -119,45 +114,6 @@
                     </div>
                     <div class="card-body">
                         <div id="variant-container">
-                            <!-- <div class="form-group d-flex" id="variant-0">
-                                                                                <div class="form-group me-1">
-                                                                                    <label for="color-0" class="form-label">Màu sắc</label>
-                                                                                    <select class="form-select mb-3" id="color-0" name="colors[]" aria-label="Default select example">
-                                                                                        <option selected>Chọn màu sắc</option>
-                                                                                        <option value="1">One</option>
-                                                                                        <option value="2">Two</option>
-                                                                                        <option value="3">Three</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="form-group me-1">
-                                                                                    <label for="size-0" class="form-label">Kích thước</label>
-                                                                                    <select class="form-select mb-3" id="size-0" name="sizes[]" aria-label="Default select example">
-                                                                                        <option selected>Chọn kích thước</option>
-                                                                                        <option value="1">One</option>
-                                                                                        <option value="2">Two</option>
-                                                                                        <option value="3">Three</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                <div class="me-1">
-                                                                                    <label for="price_in-0" class="form-label">Giá nhập</label>
-                                                                                    <input type="text" class="form-control" id="price_in-0" name="price_in[]" placeholder="Nhập giá nhập">
-                                                                                </div>
-                                                                                <div class="me-1">
-                                                                                    <label for="price_out-0" class="form-label">Giá niêm yết</label>
-                                                                                    <input type="text" class="form-control" id="price_out-0" name="price_out[]" placeholder="Nhập giá niêm yết">
-                                                                                </div>
-                                                                                <div class="me-1">
-                                                                                    <label for="sale_price-0" class="form-label">Giá bán</label>
-                                                                                    <input type="text" class="form-control" id="sale_price-0" name="sale_price[]" placeholder="Nhập giá bán">
-                                                                                </div>
-                                                                                <div class="me-1">
-                                                                                    <label for="quantity-0" class="form-label">Số lượng</label>
-                                                                                    <input type="number" class="form-control" id="quantity-0" name="quantity[]" placeholder="Nhập số lượng">
-                                                                                </div>
-                                                                                <div style="margin-top: 27px">
-                                                                                    <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-0" type="button">Xoá</button>
-                                                                                </div>
-                                                                            </div> -->
                         </div>
 
                         <div class="form-group">
@@ -241,15 +197,15 @@
 
         });
 
-       
+
         $(document).on('input', '.price-validate', function() {
             let variantId = $(this).closest('.variant-row').attr('id');
 
-            let import_price = parseFloat($('#' + variantId + ' .price_in').val()) ;
-            let list_price = parseFloat($('#' + variantId + ' .price_out').val()) ;
-            let selling_price = parseFloat($('#' + variantId + ' .sale_price').val()) ;
+            let import_price = parseFloat($('#' + variantId + ' .price_in').val());
+            let list_price = parseFloat($('#' + variantId + ' .price_out').val());
+            let selling_price = parseFloat($('#' + variantId + ' .sale_price').val());
 
-            let price = parseFloat($(this).val()) ;
+            let price = parseFloat($(this).val());
 
             if (price < 0) {
                 $(this).addClass('is-invalid');
@@ -291,12 +247,23 @@
                 let color = $(this).find('.color-select').val();
                 let size = $(this).find('.size-select').val();
                 let variant = color + '-' + size;
-                if (selectedVariants.includes(variant) && color && size) {
-                    alert('Màu và kích thước này đã tồn tại. Vui lòng chọn màu hoặc kích thước khác.');
-                    $(this).find('.color-select').val('');
-                    $(this).find('.size-select').val('');
+                if (!size) {
+                    if (selectedVariants.includes(color) && color) {
+                        alert(
+                            'Màu này đã được chọn . Vui lòng chọn màu khác.'
+                            );
+                        $(this).find('.color-select').val(''); 
+                    } else {
+                        selectedVariants.push(color); 
+                    }
                 } else {
-                    selectedVariants.push(variant);
+                    if (selectedVariants.includes(variant) && color && size) {
+                        alert('Màu và kích thước này đã tồn tại. Vui lòng chọn màu hoặc kích thước khác.');
+                        $(this).find('.color-select').val('');
+                        $(this).find('.size-select').val('');
+                    } else {
+                        selectedVariants.push(variant);
+                    }
                 }
             });
         });

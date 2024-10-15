@@ -50,7 +50,7 @@
                         <div>
                             <label for="basiInput" class="form-label">Quyền</label>
                             <input type="text" class="form-control" id="basiInput" name="name"
-                                value="{{ $user->role }}" disabled>
+                                value="{{ $user->role ==1 ? 'user': 'admin' }}" disabled>
 
                         </div>
                         <div>
