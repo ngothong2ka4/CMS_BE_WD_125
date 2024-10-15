@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $order = Order::findOrFail($id);
-        $orderdetails = OrderDetail::where('id_oder', $id)->get();
+        $orderdetails = OrderDetail::where('id_order', $id)->get();
         $orderhistories = OrderHistory::where('id_order', $id)->get();
         return view('order.show', compact('order','orderdetails','orderhistories','user'));
     }
@@ -63,6 +64,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $user = Auth::user();
+        $orderDetail = $order->orderDetail;
         try {
             DB::beginTransaction();
             $request->validate([
@@ -70,19 +72,22 @@ class OrderController extends Controller
             ],[
                 'to_status.required' => 'Vui lòng chọn trạng thái'
             ]);
-            if($request->to_status == 'Đã hủy'){
+            if($request->to_status == 7){
                 if($request->note == '' || $request->note == null){
                     toastr()->error('Phải có ghi chú hủy đơn' );
                  return redirect()->back();
 
                 };
+                if($orderDetail != [] && $orderDetail){
+                    foreach($orderDetail as $variant){
+                        Variant::where('id',$variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
+                    }
+                }
             }
-            if($request->to_status == 'Đã giao hàng thành công'){
-
-            }
+    
             $data = ['status' => $request->to_status];
-            if($request->to_status == 'Giao hàng thành công'){
-              $data['status_payment']  = 'Đã thanh toán';
+            if($request->to_status == 4){
+              $data['status_payment']  = 2;
             };
             $data_his = [
                 'id_order' => $order->id,

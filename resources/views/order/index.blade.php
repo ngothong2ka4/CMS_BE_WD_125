@@ -34,8 +34,38 @@
                                     <td>{{ $order->recipient_name }}</td>   
                                     <td>{{ number_format($order->total_payment) }}</td>
 
-                                    <td>{{ $order->	status }}</td>
-                                    <td>{{ $order->	status_payment }}</td>                            
+                                    <td>
+                                        @if($order->	status == 1)
+                                        Chờ xác nhận
+                                        @endif
+                                        @if($order->	status == 2)
+                                        Đã xác nhận
+                                        @endif
+                                        @if($order->	status == 3)
+                                        Đang giao
+                                        @endif
+                                        @if($order->	status == 4)
+                                        Giao hàng thành công
+                                        @endif
+                                        @if($order->	status == 5)
+                                        Giao hàng thất bại
+                                        @endif
+                                        @if($order->	status == 6)
+                                        Hoàn thành
+                                        @endif
+                                        @if($order->	status == 7)
+                                        Đã hủy
+                                        @endif
+                                       
+                                    </td>
+                                    <td>
+                                    @if($order->	status_payment == 1)
+                                        Chưa thanh toán
+                                        @endif
+                                        @if($order->	status_payment == 2)
+                                        Đã thanh toán
+                                        @endif
+                                    </td>                            
                                     <td>                                        
                                         <a href="{{ route('order.show', $order->id) }}"><button class="btn btn-info">Chi tiết đơn hàng</button></a>
                                     </td>  
