@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
+use App\Models\Product;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -88,6 +89,12 @@ class OrderController extends Controller
             $data = ['status' => $request->to_status];
             if($request->to_status == 4){
               $data['status_payment']  = 2;
+            
+            if($orderDetail != [] && $orderDetail){
+                foreach($orderDetail as $variant){
+                    Product::where('id',$variant->id_product)->update(['sold' => $variant->orderProduct->sold + $variant->quantity]);
+                }
+            }
             };
             $data_his = [
                 'id_order' => $order->id,

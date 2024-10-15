@@ -7,6 +7,11 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Common\Common;
+
+Common::autoUpdateStatus();
+
+
 
 /*
 |--------------------------------------------------------------------------

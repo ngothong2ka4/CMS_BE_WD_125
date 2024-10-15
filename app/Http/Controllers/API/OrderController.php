@@ -541,7 +541,7 @@ class OrderController extends Controller
         }
 
         $page = $request->input('page', 1);
-        $perPage = $request->input('per_page', 5);
+        $perPage = $request->input('per_page', 1000);
         $total = count($orders);
         $totalPages = ceil($total / $perPage);
 
