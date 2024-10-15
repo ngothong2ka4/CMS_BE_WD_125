@@ -38,17 +38,17 @@ class OrderController extends Controller
     //             }
     public function listInformationOrder(Request $request)
     {
-        $cartIds = $request->input('cartIds'); 
-        $variantId = $request->input('variantId'); 
-        $quantity = $request->input('quantity'); 
+        $cartIds = $request->input('cartIds');
+        $variantId = $request->input('variantId');
+        $quantity = $request->input('quantity');
         $user = Auth::user();
 
         if (!$user) {
             return $this->jsonResponse('Bạn chưa đăng nhập');
         }
 
-        $productInCart = []; 
-        $totalAmount = 0; 
+        $productInCart = [];
+        $totalAmount = 0;
 
         if ($cartIds) {
             $productInCart = Cart::with([
@@ -70,7 +70,7 @@ class OrderController extends Controller
                     'variant' => $item->variant,
                     'quantity' => $item->quantity,
                 ];
-            })->values()->toArray(); 
+            })->values()->toArray();
         } elseif ($variantId) {
             $product = Variant::with(['product', 'color', 'size'])
                 ->where('id', $variantId)
@@ -83,9 +83,9 @@ class OrderController extends Controller
             $totalAmount = $product->selling_price * $quantity;
 
             $productInCart = [[
-                        'variant' => $product,
-                        'quantity' => $quantity,
-            ]]; 
+                'variant' => $product,
+                'quantity' => $quantity,
+            ]];
         }
 
         $data = [
@@ -96,7 +96,7 @@ class OrderController extends Controller
         return $this->jsonResponse('Lấy thông tin thành công', true, $data);
     }
 
-    
+
     // method: POST
     // require: authToken
     // API: /api/payment
@@ -147,19 +147,19 @@ class OrderController extends Controller
                 $res = $this->processCartPayment($data, $user->id);
                 if ($res['payment_role'] == 2) {
                     $url = $this->createPaymentUrl($res);
-                    return$this->jsonResponse('Đặt hàng thành công',true, $url);
+                    return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
-                return $this->jsonResponse('Đặt hàng thành công',true,data: $res);
+                return $this->jsonResponse('Đặt hàng thành công', true, data: $res);
             } elseif (!empty($data['variantId']) && !empty($data['quantity'])) {
 
                 $res = $this->processDirectPayment($data, $user->id);
                 if ($res['payment_role'] == 2) {
                     $url = $this->createPaymentUrl($res);
-                    return$this->jsonResponse('Đặt hàng thành công',true, $url);
+                    return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
-                return $this->jsonResponse('Đặt hàng thành công',true,$res);
+                return $this->jsonResponse('Đặt hàng thành công', true, $res);
             } else {
                 return $this->jsonResponse('Thiếu dữ liệu cần thiết để thanh toán');
             }
@@ -219,25 +219,25 @@ class OrderController extends Controller
             }
 
             return [
-                'id' => $cart->variant->id, 
-                'id_product' => $cart->variant->id_product, 
-                'id_attribute_color' => $cart->variant->id_attribute_color, 
-                'id_attribute_size' => $cart->variant->id_attribute_size, 
-                'import_price' => $cart->variant->import_price, 
-                'list_price' => $cart->variant->list_price, 
-                'selling_price' => $cart->variant->selling_price, 
-                'image_color' => $cart->variant->image_color, 
-                'is_show' => $cart->variant->is_show, 
-                'quantity' => $newStockQuantity, 
+                'id' => $cart->variant->id,
+                'id_product' => $cart->variant->id_product,
+                'id_attribute_color' => $cart->variant->id_attribute_color,
+                'id_attribute_size' => $cart->variant->id_attribute_size,
+                'import_price' => $cart->variant->import_price,
+                'list_price' => $cart->variant->list_price,
+                'selling_price' => $cart->variant->selling_price,
+                'image_color' => $cart->variant->image_color,
+                'is_show' => $cart->variant->is_show,
+                'quantity' => $newStockQuantity,
                 'updated_at' => now(),
             ];
         })->toArray();
-        
+
         Variant::upsert($stockUpdateData, ['id'], ['quantity', 'updated_at']);
 
-        Cart::whereIn('id', $data['cartIds'])->delete(); 
+        Cart::whereIn('id', $data['cartIds'])->delete();
         DB::commit();
-        
+
         return [
             'id_order' => $order->id,
             'payment_role' => $order->payment_role,
@@ -285,7 +285,7 @@ class OrderController extends Controller
             "quantity" => $quantityInStock
         ]);
         DB::commit();
-        
+
         return [
             'id_order' => $order->id,
             'payment_role' => $order->payment_role,
@@ -445,9 +445,7 @@ class OrderController extends Controller
 
     public function purchasedOrders(Request $request)
     {
-
         $id_user = Auth::id();
-        $note = $request->note;
         if (!$id_user) {
             return response()->json(['message' => 'Bạn chưa đăng nhập']);
         }
@@ -470,7 +468,30 @@ class OrderController extends Controller
             return response()->json(['message' => 'Không có đơn hàng nào'], 404);
         }
 
+        if ($request->has('complete_id')) {
+            $complete_id = $request->input('complete_id');
+            $order = $orders->where('id', $complete_id)->first();
+            if (!$order) {
+                return response()->json(['message' => 'Đơn hàng không tồn tại'], 404);
+            } else {
+                if ($order->status == 4) {
+                    $order->status = 6;
+                    OrderHistory::create([
+                        'id_order' => $order->id,
+                        'from_status' => 4,
+                        'to_status' => 6,
+                        'note' => null,
+                        'id_user' => $id_user,
+                        'created_at' => now(),
+                    ]);
+                    $order->save();
+                    return response()->json(['message' => 'Đơn hàng đã được xác nhận hoàn thành']);
+                }
+            }
+        }
+
         if ($request->has('cancel_id')) {
+            $note = $request->note;
             $cancel_id = $request->input('cancel_id');
             $order = $orders->where('id', $cancel_id)->first();
 
@@ -505,7 +526,6 @@ class OrderController extends Controller
                         return response()->json(['message' => 'Lý do huỷ không được để trống'], 400);
                     }
                     $order->status = 7;
-                    // $order->note = $note;
                     OrderHistory::create([
                         'id_order' => $order->id,
                         'from_status' => 1,
@@ -521,7 +541,7 @@ class OrderController extends Controller
         }
 
         $page = $request->input('page', 1);
-        $perPage = $request->input('per_page', 2);
+        $perPage = $request->input('per_page', 5);
         $total = count($orders);
         $totalPages = ceil($total / $perPage);
 
