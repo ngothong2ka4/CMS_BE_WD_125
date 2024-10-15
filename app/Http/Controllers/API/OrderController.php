@@ -85,6 +85,7 @@ class OrderController extends Controller
             $productInCart = [[
                 'variant' => $product,
                 'quantity' => $quantity,
+                'user' => $user,
             ]];
         }
 
