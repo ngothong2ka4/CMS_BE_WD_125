@@ -38,7 +38,7 @@ toastr()->error($error);
                                         @endif
                                         @if($order->status_payment == 2)
                                        value = "Thanh toán qua VNPay"
-                                        @endif disabled>
+                                        @endif 
                                         @if($order->status_payment == 3)
                                        value = "Thanh toán qua Momo"
                                         @endif disabled>
