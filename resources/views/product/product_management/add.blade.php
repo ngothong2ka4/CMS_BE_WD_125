@@ -92,11 +92,6 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class="">
-                            {{-- <label for="images">Chọn ảnh sản phẩm</label>
-                            <input type="file" name="images[]" multiple class="form-control" id="images"> --}}
-                            {{-- @include('product.product_management.product_images.index') --}}
-                        </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
                             <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
@@ -119,45 +114,6 @@
                     </div>
                     <div class="card-body">
                         <div id="variant-container">
-                            <!-- <div class="form-group d-flex" id="variant-0">
-                                                                                                    <div class="form-group me-1">
-                                                                                                        <label for="color-0" class="form-label">Màu sắc</label>
-                                                                                                        <select class="form-select mb-3" id="color-0" name="colors[]" aria-label="Default select example">
-                                                                                                            <option selected>Chọn màu sắc</option>
-                                                                                                            <option value="1">One</option>
-                                                                                                            <option value="2">Two</option>
-                                                                                                            <option value="3">Three</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group me-1">
-                                                                                                        <label for="size-0" class="form-label">Kích thước</label>
-                                                                                                        <select class="form-select mb-3" id="size-0" name="sizes[]" aria-label="Default select example">
-                                                                                                            <option selected>Chọn kích thước</option>
-                                                                                                            <option value="1">One</option>
-                                                                                                            <option value="2">Two</option>
-                                                                                                            <option value="3">Three</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <label for="price_in-0" class="form-label">Giá nhập</label>
-                                                                                                        <input type="text" class="form-control" id="price_in-0" name="price_in[]" placeholder="Nhập giá nhập">
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <label for="price_out-0" class="form-label">Giá niêm yết</label>
-                                                                                                        <input type="text" class="form-control" id="price_out-0" name="price_out[]" placeholder="Nhập giá niêm yết">
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <label for="sale_price-0" class="form-label">Giá bán</label>
-                                                                                                        <input type="text" class="form-control" id="sale_price-0" name="sale_price[]" placeholder="Nhập giá bán">
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <label for="quantity-0" class="form-label">Số lượng</label>
-                                                                                                        <input type="number" class="form-control" id="quantity-0" name="quantity[]" placeholder="Nhập số lượng">
-                                                                                                    </div>
-                                                                                                    <div style="margin-top: 27px">
-                                                                                                        <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-0" type="button">Xoá</button>
-                                                                                                    </div>
-                                                                                                </div> -->
                         </div>
 
                         <div class="form-group">
