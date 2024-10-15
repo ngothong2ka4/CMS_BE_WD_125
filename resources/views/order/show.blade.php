@@ -33,13 +33,13 @@ toastr()->error($error);
                     <div class="col-lg-6">
                         <label for="basiInput" class="form-label">Phương thức thanh toán</label>
                         <input type="text" class="form-control mb-3" id="basiInput" name="name"
-                        @if($order->	status_payment == 1)
+                        @if($order->	payment_role == 1)
                                        value = "Thanh toán khi nhận hàng"
                                         @endif
-                                        @if($order->status_payment == 2)
+                                        @if($order->payment_role == 2)
                                        value = "Thanh toán qua VNPay"
                                         @endif 
-                                        @if($order->status_payment == 3)
+                                        @if($order->payment_role == 3)
                                        value = "Thanh toán qua Momo"
                                         @endif disabled>
 
