@@ -31,6 +31,11 @@ class OrderDetail extends Model
         return $this->hasOne(Variant::class,'id', 'id_variant');
     }
 
+    public function orderProduct()
+    {
+        return $this->hasOne(Product::class,'id', 'id_product');
+    }
+
     public function productVariant()
     {
         return $this->belongsTo(Variant::class, 'id_variant');
