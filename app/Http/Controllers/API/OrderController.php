@@ -81,17 +81,16 @@ class OrderController extends Controller
             }
 
             $totalAmount = $product->selling_price * $quantity;
-
             $productInCart = [[
                         'variant' => $product,
-                        'quantity' => $quantity,
-                        'user' => $user,
-            ]];
+                        'quantity' => $quantity
+            ]]; 
         }
 
         $data = [
             "productpayment" => $productInCart,
             "totalAmount" => $totalAmount,
+            'user' => $user
         ];
 
         return $this->jsonResponse('Lấy thông tin thành công', true, $data);
