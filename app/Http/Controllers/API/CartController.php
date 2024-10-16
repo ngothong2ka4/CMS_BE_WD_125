@@ -34,6 +34,11 @@ class CartController extends Controller
             $id_variant = $request->id_variant;
             $quantity = $request->quantity;
             $id_user = Auth::id();
+
+            $variant = Variant::find($id_variant);
+            if ($quantity > $variant->quantity) {
+                return $this->jsonResponse('Sản phẩm ' . $variant->product->name . ' không đủ hàng trong kho.');
+            }
     
             DB::beginTransaction();
             
@@ -48,7 +53,13 @@ class CartController extends Controller
                     'id_user' => $id_user,
                 ]);
             } else {
-                $cart->quantity += $quantity;
+                $newQuantity = $cart->quantity + $quantity;
+
+                if ($newQuantity > $cart->variant->quantity) {
+                    return $this->jsonResponse('Số lượng yêu cầu vượt quá số lượng có trong kho.');
+                }
+
+                $cart->quantity = $newQuantity;
                 $cart->save();
             }
     
