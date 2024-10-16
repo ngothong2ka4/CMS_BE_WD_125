@@ -217,17 +217,17 @@ toastr()->error($error);
                         <label for="basiInput" class="form-label">Trạng thái</label>
                         <select name="to_status" class="form-select mb-3" aria-label="Default select example">
                             <option value="">Chọn trạng thái</option>
-                            @if($order->status == 1)
-                            <option value="2">Đã xác nhận</option>
-                            <option value="7">Hủy</option>
-                            @endif
-                            @if($order->status == 2)
-                            <option value="3">Đang giao hàng</option>
-                            @endif
-                            @if($order->status == 3)
-                            <option value="4">Giao hàng thành công</option>
-                            <option value="5">Giao hàng thất bại</option>
-                            @endif
+                            
+                            <option value="2" @if($order->status >= 2) disabled @endif >Đã xác nhận</option>
+                           
+                           
+                            <option value="3" @if($order->status == 1 || $order->status >= 3 ) disabled @endif >Đang giao hàng</option>
+                            
+                            <option value="4" @if($order->status <= 2) disabled @endif >Giao hàng thành công</option>
+                            <option value="5" @if($order->status <= 2) disabled @endif >Giao hàng thất bại</option>
+                            <option value="7" @if($order->status >= 2) disabled @endif >Hủy</option>
+
+                           
                         </select>
 
                     </div>
