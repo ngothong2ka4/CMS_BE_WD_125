@@ -310,8 +310,8 @@ class OrderController extends Controller
         $vnp_OrderInfo = "Thanh toán hoá đơn";
         $vnp_OrderType = "Shine Shop";
         $vnp_Amount = $res['totalAmount'] * 100;
-        $vnp_Locale = "VN";
-        $vnp_BankCode = "NCB";
+        $vnp_Locale = "vn";
+        $vnp_BankCode = "";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
         $inputData = array(
