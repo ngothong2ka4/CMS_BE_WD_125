@@ -83,9 +83,9 @@ class OrderController extends Controller
             $totalAmount = $product->selling_price * $quantity;
 
             $productInCart = [[
-                'variant' => $product,
-                'quantity' => $quantity,
-                'user' => $user,
+                        'variant' => $product,
+                        'quantity' => $quantity,
+                        'user' => $user,
             ]];
         }
 
@@ -169,7 +169,7 @@ class OrderController extends Controller
         } catch (\Exception $exception) {
             DB::rollBack();
             \Log::error($exception->getMessage());
-            return $this->jsonResponse('Đã xảy ra lỗi trong quá trình thanh toán');
+            return $this->jsonResponse($exception->getMessage());
         }
     }
 
@@ -186,7 +186,7 @@ class OrderController extends Controller
             'email' => $data['email'],
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
-            'note' => $data['note'],
+            'note' => $data['note'] ?? null,
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
@@ -249,8 +249,13 @@ class OrderController extends Controller
     private function processDirectPayment($data, $userId)
     {
         $variant = Variant::with('product')->find($data['variantId']);
+        
         if (!$variant) {
             return $this->jsonResponse('Sản phẩm không tồn tại', false);
+        }
+
+        if ($variant->quantity - $data['quantity'] < 0) {
+            throw new \Exception('Sản phẩm ' . $variant->product->name . ' không đủ hàng trong kho.');
         }
 
         $order = Order::create([
