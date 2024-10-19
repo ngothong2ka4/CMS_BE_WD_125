@@ -27,10 +27,17 @@ class Product extends Model
     public function variants(){
         return $this->hasMany(Variant::class,'id_product','id');
     }
+
     public function images(){
         return $this->hasMany(ProductImage::class,'id_product','id');
     }
+
     public function comments(){
         return $this->hasMany(Comment::class,'id_product','id');
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->comments()->avg('rating');
     }
 }

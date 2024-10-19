@@ -46,7 +46,7 @@ Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);
 Route::get('/relatedProducts/{id}',[ProductController::class, 'relatedProducts']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    // Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
+    Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
 
     Route::get('/listCart',[CartController::class, 'listProductInCart']);
     Route::post('/addCart',[CartController::class, 'addProductToCart']);

@@ -14,7 +14,7 @@ class Comment extends Model
         'id_product',
         'id_user',
         'content',
-        'posting_date',
+        'rating',
         'status',
     ];
 }
