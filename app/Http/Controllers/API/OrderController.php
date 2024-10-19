@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Jobs\SendEmailAfterOrder;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -149,6 +150,16 @@ class OrderController extends Controller
                     $url = $this->createPaymentUrl($res);
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
+                $information = [
+                    'order' => $res['order'],
+                    'orderDetails' => $res['order_details'],
+                ];
+
+                SendEmailAfterOrder::dispatch(
+                    'emails.information-order', 
+                    $information, 
+                    $user->email, 
+                    'Thông tin đơn hàng');
 
                 return $this->jsonResponse('Đặt hàng thành công', true, data: $res);
             } elseif (!empty($data['variantId']) && !empty($data['quantity'])) {
@@ -158,6 +169,17 @@ class OrderController extends Controller
                     $url = $this->createPaymentUrl($res);
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
+
+                $information = [
+                    'order' => $res['order'],
+                    'orderDetails' => [$res['order_details']],
+                ];
+
+                SendEmailAfterOrder::dispatch(
+                    'emails.information-order', 
+                    $information, 
+                    $user->email, 
+                    'Thông tin đơn hàng');
 
                 return $this->jsonResponse('Đặt hàng thành công', true, $res);
             } else {
@@ -242,6 +264,8 @@ class OrderController extends Controller
             'id_order' => $order->id,
             'payment_role' => $order->payment_role,
             'totalAmount' => $order->total_payment,
+            'order_details' => $insertData,  
+            'order' => $order,
         ];
     }
 
@@ -295,6 +319,8 @@ class OrderController extends Controller
             'id_order' => $order->id,
             'payment_role' => $order->payment_role,
             'totalAmount' => $order->total_payment,
+            'order_details' => $insertData,  
+            'order' => $order,
         ];
     }
 
@@ -382,7 +408,7 @@ class OrderController extends Controller
 
         $orderId = $request->input('vnp_TxnRef');
         \Log::debug('Order ID from vnp_TxnRef: ' . $orderId);
-        $order = Order::find($orderId);
+        $order = Order::with(['orderDetail','user'])->find($orderId);
 
         if (!$order) {
             \Log::error('Order not found with ID: ' . $orderId);
@@ -393,6 +419,18 @@ class OrderController extends Controller
         if ($request->input('vnp_ResponseCode') == '00') {
             $order->status_payment = Order::STATUS_PAYMENT_COMPLETED;
             $order->save();
+
+            $information = [
+                'order' => $order,
+                'orderDetails' => $order->orderDetail->toArray(),
+            ];
+            
+            SendEmailAfterOrder::dispatch(
+                'emails.information-order', 
+                $information, 
+                $order->user->email, 
+                'Thông tin đơn hàng');
+
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
         } else {

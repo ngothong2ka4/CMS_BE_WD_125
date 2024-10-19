@@ -244,6 +244,11 @@ class ProductController extends Controller
                 $query->where('status', 1);
             }
         ])->find($id);
+
+        if (!$product) {
+            return $this->jsonResponse('Không tìm thấy sản phẩm');
+        }
+
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
             if (!empty($variant->image_color)) {
@@ -255,10 +260,9 @@ class ProductController extends Controller
             return ['link_image' => $link];
         });
 
-        if (!$product) {
-            return $this->jsonResponse('Không tìm thấy sản phẩm');
-        }
-
+        $averageRating = $product->comments->avg('rating'); 
+        $product->average_rating = $averageRating ? number_format($averageRating, 2) : null;
+        
         return $this->jsonResponse('Success', true, new ProductDetailResource($product));
     }
 
@@ -289,33 +293,65 @@ class ProductController extends Controller
         return $this->jsonResponse('Success', true, RelatedProductsResource::collection($relatedProducts));
     }
 
-    // public function addCommentProduct(Request $request)
-    // {
-    //     try {
-    //         $user = Auth::user();
-    //         $productId = $request->input('product_id');
+    // method: POST
+    // API: /api/addCommentProduct
+    // parram: (id_order, id_product, content,rating)
+    // response:200
+    //              {
+    //                  "status": true,
+    //                  "message": "Thêm đánh giá thành công",
+    //                  "data": {
+    //                      "id_product": 3,
+    //                      "id_user": 3,
+    //                      "content": "không biết nói gì",
+    //                      "rating": 3,
+    //                      "status": 1,
+    //                      "updated_at": "2024-10-19T08:34:35.000000Z",
+    //                      "created_at": "2024-10-19T08:34:35.000000Z",
+    //                      "id": 1
+    //                  }
+    //              }
 
-    //         if (!$user) {
-    //             return $this->jsonResponse('Bạn phải đăng nhập mới có thể bình luận');
-    //         }
+    public function addCommentProduct(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_order' => 'required|exists:order,id',
+            'id_product' => 'required|exists:products,id', 
+            'content' => 'required|string|max:500', 
+            'rating' => 'required|integer|min:1|max:5', 
+        ]);
+        try {
+            $user = Auth::user();
+            $id_product = $validatedData['id_product'];
+            $id_order = $validatedData['id_order'];
+            if (!$user) {
+                return $this->jsonResponse('Bạn phải đăng nhập mới có thể Đánh giá');
+            }
+            
+            $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user,$id_order) {
+                $query->where('id', $id_order)
+                        ->where('id_user', $user->id)
+                        ->where('status', 6);
+            })->where('id_product', $id_product)->exists();
 
-    //         $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user) {
-    //             $query->where('id_user', $user->id)
-    //                 ->where('status', 4); 
-    //         })->where('product_id', $productId)->exists();
+            if (!$hasPurchased) {
+                return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi đánh giá.');
+            }
+            DB::beginTransaction();
+                $comment = Comment::create([
+                    'id_product' => $validatedData['id_product'],
+                    'id_user' => $user->id,
+                    'content' => $validatedData['content'],
+                    'rating' => $validatedData['rating'] ?? null, 
+                    'status' => 1, 
+                ]);
+            DB::commit();
 
-    //         if (!$hasPurchased) {
-    //             return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi bình luận.');
-    //         }
-
-    //         DB::beginTransaction();
-    //             $comment = Comment::create($request->all());
-    //         DB::commit();
-    //         return $this->jsonResponse('Success', true,$comment);
-    //     } catch (\Exception $exception) {
-    //         DB::rollBack();
-    //         \Log::error($exception->getMessage());
-    //         return $this->jsonResponse('Common Exception');
-    //     }
-    // }
+            return $this->jsonResponse('Thêm đánh giá thành công', true, $comment);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse('Có lỗi xảy ra');
+        }
+    }
 }
