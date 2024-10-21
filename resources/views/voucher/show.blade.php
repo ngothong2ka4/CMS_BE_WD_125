@@ -12,57 +12,51 @@
                     <h5 class="card-title mb-0">Chi tiết mã giảm giá</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{voucher.index}} " method="POST">
-                        @csrf
-                        {{-- <div>
-                            <label for="basiInput" class="form-label">Sản phẩm</label>
-                            <input type="text" class="form-control @error('id_product') is-invalid @enderror" id="basiInput"
-                                name="id_product" value="{{ old('product->name') }}">
-                        </div> --}}
+                    <form>
                         <div class="">
                             <label for="basiInput" class="form-label">Mã code</label>
-                            <input type="text" class="form-control @error('code') is-invalid @enderror" id="basiInput"
-                                name="code" value="{{ old('code') }}">
+                            <input type="text" class="form-control mb-3 @error('code') is-invalid @enderror" id="basiInput"
+                                name="code" value="{{ $voucher->code }}" disabled>
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Loại giảm giá</label>
                             <select required name="discount_type" class="form-select mb-3" id=" "
-                                aria-label="Default select example">
+                                aria-label="Default select example" disabled>
                                 <option value="">Chọn</option>
-                                <option value="1">Giảm giá theo phần trăm</option>
-                                <option value="2">Giảm giá giá trị cố định</option>
+                                <option value="1" {{ $voucher->discount_type == 1 ? 'selected' : ''}} >Giảm giá theo phần trăm</option>
+                                <option value="2" {{ $voucher->discount_type == 2 ? 'selected' : ''}}>Giảm giá giá trị cố định</option>
 
                             </select>
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Mức ưu đãi</label>
-                            <input type="number" class="form-control @error('discount_value') is-invalid @enderror"
-                                id="basiInput" name="discount_value" value="{{ old('discount_value') }}">
+                            <input type="number" class="form-control mb-3 @error('discount_value') is-invalid @enderror"
+                                id="basiInput" name="discount_value" value="{{ $voucher->discount_value }}" disabled>
                         </div>
-                        <div class="d-flex gap-3">
+                        <div class="d-flex gap-3 mb-3">
                             <div class="">
                                 <label for="basiInput" class="form-label">Ngày bắt đầu</label>
                                 <input type="date" class="form-control @error('start_date') is-invalid @enderror"
-                                    id="basiInput" name="start_date" value="{{ old('start_date') }}">
+                                    id="basiInput" name="start_date" value="{{ $voucher->start_date }}" disabled>
                             </div>
                             <div class="">
                                 <label for="basiInput" class="form-label">Ngày kết thúc</label>
                                 <input type="date" class="form-control @error('end_date') is-invalid @enderror"
-                                    id="basiInput" name="end_date" value="{{ old('end_date') }}">
+                                    id="basiInput" name="end_date" value="{{ $voucher->end_date }}" disabled>
                             </div>
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Giới hạn sử dụng cho mỗi mã giảm giá</label>
                             <input type="number" class="form-control @error('usage_limit') is-invalid @enderror"
-                                id="basiInput" name="usage_limit" value="{{ old('usage_limit') }}">
+                                id="basiInput" name="usage_limit" value="{{ $voucher->usage_limit }}" disabled>
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Giới hạn sử dụng trên mỗi người dùng</label>
                             <input type="number" class="form-control @error('usage_per_user') is-invalid @enderror"
-                                id="basiInput" name="usage_per_user" value="{{ old('usage_per_user') }}">
+                                id="basiInput" name="usage_per_user" value="{{ $voucher->usage_per_user }}" disabled>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-success">Quay lại</button>
+                        <a href="{{ route('voucher.index') }}" class="btn btn-success">Quay lại</a>
                         </div>
                     </form>
                 </div>
