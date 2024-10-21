@@ -28,6 +28,7 @@ class ProductDetailResource extends JsonResource
             'stone' => new StoneResource($this->whenLoaded('stone')),
             'description' => $this->description,
             'slideImages' => $this->slideImages,
+            'averageRating' => $this->average_rating,
             'comments' =>CommentResource::collection($this->whenLoaded('comments')),
         ];
         return $data;

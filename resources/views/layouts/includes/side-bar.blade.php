@@ -55,13 +55,19 @@
                                 <a href="{{ route('product_size.index') }}"
                                     class="nav-link {{ Request::is('products/product_size*') ? 'active' : '' }}"
                                     data-key="t-analytics">
-                                    Quản lý kích thước </a>
+                                    Quản lý Kích thước </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('product_color.index') }}"
                                     class="nav-link {{ Request::is('products/product_color*') ? 'active' : '' }}"
                                     data-key="t-analytics">
                                     Quản lý Màu sắc </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('product_tag.index') }}"
+                                    class="nav-link {{ Request::is('products/product_tag*') ? 'active' : '' }}"
+                                    data-key="t-analytics">
+                                    Quản lý Thẻ </a>
                             </li>
                         </ul>
                     </div>

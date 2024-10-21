@@ -7,11 +7,15 @@ use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\product\ProductColorController;
 use App\Http\Controllers\product\ProductController;
+use App\Http\Controllers\product\ProductMaterialController;
 use App\Http\Controllers\product\ProductSizeController;
+use App\Http\Controllers\product\ProductStoneController;
+use App\Http\Controllers\product\ProductTagController;
 use App\Http\Controllers\product\ProductVariantController;
 use App\Http\Controllers\statistic\StatisticController;
 use App\Http\Controllers\user\UserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Models\Material;
 use Illuminate\Support\Facades\Route;
 
 Common::autoUpdateStatus();
@@ -54,23 +58,26 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
 
-    Route::middleware(['auth',AdminMiddleware::class])->group(function () {
-    Route::redirect('','dashboard');
-    Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
-    Route::resource('category', CategoryController::class);
-    Route::resource('order', OrderController::class);
-    Route::resource('statistic', StatisticController::class);
-    Route::resource('/user', UserController::class);
-    Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+    Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+        Route::redirect('', 'dashboard');
+        Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+        Route::resource('category', CategoryController::class);
+        Route::resource('order', OrderController::class);
+        Route::resource('statistic', StatisticController::class);
+        Route::resource('/user', UserController::class);
+        Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
 
-    Route::prefix('products')->group(function () {
-        Route::resource('/product_management', ProductController::class);
-        Route::resource('/product_color', ProductColorController::class);
-        Route::resource('/product_size', ProductSizeController::class);
-        Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
-        Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
+        Route::prefix('products')->group(function () {
+            Route::resource('/product_management', ProductController::class);
+            Route::resource('/product_color', ProductColorController::class);
+            Route::resource('/product_size', ProductSizeController::class);
+            Route::get('/variant/{id}', [ProductVariantController::class, 'delete']);
+            Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
+            Route::prefix('product_tag')->group(function () {
+                Route::get('/', [ProductTagController::class, 'index'])->name('product_tag.index');
+                Route::resource('material', ProductMaterialController::class);
+                Route::resource('stone', ProductStoneController::class);
+            });
+        });
     });
-
-    });
-
 });

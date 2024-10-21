@@ -34,6 +34,11 @@ class AuthController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
+
+                if ($user->status !== 1) {
+                    return $this->jsonResponse('Tài khoản của bạn không hoạt động');
+                }
+
                 $token = $user->createToken('tokenAuth')->plainTextToken;
                 $data = [
                     'role' => $user->role,

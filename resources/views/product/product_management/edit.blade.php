@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('product_management.update', $product->id) }}" method="POST" enctype="multipart/form-data" novalidate>
+            <form action="{{ route('product_management.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="card mb-2">
@@ -135,9 +135,9 @@
                                 <input type="hidden" name="id_var[]" value="{{ $var->id }}">
                                 <div class="form-group d-flex variant-row" id="variant-row-{{ $loop->index }}">
                                     <div class="form-group me-1">
-                                        <label for="color-{{ $loop->index }}"
-                                            class="form-label">Màu sắc</label>
-                                        <select required name="id_attribute_color[]" class="form-select mb-3 variant-select color-select"
+                                        <label for="color-{{ $loop->index }}" class="form-label">Màu sắc</label>
+                                        <select required name="id_attribute_color[]"
+                                            class="form-select mb-3 variant-select color-select"
                                             id="color-{{ $loop->index }}" aria-label="Default select example">
                                             <option value="">Chọn màu sắc</option>
                                             @foreach ($colors as $color)
@@ -151,7 +151,7 @@
                                         <select name="id_attribute_size[]"
                                             class="form-select mb-3 variant-select size-select"
                                             id="size-{{ $loop->index }}" aria-label="Default select example">
-                                            <option value="">Chọn kích thước</option>
+
                                             @foreach ($sizes as $size)
                                                 <option {{ $size->id === $var->id_attribute_size ? 'selected' : '' }}
                                                     value="{{ $size->id }}">{{ $size->name }}</option>
@@ -162,15 +162,16 @@
                                         <label for="price_in-{{ $loop->index }}" class="form-label">Giá nhập</label>
                                         <input value="{{ number_format($var->import_price, 0, '.', '') }}"
                                             name="import_price[]" type="number" required min=0
-                                            class="form-control price-validate price_in" id="price_in-{{ $loop->index }}"
-                                            placeholder="Nhập giá nhập">
+                                            class="form-control price-validate price_in"
+                                            id="price_in-{{ $loop->index }}" placeholder="Nhập giá nhập">
                                     </div>
                                     <div class="me-1">
-                                        <label for="price_out-{{ $loop->index }}" class="form-label">Giá niêm yết</label>
+                                        <label for="price_out-{{ $loop->index }}" class="form-label">Giá niêm
+                                            yết</label>
                                         <input value="{{ number_format($var->list_price, 0, '.', '') }}"
                                             name="list_price[]" type="number" required min=0
-                                            class="form-control price-validate price_out" id="price_out-{{ $loop->index }}"
-                                            placeholder="Nhập giá niêm yết">
+                                            class="form-control price-validate price_out"
+                                            id="price_out-{{ $loop->index }}" placeholder="Nhập giá niêm yết">
                                     </div>
                                     <div class="me-1">
                                         <label for="sale_price-{{ $loop->index }}" class="form-label">Giá bán</label>
