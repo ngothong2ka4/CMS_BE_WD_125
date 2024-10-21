@@ -82,7 +82,7 @@
      
 
         <div class="footer">
-            <p>Nếu bạn có bất kỳ câu hỏi nào về đơn hàng, vui lòng liên hệ với chúng tôi qua email <a href="mailto:ngothong2ka4@gmail.com">ngothong2ka4@gmail.com</a>.</p>
+            <p>Nếu bạn có bất kỳ câu hỏi nào về đơn hàng, vui lòng liên hệ với chúng tôi qua email <a href="{{config('mail.from.address')}}">{{config('mail.from.address')}}</a>.</p>
             <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi!</p>
         </div>
     </div>
