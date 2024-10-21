@@ -13,6 +13,7 @@ use App\Http\Controllers\product\ProductStoneController;
 use App\Http\Controllers\product\ProductTagController;
 use App\Http\Controllers\product\ProductVariantController;
 use App\Http\Controllers\user\UserController;
+use App\Http\Controllers\voucher\VoucherController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Models\Material;
 use Illuminate\Support\Facades\Route;
@@ -73,12 +74,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::get('/{id}/image', [ProductVariantController::class, 'destroy'])->name('delImage');
             Route::prefix('product_tag')->group(function () {
                 Route::get('/', [ProductTagController::class, 'index'])->name('product_tag.index');
-                   Route::resource('material',ProductMaterialController ::class);
-                   Route::resource('stone',ProductStoneController ::class);
-                
+                Route::resource('material', ProductMaterialController::class);
+                Route::resource('stone', ProductStoneController::class);
             });
         });
-
+        Route::resource('voucher', VoucherController::class);
     });
 
 });
