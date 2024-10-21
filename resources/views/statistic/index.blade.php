@@ -15,7 +15,7 @@
                 ['Ngày', 'Doanh thu', 'Lợi nhuận', 'Vốn đầu tư'],
 
                 @foreach ($completeStatistic as $statistic)
-                    [{{ $statistic['time'] }}, {{ $statistic['total_revenue'] }}, {{ $statistic['profit'] }},
+                    ['{{ $statistic['time'] }}', {{ $statistic['total_revenue'] }}, {{ $statistic['profit'] }},
                         {{ $statistic['total_cost'] }}
                     ],
                 @endforeach
@@ -23,13 +23,14 @@
 
             var options = {
                 title: '{{ $title }}',
+                colors: ['#0ab39c', '#405189', '#3577f1'],
                 titleTextStyle: {
                     fontSize: 18, // Kích thước chữ tiêu đề
                     bold: true
                 },
                 chartArea: {
                     top: 80, // Điều chỉnh margin trên của biểu đồ (tạo khoảng trống cho tiêu đề)
-                    height: '70%',  // Giảm chiều cao của vùng biểu đồ để tạo thêm khoảng cách phía dưới
+                    height: '70%', // Giảm chiều cao của vùng biểu đồ để tạo thêm khoảng cách phía dưới
                     width: '70%'
                 },
                 vAxis: {
@@ -67,11 +68,11 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Chờ xác nhận</p>
+                            <p class="text-uppercase fw-medium text-secondary text-truncate mb-0"> Chờ xác nhận</p>
                         </div>
                     </div>
                     <div>
-                        <h6 class="fs-22 fw-semibold ff-secondary mt-2">{{ $choXacNhan }} ĐƠN</h6>
+                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $choXacNhan }} ĐƠN</h6>
                     </div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
                         <div>
@@ -79,7 +80,7 @@
                         </div>
                         <div>
                             <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-info"></i>
+                                <i class="bx bx-detail text-secondary"></i>
                             </span>
                         </div>
                     </div>
@@ -93,37 +94,11 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Đã xác nhận</p>
+                            <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Đã xác nhận</p>
                         </div>
                     </div>
                     <div>
-                        <h6 class="fs-22 fw-semibold ff-secondary mt-2">{{ $daXacNhan }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
-                        </div>
-                        <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-success"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Đang giao</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-22 fw-semibold ff-secondary mt-2">{{ $dangGiao }} ĐƠN</h6>
+                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daXacNhan }} ĐƠN</h6>
                     </div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
                         <div>
@@ -145,11 +120,11 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Giao thành công</p>
+                            <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Đang giao</p>
                         </div>
                     </div>
                     <div>
-                        <h6 class="fs-22 fw-semibold ff-secondary mt-2">{{ $giaoThanhCong }} ĐƠN</h6>
+                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $dangGiao }} ĐƠN</h6>
                     </div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
                         <div>
@@ -171,11 +146,37 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Giao thất bại</p>
+                            <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Giao thành công</p>
                         </div>
                     </div>
                     <div>
-                        <h6 class="fs-22 fw-semibold ff-secondary mt-2">{{ $giaoThatBai }} ĐƠN</h6>
+                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThanhCong }} ĐƠN</h6>
+                    </div>
+                    <div class="d-flex align-items-end justify-content-between mt-2">
+                        <div>
+                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                        </div>
+                        <div>
+                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                <i class="bx bx-detail text-success"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+        <div class="col-xl-2 col-md-4">
+            <!-- card -->
+            <div class="card card-animate">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1 overflow-hidden">
+                            <p class="text-uppercase fw-medium text-warning text-truncate mb-0"> Giao thất bại</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThatBai }} ĐƠN</h6>
                     </div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
                         <div>
@@ -197,11 +198,11 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Đã huỷ</p>
+                            <p class="text-uppercase fw-medium text-danger text-truncate mb-0"> Đã huỷ</p>
                         </div>
                     </div>
                     <div>
-                        <h6 class="fs-22 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
+                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
                     </div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
                         <div>
@@ -233,7 +234,8 @@
                                 <div class="row gx-2">
                                     <div class="col">
                                         <label for="year" class="form-label">Năm</label>
-                                        <input type="number" class="form-control" name="year" placeholder="Nhập năm" required>
+                                        <input type="number" class="form-control" name="year" placeholder="Nhập năm"
+                                            required>
                                     </div>
                                     <div class="col">
                                         <label for="month" class="form-label">Tháng</label>
@@ -246,12 +248,14 @@
                                     </div>
                                     <div class="col">
                                         <label for="day" class="form-label">Ngày</label>
-                                        <input type="number" class="form-control" name="day" placeholder="Nhập ngày">
+                                        <input type="number" class="form-control" name="day"
+                                            placeholder="Nhập ngày">
                                     </div>
                                     <div class="col d-flex align-item-center">
-                                        <button type="submit" style="height: 50%; margin-top: 29px" class="btn btn-sm btn-primary">Gửi</button>
+                                        <button type="submit" style="height: 50%; margin-top: 29px"
+                                            class="btn btn-sm btn-success">Gửi</button>
                                     </div>
-                                </div>                       
+                                </div>
                             </form>
                         </div>
                         <div class="col-6 ms-6">
@@ -260,16 +264,19 @@
                                 <div class="row gx-2">
                                     <div class="col">
                                         <label for="year" class="form-label">Bắt đầu</label>
-                                        <input type="date" class="form-control" name="start" placeholder="Nhập năm" required>
+                                        <input type="date" class="form-control" name="start" id="start"
+                                            placeholder="Nhập năm" required>
                                     </div>
                                     <div class="col">
                                         <label for="year" class="form-label">Kết thúc</label>
-                                        <input type="date" class="form-control" name="end" placeholder="Nhập năm" required>
+                                        <input type="date" class="form-control" name="end" id="end"
+                                            placeholder="Nhập năm" required>
                                     </div>
                                     <div class="col d-flex align-item-center">
-                                        <button type="submit" style="height: 50%; margin-top: 29px" class="btn btn-sm btn-primary">Gửi</button>
+                                        <button type="submit" style="height: 50%; margin-top: 29px"
+                                            class="btn btn-sm btn-secondary">Gửi</button>
                                     </div>
-                                </div>                       
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -279,10 +286,9 @@
                     @endif
 
                     @if (!$Statistic->isEmpty())
-                    <center>
-                        <div id="chart_div" style="width: 100%; height: 600px;"></div>
-                    </center>
-                        
+                        <center>
+                            <div id="chart_div" style="width: 100%; height: 600px;"></div>
+                        </center>
                     @else
                         <div class="alert alert-warning" role="alert">
                             Khoảng thời gian bạn chọn không có đơn hàng nào, vui lòng chọn khoảng thời gian khác!
@@ -302,7 +308,7 @@
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">TOP 5 SẢN PHẨM BÁN CHẠY</h4>
+                                    <h2 class="h5">TOP 5 SẢN PHẨM BÁN CHẠY NHẤT</h2>
                                 </div><!-- end card header -->
 
                                 <div class="card-body">
@@ -350,7 +356,7 @@
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
-                                    <h4 class="card-title mb-0 flex-grow-1">TOP 5 SẢN PHẨM DOANH THU CAO NHẤT</h4>
+                                    <h2 class="h5">TOP 5 SẢN PHẨM CÓ DOANH THU CAO NHẤT</h2>
                                 </div><!-- end card header -->
 
                                 <div class="card-body">
@@ -399,7 +405,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">TOP 5 SẢN PHẨM CÓ LỢI NHUẬN CAO NHẤT</h4>
+                                    <h2 class="h5">TOP 5 SẢN PHẨM CÓ LỢI NHUẬN CAO NHẤT</h2>
                             </div><!-- end card header -->
 
                             <div class="card-body">
@@ -448,8 +454,8 @@
     </div>
 @endsection
 
-{{-- @push('scripts')
-    <script>
+@push('scripts')
+    {{-- <script>
         new DataTable("#example", {
             order: [
                 [0, 'desc']
@@ -472,5 +478,46 @@
                 }
             }
         });
+    </script> --}}
+    <script>
+        document.getElementById('start').addEventListener('input', function() {
+            document.getElementById('end').value = '';
+        });
+
+        document.getElementById('end').addEventListener('input', function() {
+            const startInput = document.getElementById('start');
+            const endInput = document.getElementById('end');
+
+            const startDate = new Date(startInput.value);
+            const endDate = new Date(endInput.value);
+
+            if (startInput.value) {
+                if (!endInput.value) {
+                    return;
+                }
+                if (endDate <= startDate) {
+                    alert('Ngày kết thúc phải sau ngày bắt đầu.');
+                    endInput.value = '';
+                    return;
+                }
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+                if (diffDays > 10) {
+                    alert('Ngày kết thúc không được vượt quá 10 ngày kể từ ngày bắt đầu.');
+                    endInput.value = '';
+                }
+            }
+        });
+        document.getElementById('start').addEventListener('change', function() {
+            const startInput = document.getElementById('start');
+            const endInput = document.getElementById('end');
+
+            if (startInput.value) {
+                const startDate = new Date(startInput.value);
+                startDate.setDate(startDate.getDate() + 1);
+                endInput.value = startDate.toISOString().split('T')[0];
+            }
+        });
     </script>
-@endpush --}}
+@endpush

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\statistic;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,9 +39,9 @@ class StatisticController extends Controller
         $Statistic = Order::with('orderDetail')
             ->select(
                 DB::raw('MONTH(order.created_at) as time'),
-                DB::raw('SUM(order.total_payment) as total_revenue'),
+                DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
                 DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                DB::raw('(SUM(order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
+                DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
             )
             ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
             ->whereYear('order.created_at', $year)
@@ -65,7 +68,53 @@ class StatisticController extends Controller
         $title = "Thống kê doanh thu, lợi nhuận kinh doanh năm $year";
         $cotY = "Tháng";
 
+        if ($request->start && $request->end) {
+            $startDate = $request->input('start');
+            $endDate = $request->input('end');
+            $Statistic = Order::with('orderDetail')
+                ->select(
+                    DB::raw('DATE(order.created_at) as time'),
+                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
+                    DB::raw('SUM(order_detail.import_price * order_detail.quantity) as total_cost'),
+                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_detail.import_price * order_detail.quantity)) as profit')
+                )
+                ->join('order_detail', 'order.id', '=', 'order_detail.id_order')
+                ->whereBetween('order.created_at', [$startDate, $endDate])
+                ->where('order.status', '!=', 7)
+                ->groupBy(DB::raw('DATE(order.created_at)'))
+                ->orderBy('time')
+                ->get();
+            // dd($Statistic);
 
+            $start = new DateTime($startDate);
+            $end = new DateTime($endDate);
+            $end = $end->modify('+1 day');
+
+            $dates = [];
+            $interval = new DateInterval('P1D');
+            $period = new DatePeriod($start, $interval, $end);
+            foreach ($period as $date) {
+                $dates[] = $date->format('Y-m-d');
+            }
+            // dd($dates);
+            $completeStatistic = [];
+
+            foreach ($dates as $date) {
+                $revenueData = $Statistic->where('time', $date)->first();
+                $total_revenue = $revenueData ? $revenueData->total_revenue : 0;
+                $profit = $revenueData ? $revenueData->profit : 0;
+                $total_cost = $revenueData ? $revenueData->total_cost : 0;
+
+                $completeStatistic[] = [
+                    'time' => $date,
+                    'total_revenue' => $total_revenue,
+                    'profit' => $profit,
+                    'total_cost' => $total_cost,
+                ];
+            }
+            $title = "Thống kê doanh thu, lợi nhuận kinh doanh từ $startDate đến $endDate";
+            $cotY = "Mốc thời gian";
+        }
 
         if ($Statistic->isEmpty()) {
             $message = "Không có dữ liệu cho năm $year.";
@@ -77,9 +126,9 @@ class StatisticController extends Controller
                 $Statistic = Order::with('orderDetail')
                     ->select(
                         DB::raw('DAY(order.created_at) as time'),
-                        DB::raw('SUM(order.total_payment) as total_revenue'),
+                        DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
                         DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                        DB::raw('(SUM(order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
+                        DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
                     )
                     ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
                     ->whereYear('order.created_at', $year)
@@ -114,9 +163,9 @@ class StatisticController extends Controller
                 $Statistic = Order::with('orderDetail')
                     ->select(
                         DB::raw('HOUR(order.created_at) as time'),
-                        DB::raw('SUM(order.total_payment) as total_revenue'),
+                        DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
                         DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                        DB::raw('(SUM(order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
+                        DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
                     )
                     ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
                     ->whereYear('order.created_at', $year)
