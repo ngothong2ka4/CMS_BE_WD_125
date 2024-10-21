@@ -23,6 +23,15 @@
 
             var options = {
                 title: '{{ $title }}',
+                titleTextStyle: {
+                    fontSize: 18, // Kích thước chữ tiêu đề
+                    bold: true
+                },
+                chartArea: {
+                    top: 80, // Điều chỉnh margin trên của biểu đồ (tạo khoảng trống cho tiêu đề)
+                    height: '70%',  // Giảm chiều cao của vùng biểu đồ để tạo thêm khoảng cách phía dưới
+                    width: '70%'
+                },
                 vAxis: {
                     title: 'Việt Nam Đồng'
                 },
@@ -48,7 +57,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">#1. Thống kê bán hàng</h5>
+                    <h2 class="h4">I. THỐNG KÊ ĐƠN HÀNG</h2>
                 </div>
             </div>
         </div><!--end col-->
@@ -214,43 +223,66 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">#2. Thống kê doanh thu</h5>
-                    {{-- <h6>Tổng doanh thu theo năm {{ $year }}</h6>
-                    @foreach ($yearlyRevenue as $revenue)
-                        <h6>Tháng: {{ $revenue->month }}, Doanh thu: {{ $revenue->total_revenue }}</h6>
-                    @endforeach --}}
+                    <h2 class="h4">II. THỐNG KÊ DOANH THU/LỢI NHUẬN</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('statistic.index') }}" method="get">
-                        @csrf
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="year" class="form-label">Năm</label>
-                                <input type="number" class="form-control" name="year" placeholder="Nhập năm" required>
-                            </div>
-                            <div class="col">
-                                <label for="month" class="form-label">Tháng</label>
-                                <select class="form-select" name="month">
-                                    <option selected value="">Chọn tháng</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label for="day" class="form-label">Ngày</label>
-                                <input type="number" class="form-control" name="day" placeholder="Nhập ngày">
-                            </div>
+                    <div class="row gx-0">
+                        <div class="col-6">
+                            <form action="{{ route('statistic.index') }}" method="get">
+                                @csrf
+                                <div class="row gx-2">
+                                    <div class="col">
+                                        <label for="year" class="form-label">Năm</label>
+                                        <input type="number" class="form-control" name="year" placeholder="Nhập năm" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="month" class="form-label">Tháng</label>
+                                        <select class="form-select" name="month">
+                                            <option selected value="">-Tháng-</option>
+                                            @for ($i = 1; $i <= 12; $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="day" class="form-label">Ngày</label>
+                                        <input type="number" class="form-control" name="day" placeholder="Nhập ngày">
+                                    </div>
+                                    <div class="col d-flex align-item-center">
+                                        <button type="submit" style="height: 50%; margin-top: 29px" class="btn btn-sm btn-primary">Gửi</button>
+                                    </div>
+                                </div>                       
+                            </form>
                         </div>
-                        <button type="submit" class="btn btn-primary">Gửi</button>
-                    </form>
+                        <div class="col-6 ms-6">
+                            <form action="{{ route('statistic.index') }}" method="get">
+                                @csrf
+                                <div class="row gx-2">
+                                    <div class="col">
+                                        <label for="year" class="form-label">Bắt đầu</label>
+                                        <input type="date" class="form-control" name="start" placeholder="Nhập năm" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="year" class="form-label">Kết thúc</label>
+                                        <input type="date" class="form-control" name="end" placeholder="Nhập năm" required>
+                                    </div>
+                                    <div class="col d-flex align-item-center">
+                                        <button type="submit" style="height: 50%; margin-top: 29px" class="btn btn-sm btn-primary">Gửi</button>
+                                    </div>
+                                </div>                       
+                            </form>
+                        </div>
+                    </div>
                     {{-- <div id="chart_div" style="width: 900px; height: 500px;"></div> --}}
                     @if ($message)
                         <div class="alert alert-warning">{{ $message }}</div>
                     @endif
 
                     @if (!$Statistic->isEmpty())
+                    <center>
                         <div id="chart_div" style="width: 100%; height: 600px;"></div>
+                    </center>
+                        
                     @else
                         <div class="alert alert-warning" role="alert">
                             Khoảng thời gian bạn chọn không có đơn hàng nào, vui lòng chọn khoảng thời gian khác!
@@ -298,12 +330,12 @@
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }}
                                                                 VNĐ
                                                             </h5>
-                                                            <span class="text-muted">Price</span>
+                                                            <span class="text-muted">Giá</span>
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->total_quantity }}
                                                             </h5>
-                                                            <span class="text-muted">Sold</span>
+                                                            <span class="text-muted">Đã bán</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -346,7 +378,7 @@
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }}
                                                                 VNĐ
                                                             </h5>
-                                                            <span class="text-muted">Price</span>
+                                                            <span class="text-muted">Giá</span>
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->total_revenue }}
@@ -394,7 +426,7 @@
                                                     <td>
                                                         <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }} VNĐ
                                                         </h5>
-                                                        <span class="text-muted">Price</span>
+                                                        <span class="text-muted">Giá</span>
                                                     </td>
                                                     <td>
                                                         <h5 class="fs-14 my-1 fw-normal">{{ $item->total_profit }} VNĐ
