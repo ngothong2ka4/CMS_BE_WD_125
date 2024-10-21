@@ -12,6 +12,7 @@ use App\Http\Controllers\product\ProductSizeController;
 use App\Http\Controllers\product\ProductStoneController;
 use App\Http\Controllers\product\ProductTagController;
 use App\Http\Controllers\product\ProductVariantController;
+use App\Http\Controllers\statistic\StatisticController;
 use App\Http\Controllers\user\UserController;
 use App\Http\Controllers\voucher\VoucherController;
 use App\Http\Middleware\AdminMiddleware;
@@ -63,6 +64,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
         Route::resource('category', CategoryController::class);
         Route::resource('order', OrderController::class);
+        Route::resource('statistic', StatisticController::class);
         Route::resource('/user', UserController::class);
         Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
 
@@ -78,7 +80,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
                 Route::resource('stone', ProductStoneController::class);
             });
         });
-        Route::resource('voucher', VoucherController::class);
-    });
 
+        Route::resource('voucher', VoucherController::class);
+
+    });
 });
