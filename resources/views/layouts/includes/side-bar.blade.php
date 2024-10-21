@@ -80,6 +80,14 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Đơn hàng</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('statistic*') ? 'active' : '' }}"
+                        href="{{ route('statistic.index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->
