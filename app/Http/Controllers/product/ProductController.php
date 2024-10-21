@@ -232,10 +232,10 @@ class ProductController extends Controller
             'description' => $request->description,
             'thumbnail' => url($path),
         ];
-        if(!$request->new_id_attribute_color ){
-            toastr()->error('Sản phẩm phải có ít nhất một biến thể!');
-            return redirect()->back();
-        }
+        // if(!$request->new_id_attribute_color ){
+        //     toastr()->error('Sản phẩm phải có ít nhất một biến thể!');
+        //     return redirect()->back();
+        // }
 
         $product->update($data_pro);
 
