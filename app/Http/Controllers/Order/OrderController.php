@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Order;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailAfterOrder;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
@@ -11,6 +12,7 @@ use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -105,6 +107,7 @@ class OrderController extends Controller
             ];
             $order->update($data);
             OrderHistory::create($data_his);
+            $this->sendEmail($order);
             DB::commit();
             toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
             return redirect()->back();
@@ -120,5 +123,17 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function sendEmail($order){
+        $email = $order->email;
+
+        Mail::send('emails.status',compact('order'),
+            function ($message) use ($email){
+                $message->from(config('mail.from.address'),'Shine');
+                $message->to($email);
+                $message->subject('Trạng thái đơn hàng');
+            }
+    );
     }
 }
