@@ -19,7 +19,7 @@ class VoucherController extends Controller
     }
     public function store(Request $request)
     {
-        // dd($request);
+        $voucher = Voucher::all();
         try {
             $params = $request->validate([
                 'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,',
