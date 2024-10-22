@@ -35,9 +35,9 @@
                                     <td>{{ $index + 1 }}</td>
                                     {{-- <td>{{ $voucher->id_product ?$voucher->product->name :' ' }}</td> --}}
                                     <td>{{ $voucher->code }}</td>
-                                    <td>{{ $voucher->discount_value	}}</td>
-                                    <td>{{$voucher->start_date}}</td>
-                                    <td>{{$voucher->end_date}}</td>
+                                    <td>{{$voucher->discount_type==1 ? $voucher->discount_value ."%":$voucher->discount_value."đ" }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($voucher->start_date)->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d-m-Y') }}</td>
                                     <td>{{$voucher->usage_limit}} / {{$voucher->usage_per_user}}</td>
                                     <td>                                        
                                         <a href="{{ route('voucher.show', $voucher->id) }}"><button class="btn btn-info">Chi tiết</button></a>
