@@ -24,19 +24,35 @@ class VoucherController extends Controller
             $params = $request->validate([
                 'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,',
                 'discount_type' => 'required|in:1,2',
-                'discount_value' => 'required',
+                'discount_value' => 'required|numeric|min:1',
                 'start_date' => 'required',
                 'end_date' => 'required',
-                'usage_limit' => 'required',
-                'usage_per_user' => 'required',
+                'usage_limit' => 'required|integer|min:1',
+                'usage_per_user' => 'required|integer|min:1',
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
                 'code.min' => 'Mã code phải có ít nhất 3 ký tự.',
                 'code.regex' => 'Mã code chỉ được chứa chữ cái, số và khoảng trắng.',
                 'code.unique' => 'Mã code đã tồn tại, vui lòng chọn tên khác.',
-            ]);
 
+                'discount_value.min'=> 'Mức ưu đãi phải lớn hơn không',
+                'usage_per_user.min'=> 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
+                'usage_limit.min'=> 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
+            ]);
+          
+            if($request->discount_type == 1 && $request->discount_value > 100 ){
+                toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
+                return back()->withInput();
+            }
+            if($request->discount_type == 2 && $request->discount_value < 10000 ){
+                toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000' );
+                return back()->withInput();
+            }
+            if($request->start_date >= $request->end_date){
+                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc' );
+                return back()->withInput();
+            }
             Voucher::create($params);
             toastr()->success('Thêm voucher thành công!');
             return redirect()->route('voucher.index');
@@ -76,19 +92,35 @@ class VoucherController extends Controller
             $params = $request->validate([
                 'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,'. $voucher->id,
                 'discount_type' => 'required|in:1,2',
-                'discount_value' => 'required',
+                'discount_value' => 'required|numeric|min:1',
                 'start_date' => 'required',
                 'end_date' => 'required',
-                'usage_limit' => 'required',
-                'usage_per_user' => 'required',
+                'usage_limit' => 'required|integer|min:1',
+                'usage_per_user' => 'required|integer|min:1',
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
                 'code.min' => 'Mã code phải có ít nhất 3 ký tự.',
                 'code.regex' => 'Mã code chỉ được chứa chữ cái, số và khoảng trắng.',
                 'code.unique' => 'Mã code đã tồn tại, vui lòng chọn tên khác.',
-            ]);
 
+                'discount_value.min'=> 'Mức ưu đãi phải lớn hơn không',
+                'usage_per_user.min'=> 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
+                'usage_limit.min'=> 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
+            ]);
+          
+            if($request->discount_type == 1 && $request->discount_value > 100 ){
+                toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
+                return back()->withInput();
+            }
+            if($request->discount_type == 2 && $request->discount_value < 10000 ){
+                toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000' );
+                return back()->withInput();
+            }
+            if($request->start_date >= $request->end_date){
+                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc' );
+                return back()->withInput();
+            }
             $voucher->update($params);
             toastr()->success('Sửa voucher thành công!');
             return redirect()->route('voucher.index');

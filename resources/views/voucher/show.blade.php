@@ -45,7 +45,7 @@
                                     id="basiInput" name="end_date" value="{{ $voucher->end_date }}" disabled>
                             </div>
                         </div>
-                        <div class="">
+                        <div class="mb-3">
                             <label for="basiInput" class="form-label">Giới hạn sử dụng cho mỗi mã giảm giá</label>
                             <input type="number" class="form-control @error('usage_limit') is-invalid @enderror"
                                 id="basiInput" name="usage_limit" value="{{ $voucher->usage_limit }}" disabled>

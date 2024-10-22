@@ -26,7 +26,7 @@
                     <div class="card-body">
                         <div>
                             <label for="basiInput" class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="basiInput" name="name"
+                            <input type="text" class="form-control mb-3" id="basiInput" name="name"
                                 value="{{ old('name') }}">
                             @error('name')
                                 <div class="invalid-feedback">

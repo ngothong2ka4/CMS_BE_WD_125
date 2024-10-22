@@ -27,7 +27,7 @@
                     <div class="card-body">
                         <div>
                             <label for="basiInput" class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="basiInput" name="name"
+                            <input type="text" class="form-control mb-3" id="basiInput" name="name"
                                 value="{{ $product->name }}" disabled>
 
                         </div>
@@ -76,7 +76,7 @@
 
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
-                            <textarea class="form-control" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả" disabled>{{ $product->description }}</textarea>
+                            <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả" disabled>{{ $product->description }}</textarea>
                         </div>
                         <div class="text-break">
 

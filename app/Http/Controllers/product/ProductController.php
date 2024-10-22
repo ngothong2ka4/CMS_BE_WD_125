@@ -140,7 +140,7 @@ class ProductController extends Controller
         return redirect()->route('product_management.index');
     } catch (\Exception $e) {
         toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
-        return redirect()->back();
+        return redirect()->back()->withInput();
     }
 
     }
