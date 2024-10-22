@@ -4,6 +4,7 @@ use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\VoucherController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,4 +62,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/cancelOrder',[OrderController::class, 'cancelOrder']);
     Route::get('/listStatusOrderHistory',[OrderController::class, 'listStatusOrderHistory']);
 
+    Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
 });
