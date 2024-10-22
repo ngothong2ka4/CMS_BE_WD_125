@@ -73,12 +73,26 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::is('user*') ? 'active' : '' }}" href="{{ route('user.index') }}"
-                      role="button" aria-expanded="false" aria-controls="sidebarUser">
+                    <a class="nav-link menu-link {{ Request::is('user*') ? 'active' : '' }}" href="#sidebarUser"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUser">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Người Dùng</span>
                     </a>
+                    <div class="collapse menu-dropdown {{ Request::is('user*') ? 'show' : '' }}" id="sidebarUser">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('user.index') }}"
+                                    class="nav-link {{ Request::is('user/user*') ? 'active' : '' }}" data-key="t-analytics">
+                                    Danh sách người dùng </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.index') }}"
+                                    class="nav-link {{ Request::is('user/admin*') ? 'active' : '' }}" data-key="t-analytics">
+                                    Quản trị </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
-             
+
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('order*') ? 'active' : '' }}"
                         href="{{ route('order.index') }}" role="button" aria-expanded="false"
@@ -94,7 +108,7 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('voucher*') ? 'active' : '' }}"
                         href="{{ route('voucher.index') }}" role="button" aria-expanded="false"

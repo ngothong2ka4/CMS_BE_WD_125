@@ -9,15 +9,15 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Quản lý người dùng</h5>
+                    <h5 class="card-title mb-0">Quản lý Admin</h5>
                 </div>
                 <div class="card-body">
-                    {{-- <a href="{{ route('admin.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
+                    <a href="{{ route('admin.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
                     @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
                         </div>
-                    @endif --}}
+                    @endif
 
                     <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle"
                         style="width:100%">
@@ -50,8 +50,16 @@
 
                                     </td>
                                     <td>
-                                        <a href="{{ route('user.show', $item->id) }}"><button
-                                                class="btn btn-warning me-3">Chi tiết</button></a>
+                                        <a href="{{ route('admin.show', $item->id) }}"><button
+                                                class="btn btn-success me-3">Chi tiết</button></a>
+                                        <a href="{{ route('admin.edit', $item->id) }}"><button
+                                                class="btn btn-warning me-3">Sửa</button></a>
+                                        {{-- <form action="{{ route('user.destroy', $item->id) }}" method="POST"
+                                            class="d-inline" onsubmit="return confirm('Bạn có đồng ý xóa không?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger">Xóa</button>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

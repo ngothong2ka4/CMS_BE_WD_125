@@ -13,6 +13,7 @@ use App\Http\Controllers\product\ProductStoneController;
 use App\Http\Controllers\product\ProductTagController;
 use App\Http\Controllers\product\ProductVariantController;
 use App\Http\Controllers\statistic\StatisticController;
+use App\Http\Controllers\user\AdminController;
 use App\Http\Controllers\user\UserController;
 use App\Http\Controllers\voucher\VoucherController;
 use App\Http\Middleware\AdminMiddleware;
@@ -65,8 +66,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::resource('category', CategoryController::class);
         Route::resource('order', OrderController::class);
         Route::resource('statistic', StatisticController::class);
-        Route::resource('/user', UserController::class);
-        Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+        Route::prefix('user')->group(function () {
+            Route::resource('/user', UserController::class);
+            Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
+            Route::resource('/admin', AdminController::class);
+            Route::patch('/admin/status/{id}', [AdminController::class, 'status'])->name('admin_status');
+        });
+
 
         Route::prefix('products')->group(function () {
             Route::resource('/product_management', ProductController::class);

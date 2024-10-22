@@ -46,23 +46,23 @@ class AuthController extends Controller
     
 
    
-    // public function register()
-    // {
-    //     return view('auth.signup');
-    // }
-    // public function postRegister(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'name' => 'required|min:3|unique:users',
-    //         'email' => 'required|unique:users|email',
-    //         'password' => 'required|min:8|confirmed'
-    //     ]);
-    //     $user=User::query()->create($data);
-    //     Auth::login($user);
-    //     $request->session()->regenerate();
-    //     return redirect()->route('dashboard');
+    public function register()
+    {
+        return view('auth.signup');
+    }
+    public function postRegister(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|min:3|unique:users',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|min:8|confirmed'
+        ]);
+        $user=User::query()->create($data);
+        Auth::login($user);
+        $request->session()->regenerate();
+        return redirect()->route('dashboard');
        
-    // }
+    }
 
 
     public function logout(Request $request)

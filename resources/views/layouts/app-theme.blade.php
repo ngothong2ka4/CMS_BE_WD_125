@@ -64,6 +64,7 @@
     @include('layouts.includes.theme-footer')
 
     @stack('scripts')
+    <script src="{{ asset('admin/assets/js/pages/password-addon.init.js') }}"></script>
     
 </body>
 
