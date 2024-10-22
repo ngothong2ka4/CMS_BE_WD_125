@@ -18,7 +18,7 @@
                 
                         <div class="">
                             <label for="basiInput" class="form-label">Mã code</label>
-                            <input type="text" class="form-control mb-3 @error('code') is-invalid @enderror" id="basiInput"
+                            <input required type="text" class="form-control mb-3 @error('code') is-invalid @enderror" id="basiInput"
                                 name="code" value="{{ $voucher->code }}">
                         </div>
                         <div class="">
@@ -32,29 +32,29 @@
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Mức ưu đãi</label>
-                            <input type="number" class="form-control mb-3 @error('discount_value') is-invalid @enderror"
+                            <input required type="number" class="form-control mb-3 @error('discount_value') is-invalid @enderror"
                                 id="basiInput" name="discount_value" value="{{  $voucher->discount_value  }}">
                         </div>
                         <div class="d-flex gap-3 mb-3">
                             <div class="">
                                 <label for="basiInput" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" class="form-control @error('start_date') is-invalid @enderror"
+                                <input required type="date" class="form-control @error('start_date') is-invalid @enderror"
                                     id="basiInput" name="start_date" value="{{ $voucher->start_date }}">
                             </div>
                             <div class="">
                                 <label for="basiInput" class="form-label">Ngày kết thúc</label>
-                                <input type="date" class="form-control @error('end_date') is-invalid @enderror"
+                                <input required type="date" class="form-control @error('end_date') is-invalid @enderror"
                                     id="basiInput" name="end_date" value="{{ $voucher->end_date }}">
                             </div>
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Giới hạn sử dụng cho mỗi mã giảm giá</label>
-                            <input type="number" class="form-control @error('usage_limit') is-invalid @enderror"
+                            <input required type="number" class="form-control mb-3 @error('usage_limit') is-invalid @enderror"
                                 id="basiInput" name="usage_limit" value="{{ $voucher->usage_limit }}">
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Giới hạn sử dụng trên mỗi người dùng</label>
-                            <input type="number" class="form-control @error('usage_per_user') is-invalid @enderror"
+                            <input required type="number" class="form-control @error('usage_per_user') is-invalid @enderror"
                                 id="basiInput" name="usage_per_user" value="{{ $voucher->usage_per_user }}">
                         </div>
                         <div class="mt-3">
