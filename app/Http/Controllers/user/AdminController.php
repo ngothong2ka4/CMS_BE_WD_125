@@ -40,7 +40,7 @@ class AdminController extends Controller
 
     //         $data = [
     //             'name' => $request->name,
-    //             'image' => url($path),
+    //             'image' => $path ? url($path) : null,
     //             'email' => $request->email,
     //             'password' => $request->password,
     //             'address' => $request->address,
@@ -92,6 +92,7 @@ class AdminController extends Controller
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
 
         ]);
+        $path=null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $nameImage = time() . "_" . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
@@ -101,7 +102,7 @@ class AdminController extends Controller
 
         $data = [
             'name' => $request->name,
-            'image' => url($path),
+            'image' => $path ? url($path) : null,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone_number' => $request->phone_number,
@@ -109,7 +110,6 @@ class AdminController extends Controller
             'role' => $request->input('role', 2),
             'status' => $request->input('status', 1),
         ];
-        dd($data);
         User::query()->create($data);
         // Auth::login($user);
         $request->session()->regenerate();
@@ -169,7 +169,7 @@ class AdminController extends Controller
         }
         $data = [
             'name' => $request->name,
-            'image' => url($path),
+            'image' => $path ? url($path) : null,
             'email' => $request->email,
             'address' => $request->address,
             'phone_number' => $request->phone_number,
