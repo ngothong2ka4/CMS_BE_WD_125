@@ -108,6 +108,13 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('comment*') ? 'active' : '' }}"
+                        href="{{ route('comment.index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Bình luận</span>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('voucher*') ? 'active' : '' }}"

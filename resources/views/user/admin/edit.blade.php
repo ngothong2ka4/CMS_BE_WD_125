@@ -65,7 +65,7 @@
                     </div>
                     <div class="mt-3 ms-auto me-auto mb-2">
                         <button type="submit" class="btn btn-success">Gửi</button>
-                        {{-- <a href="{{ route('user.index') }}" class="btn btn-success">Quay lại</a> --}}
+                        <a href="{{ route('admin.index') }}" class="btn btn-success">Quay lại</a>
                     </div>
                 </div>
 
