@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <div>
                                 <label for="basiInput" class="form-label">Tên người dùng</label>
-                                <input type="text" class="form-control" id="basiInput" name="name" value="">
+                                <input type="text" class="form-control" id="basiInput" name="name" value="{{old('name')}}">
 
                             </div>
                             <div>
@@ -39,7 +39,7 @@
                             </div>
                             <div>
                                 <label for="basiInput" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="basiInput" name="email" value="">
+                                <input type="email" class="form-control" id="basiInput" name="email" value="{{old('email')}}">
 
                             </div>
                             <div class="mb-3">
@@ -47,7 +47,7 @@
                                 <div class="position-relative auth-pass-inputgroup">
                                     <input type="password" class="form-control pe-5 password-input" 
                                         placeholder=" Nhập mật khẩu" name="password" id="password"
-                                        aria-describedby="passwordInput" >
+                                        aria-describedby="passwordInput" value="{{old('password')}}">
                                     <button
                                         class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                         type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
@@ -59,7 +59,7 @@
                                 <div class="position-relative auth-pass-inputgroup">
                                     <input type="password" class="form-control pe-5 password-input" 
                                         placeholder=" Nhập mật khẩu" name="password_confirmation" id="password_confirmation"
-                                        aria-describedby="passwordInput" >
+                                        aria-describedby="passwordInput" value="{{old('password_confirmation')}}">
                                     <button
                                         class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                         type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
@@ -68,7 +68,7 @@
                             </div>
                             <div>
                                 <label for="basiInput" class="form-label">Địa chỉ</label>
-                                <input type="text" class="form-control" id="basiInput" name="address" value="">
+                                <input type="text" class="form-control" id="basiInput" name="address" value="{{old('address')}}">
 
                             </div>
                             {{-- <div class="d-flex gap-2">

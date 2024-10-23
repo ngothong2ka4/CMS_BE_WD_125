@@ -1,6 +1,7 @@
 <?php
 
 use App\Common\Common;
+use App\Http\Controllers\comment\CommentController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\AuthController as LoginController;
 use App\Http\Controllers\category\CategoryController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\user\AdminController;
 use App\Http\Controllers\user\UserController;
 use App\Http\Controllers\voucher\VoucherController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckStatusUser;
 use App\Models\Material;
 use Illuminate\Support\Facades\Route;
 
@@ -60,10 +62,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
 
-    Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+    Route::middleware(['auth', AdminMiddleware::class, CheckStatusUser::class])->group(function () {
         Route::redirect('', 'dashboard');
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
         Route::resource('category', CategoryController::class);
+        Route::resource('comment', CommentController::class);
+        Route::patch('comment/status/{id}',[CommentController::class,'status'])->name('comment_status');
+
         Route::resource('order', OrderController::class);
         Route::resource('statistic', StatisticController::class);
         Route::prefix('user')->group(function () {

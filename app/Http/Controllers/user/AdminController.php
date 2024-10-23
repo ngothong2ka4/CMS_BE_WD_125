@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
@@ -68,6 +69,8 @@ class AdminController extends Controller
             'password' => 'required|min:8|confirmed',
             'imgae' => 'nullable|file|image|max:2048',
             'address' => 'nullable',
+            'role'=>'nullablle|in:1,2',
+            'status'=>'nullablle|in:0,1',
         ], [
             'name.required' => 'Tên sản phẩm là bắt buộc.',
             'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
@@ -99,8 +102,8 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'address' => $request->address,
-            // 'role' => $request->role,
-            // 'status' => $request->status,
+            'role' => $request->input('role', 2),  
+            'status' => $request->input('status', 1), 
         ];
         User::query()->create($data);
         // Auth::login($user);
@@ -118,118 +121,54 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         return view('user.admin.edit', compact('user'));
     }
-    // public function update(Request $request, $id)
-    // {
-    //     $user = User::findOrFail($id);
-    //     $data = $request->validate([
-    //         'name' => 'required|max:255|min:3|unique:users' . $user->id,
-    //         'email' => 'erquired|email|unique:users' . $user->id,
-    //         'password' => 'nullable',
-    //         'imgae' => 'nullable|file|image|max:2048',
-    //         'address' => 'nullable',
-    //     ], [
-    //         'name.required' => 'Tên sản phẩm là bắt buộc.',
-    //         'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
-    //         'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
-    //         'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
-
-    //         'email.required' => 'Email là bắt buộc.',
-    //         'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
-    //         'email.email' => 'Email phải dạng email.',
-
-
-    //         'thumbnail.max' => 'Hình sản phẩm dung lượng vượt quá 2Mb.',
-    //         'thumbnail.image' => 'Hình ảnh sản phẩm phải là một hình ảnh',
-
-    //     ]);
-    //     $old_image = $user->image;
-    //     if ($request->hasFile('image')) {
-    //         $image = $request->file('image');
-    //         $nameImage = $user->id . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
-    //         $image->move('img/user', $nameImage);
-    //         $path = 'img/user/' . $nameImage;
-    //         if (file_exists(public_path($old_image))) {
-    //             unlink(public_path($old_image));
-    //         }
-    //     } else {
-    //         $path = $old_image;
-    //     }
-
-    //     $data = [
-    //         'name' => $request->name,
-    //         'image' => url($path),
-    //         'email' => $request->email,
-    //         'password' => Hash::make($request->password) ,
-    //         'address' => $request->address,
-    //         'role' => $request->role,
-    //         'status' => $request->status,
-    //     ];
-    //     $user->update($data);
-    //     $request->session()->regenerate();
-    //     return redirect()->back();
-    // }
-
     public function update(Request $request, $id)
-{
-    // Lấy thông tin người dùng
-    $user = User::findOrFail($id);
+    {
+        $user = User::findOrFail($id);
 
-    // Validation
-    $data = $request->validate([
-        'name' => 'required|max:255|min:3|unique:users,name,'.$id,
-        'email' => 'required|email|unique:users,email,'.$id,
-        'password' => 'nullable',
-        'image' => 'nullable|file|image|max:2048',
-        'address' => 'nullable',
-    ], [
-        'name.required' => 'Tên sản phẩm là bắt buộc.',
-        'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
-        'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
-        'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
+        $data = $request->validate([
+            'name' => 'required|max:255|min:3|unique:users,name,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable',
+            'image' => 'nullable|file|image|max:2048',
+            'address' => 'nullable',
+        ], [
+            'name.required' => 'Tên sản phẩm là bắt buộc.',
+            'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
+            'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
+            'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
 
-        'email.required' => 'Email là bắt buộc.',
-        'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
-        'email.email' => 'Email phải có định dạng hợp lệ.',
+            'email.required' => 'Email là bắt buộc.',
+            'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
+            'email.email' => 'Email phải có định dạng hợp lệ.',
 
-        'image.max' => 'Hình ảnh dung lượng vượt quá 2MB.',
-        'image.image' => 'Hình ảnh phải là một file ảnh hợp lệ.',
-    ]);
+            'image.max' => 'Hình ảnh dung lượng vượt quá 2MB.',
+            'image.image' => 'Hình ảnh phải là một file ảnh hợp lệ.',
+        ]);
 
-    // Xử lý hình ảnh
-    $old_image = $user->image;
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $nameImage = $user->id . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
-        $image->move('img/user', $nameImage);
-        $path = 'img/user/' . $nameImage;
-
-        // Xóa hình ảnh cũ nếu tồn tại
-        if (file_exists(public_path($old_image))) {
-            unlink(public_path($old_image));
+        $old_image = $user->image;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $nameImage = $user->id . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+            $image->move('img/user', $nameImage);
+            $path = 'img/user/' . $nameImage;
+            if ($old_image && file_exists(public_path($old_image))) {
+                unlink(public_path($old_image));
+            }
+        } else {
+            $path = $old_image;
         }
-    } else {
-        $path = $old_image;
+        $data = [
+            'name' => $request->name,
+            'image' => url($path),
+            'email' => $request->email,
+            'address' => $request->address,
+            'role' => $request->role,
+            'status' => $request->status,
+        ];
+        $user->update($data);
+        $request->session()->regenerate();
+        return redirect()->back()->with('status', 'Cập nhật thành công!');
     }
-
-    // Chuẩn bị dữ liệu để cập nhật
-    $data = [
-        'name' => $request->name,
-        'image' => url($path),
-        'email' => $request->email,
-        'address' => $request->address,
-        'role' => $request->role,
-        'status' => $request->status,
-    ];
-
-    // Cập nhật thông tin người dùng
-    $user->update($data);
-
-    // Regenerate session để cập nhật thông tin đăng nhập nếu cần
-    $request->session()->regenerate();
-
-    // Redirect về trang trước
-    return redirect()->back()->with('status', 'Cập nhật thành công!');
-}
 
     public function status($id)
     {

@@ -17,4 +17,12 @@ class Comment extends Model
         'rating',
         'status',
     ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'id_product','id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class,'id_user','id');
+    }
 }
