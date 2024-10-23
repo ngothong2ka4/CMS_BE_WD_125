@@ -67,10 +67,11 @@ class AdminController extends Controller
             'name' => 'required|max:255|min:3|unique:users',
             'email' => 'required|unique:users|email',
             'password' => 'required|min:8|confirmed',
-            'imgae' => 'nullable|file|image|max:2048',
+            'image' => 'nullable|file|image|max:2048',
+            'phone_number' => 'nullable|regex:/^[0-9]{10,}$/',
             'address' => 'nullable',
-            'role'=>'nullablle|in:1,2',
-            'status'=>'nullablle|in:0,1',
+            'role' => 'nullable|in:1,2',
+            'status' => 'nullable|in:0,1',
         ], [
             'name.required' => 'Tên sản phẩm là bắt buộc.',
             'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
@@ -81,11 +82,13 @@ class AdminController extends Controller
             'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
             'email.email' => 'Email phải dạng email.',
 
+            'phone_number.regex' => 'Số điện thoại phải có 10 số',
 
-            'thumbnail.max' => 'Hình sản phẩm dung lượng vượt quá 2Mb.',
-            'thumbnail.image' => 'Hình ảnh sản phẩm phải là một hình ảnh',
+            'image.max' => 'Hình sản phẩm dung lượng vượt quá 2Mb.',
+            'image.image' => 'Hình ảnh sản phẩm phải là một hình ảnh',
 
             'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.confirmed' => 'Mật khẩu không khớp.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
 
         ]);
@@ -101,10 +104,12 @@ class AdminController extends Controller
             'image' => url($path),
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone_number' => $request->phone_number,
             'address' => $request->address,
-            'role' => $request->input('role', 2),  
-            'status' => $request->input('status', 1), 
+            'role' => $request->input('role', 2),
+            'status' => $request->input('status', 1),
         ];
+        dd($data);
         User::query()->create($data);
         // Auth::login($user);
         $request->session()->regenerate();
@@ -130,12 +135,17 @@ class AdminController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable',
             'image' => 'nullable|file|image|max:2048',
+            'phone_number' => 'nullable|regex:/^[0-9]{10,}$/',
             'address' => 'nullable',
+            'role' => 'nullable|in:1,2',
+            'status' => 'nullable|in:0,1',
         ], [
             'name.required' => 'Tên sản phẩm là bắt buộc.',
             'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
             'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
             'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
+
+            'phone_number.regex' => 'Số điện thoại phải có 10 số',
 
             'email.required' => 'Email là bắt buộc.',
             'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
@@ -162,12 +172,14 @@ class AdminController extends Controller
             'image' => url($path),
             'email' => $request->email,
             'address' => $request->address,
+            'phone_number' => $request->phone_number,
             'role' => $request->role,
             'status' => $request->status,
         ];
         $user->update($data);
         $request->session()->regenerate();
-        return redirect()->back()->with('status', 'Cập nhật thành công!');
+        toastr()->success('Cập nhật thành công!');
+        return redirect()->back();
     }
 
     public function status($id)
@@ -177,5 +189,32 @@ class AdminController extends Controller
         $user->save();
         toastr()->success('Tài khoản đã được cập nhật thành công !');
         return redirect()->back();
+    }
+    public function changePassword($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user.admin.changepassword', compact('user'));
+    }
+    public function getchangePassword(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ], [
+            'current_password.required' => 'Mật khẩu cũ là bắt buộc',
+            'new_password.required' => 'Mật khẩu mới là bắt buộc',
+            'new_password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
+            'new_password.confirmed' => 'Mật khẩu không khớp.',
+
+        ]);
+
+        if (Hash::check($request->current_password, $user->password)) {
+            $user->password = Hash::make($request->current_password);
+            $user->save();
+            return redirect('changePassword');
+        } else {
+            return redirect('changePassword');
+        }
     }
 }

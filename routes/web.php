@@ -67,7 +67,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
         Route::resource('category', CategoryController::class);
         Route::resource('comment', CommentController::class);
-        Route::patch('comment/status/{id}',[CommentController::class,'status'])->name('comment_status');
+        Route::patch('comment/status/{id}', [CommentController::class, 'status'])->name('comment_status');
 
         Route::resource('order', OrderController::class);
         Route::resource('statistic', StatisticController::class);
@@ -76,6 +76,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::patch('/user/status/{id}', [UserController::class, 'status'])->name('user_status');
             Route::resource('/admin', AdminController::class);
             Route::patch('/admin/status/{id}', [AdminController::class, 'status'])->name('admin_status');
+            Route::get('/admin/changepassword/{id}', [AdminController::class, 'changePassword']);
+            Route::post('/admin/changepassword/{id}', [AdminController::class, 'getchangePassword'])->name('changePassword');
         });
 
 

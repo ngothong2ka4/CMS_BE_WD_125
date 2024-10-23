@@ -25,43 +25,28 @@
                         <h4 class="mb-0">Thông tin tài khoản</h4>
                     </div> --}}
                     <div class="card-body">
-                        <div>
-                            <label for="basiInput" class="form-label">Tên người dùng</label>
-                            <input type="text" class="form-control" id="basiInput" name="name"
-                                value="{{ $user->name }}" disabled>
-
+                        <div class="profile-container d-flex gap-3">
+                            <div class="profile-image">
+                                <img class="rounded-circle" src="{{ $user->image }}" width="200px" height="200px"
+                                    alt="Avatar">
+                            </div>
+                            <div class="profile-info m-5">
+                                <h1>{{ $user->name }}</h1>
+                            </div>
                         </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Ảnh Avatar</label>
-                            <img class="mb-3 pl-5" src="{{ $user->image }}" width=100 height=100 alt="">
+                        <div class="">
+                            <h2>Thông tin cá nhân</h2>
+                            <li> <strong> Tên: </strong>{{ $user->name }} </li>
+                            <li> <strong> Số điện thoại:</strong> {{ $user->phone_number }} </li>
+                            <li> <strong> Email: </strong>{{ $user->email }} </li>
+                            <li> <strong>Địa chỉ: </strong> {{ $user->address }} </li>
+                            <li> <strong>Quyền: </strong>{{ $user->role == 2 ? 'Admin' : 'User' }} </li>
+                            <li> <strong> Trang thái: </strong>{{ $user->status == 1 ? 'Hoạt động' : 'Dừng hoạt động' }} </li>
                         </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="basiInput" name="name"
-                                value="{{ $user->email }}" disabled>
-
-                        </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Địa chỉ</label>
-                            <input type="text" class="form-control" id="basiInput" name="name"
-                                value="{{ $user->address }}" disabled>
-
-                        </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Quyền</label>
-                            <input type="text" class="form-control" id="basiInput" name="name"
-                                value="{{ $user->role ==1 ? 'user': 'admin' }}" disabled>
-
-                        </div>
-                        <div>
-                            <label for="basiInput" class="form-label">Trang thái</label>
-                            <input type="text" class="form-control" id="basiInput" name="name"
-                                value="{{ $user->status ? 'Kích hoạt' : 'Dừng kích hoạt' }}" disabled>
-                        </div>
-                        
-                    </div><div class="mt-3 ms-auto me-auto mb-2">
-                            <a href="{{ route('admin.index') }}" class="btn btn-success">Quay lại</a>
-                        </div>
+                    </div>
+                    <div class="mt-3 ms-auto me-auto mb-2">
+                        <a href="{{ route('admin.index') }}" class="btn btn-success">Quay lại</a>
+                    </div>
                 </div>
 
 

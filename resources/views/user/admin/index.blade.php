@@ -46,8 +46,6 @@
                                             <button
                                                 class="btn btn-danger">{{ $item->status ? 'Kích hoạt' : 'Dừng kích hoạt' }}</button>
                                         </form>
-
-
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.show', $item->id) }}"><button
