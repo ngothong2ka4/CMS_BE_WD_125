@@ -14,17 +14,18 @@
                     </div>
                     <div class="">
                         @if ($errors->has('login'))
-                        <div class="invalid-feedback d-block">
-                            {{ $errors->first('login') }} 
-                        </div>
-                    @endif
+                            <div class="invalid-feedback d-block">
+                                {{ $errors->first('login') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="p-2 mt-4">
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control  @error('email') is-invalid @enderror" id="email" name="email" placeholder="Email" value="{{old('name')}}">
+                                <input type="email" class="form-control  @error('email') is-invalid @enderror"
+                                    id="email" name="email" placeholder="Email" value="{{ old('name') }}">
                                 @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -32,28 +33,29 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                {{-- <div class="float-end">
-                                    <a href="{{ route('forgot') }}" class="text-muted">Quên mật khẩu?</a>
-                                </div> --}}
                                 <label class="form-label" for="password">Mật khẩu</label>
                                 <div class="position-relative auth-pass-inputgroup mb-3">
-                                    <input type="password" class="form-control pe-5 password-input @error('password') is-invalid @enderror"
-                                                            placeholder="Mật khẩu" id="password" name="password">
+                                    <input type="password"
+                                        class="form-control pe-5 password-input @error('password') is-invalid @enderror"
+                                        placeholder="Mật khẩu" id="password" name="password">
                                     <button
                                         class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                         type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                        @error('password')
+                                    @error('password')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                             </div>
-
+                            <div class="float-end">
+                                <a href="{{ route('forgot') }}" class="text-muted">Quên mật khẩu?</a>
+                            </div> <br>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="remember" id="auth-remember-check">
                                 <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
                             </div>
+
 
                             <div class="mt-4">
                                 <button class="btn btn-success w-100" type="submit">Đăng Nhập</button>
@@ -75,6 +77,7 @@
                                 </div>
                             </div>
                         </form>
+
                     </div>
                 </div>
                 <!-- end card body -->

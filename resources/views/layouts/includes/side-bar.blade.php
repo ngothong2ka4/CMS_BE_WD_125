@@ -30,6 +30,13 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('statistic*') ? 'active' : '' }}"
+                        href="{{ route('statistic.index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('category*') ? 'active' : '' }}"
                         href="{{ route('category.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
@@ -101,13 +108,13 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('statistic*') ? 'active' : '' }}"
                         href="{{ route('statistic.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('comment*') ? 'active' : '' }}"
                         href="{{ route('comment.index') }}" role="button" aria-expanded="false"
