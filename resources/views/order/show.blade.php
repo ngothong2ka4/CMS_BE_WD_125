@@ -108,8 +108,8 @@ toastr()->error($error);
                             <td>Màu: {{ $orderdetail->orderVariant?->color->name}}, Size: {{ $orderdetail->orderVariant?->size->name}}</td>
 
                             <td>{{ $orderdetail->	quantity }}</td>
-                            <td>{{ number_format($orderdetail->	selling_price) }}</td>
-                            <td>{{number_format($orderdetail->	quantity * $orderdetail->	selling_price) }}</td>
+                            <td>{{ number_format($orderdetail->	selling_price) }} đ</td>
+                            <td>{{number_format($orderdetail->	quantity * $orderdetail->	selling_price) }} đ</td>
                         </tr>
 
                         @endforeach
@@ -117,7 +117,7 @@ toastr()->error($error);
                     </tbody>
                 </table>
                 <div class="col-lg-12 text-center font-weight-bold">
-                    <h5>Tổng: {{number_format($order->total_payment)}}</h5>
+                    <h5>Tổng: {{number_format($order->total_payment)}} đ</h5>
                 </div>
 
             </div>

@@ -78,9 +78,17 @@ class OrderController extends Controller
             if($request->to_status == 7){
                 if($request->note == '' || $request->note == null){
                     toastr()->error('Phải có ghi chú hủy đơn' );
-                 return redirect()->back();
+                 return back();
 
                 };
+                if($orderDetail != [] && $orderDetail){
+                    foreach($orderDetail as $variant){
+                        Variant::where('id',$variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
+                    }
+                }
+            }
+
+            if($request->to_status == 5){
                 if($orderDetail != [] && $orderDetail){
                     foreach($orderDetail as $variant){
                         Variant::where('id',$variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);

@@ -18,6 +18,10 @@
                             <input type="text" class="form-control mb-3 @error('code') is-invalid @enderror" id="basiInput"
                                 name="code" value="{{ $voucher->code }}" disabled>
                         </div>
+                        <div>
+                            <label for="basiInput" class="form-label">Mô tả</label>
+                            <textarea disabled class="form-control mb-3" name="description" id="meassageInput" rows="3">{{ $voucher->description }}</textarea>
+                        </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Loại giảm giá</label>
                             <select required name="discount_type" class="form-select mb-3" id=" "
