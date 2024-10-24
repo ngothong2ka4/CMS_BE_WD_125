@@ -5,6 +5,7 @@ namespace App\Http\Controllers\user;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\User;
+use Auth;
 use Hash;
 use Illuminate\Http\Request;
 
@@ -195,26 +196,27 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         return view('user.admin.changepassword', compact('user'));
     }
-    public function getchangePassword(Request $request, $id)
+    public function updatechangePassword(Request $request, $id)
     {
-        $user = User::findOrFail($id);
         $request->validate([
-            'current_password' => 'required',
+            'old_password' => 'required',
             'new_password' => 'required|min:8|confirmed',
         ], [
-            'current_password.required' => 'Mật khẩu cũ là bắt buộc',
+            'old_password.required' => 'Mật khẩu cũ là bắt buộc',
             'new_password.required' => 'Mật khẩu mới là bắt buộc',
             'new_password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
             'new_password.confirmed' => 'Mật khẩu không khớp.',
 
         ]);
-
-        if (Hash::check($request->current_password, $user->password)) {
-            $user->password = Hash::make($request->current_password);
+        $user= Auth::user();
+        if (Hash::check($request->old_password, $user->password)) {
+            $user->password = Hash::make($request->new_password);
             $user->save();
-            return redirect('changePassword');
+            toastr()->success('Đổi mật khẩu thành công');
+            return redirect()->back();
         } else {
-            return redirect('changePassword');
+            toastr()->error('Mật khẩu cũ không đúng hãy nhập lại!');
+            return redirect()->back();
         }
     }
 }
