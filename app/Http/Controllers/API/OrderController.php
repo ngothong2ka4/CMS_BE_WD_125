@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
 use App\Models\Variant;
+use App\Models\Voucher;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -105,6 +106,7 @@ class OrderController extends Controller
     //       Mua ở giỏ hàng(truyền payment_role thích hợp )
     //          {
     //              "cartIds": [6, 7],
+    //              "voucherId": 1,
     //              "recipient_name": "Nguyễn Văn A",
     //              "email": "example@example.com",
     //              "phone_number": "0123456789",
@@ -117,6 +119,7 @@ class OrderController extends Controller
     //          {
     //              "variantId": 5,
     //              "quantity": 2,
+    //              "voucherId": 1,
     //              "recipient_name": "Nguyễn Văn A",
     //              "email": "example@example.com",
     //              "phone_number": "0123456789",
@@ -139,6 +142,8 @@ class OrderController extends Controller
         }
 
         $data = $request->all();
+        
+        $voucher = Voucher::find($data['voucherId']);
 
         try {
             DB::beginTransaction();
@@ -147,18 +152,23 @@ class OrderController extends Controller
 
                 $res = $this->processCartPayment($data, $user->id);
                 if ($res['payment_role'] == 2) {
+                    $res['id_voucher'] = $voucher->id;
+                    $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
+
                 $information = [
                     'order' => $res['order'],
                     'orderDetails' => $res['order_details'],
                 ];
 
+                $voucher->incrementUsage($user->id);
+
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order', 
                     $information, 
-                    $user->email, 
+                    $data['email'], 
                     'Thông tin đơn hàng');
 
                 return $this->jsonResponse('Đặt hàng thành công', true, data: $res);
@@ -166,6 +176,8 @@ class OrderController extends Controller
 
                 $res = $this->processDirectPayment($data, $user->id);
                 if ($res['payment_role'] == 2) {
+                    $res['id_voucher'] = $voucher->id;
+                    $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
@@ -175,10 +187,12 @@ class OrderController extends Controller
                     'orderDetails' => [$res['order_details']],
                 ];
 
+                $voucher->incrementUsage($user->id);
+
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order', 
                     $information, 
-                    $user->email, 
+                    $data['email'], 
                     'Thông tin đơn hàng');
 
                 return $this->jsonResponse('Đặt hàng thành công', true, $res);
@@ -326,18 +340,20 @@ class OrderController extends Controller
 
     public function createPaymentUrl($res)
     {
-
         $vnp_Url = env('VNP_URL');
         $vnp_Returnurl = env('VNP_RETURNURL');
         $vnp_TmnCode = env('VNP_TMNCODE');
         $vnp_HashSecret = env('VNP_HASHSECRET');
 
         $vnp_TxnRef = $res['id_order'];
-        $vnp_OrderInfo = "Thanh toán hoá đơn";
+        $vnp_OrderInfo = serialize([
+            'vnp_VoucherId' => $res['id_voucher'],
+            'vnp_email' => $res['email']
+        ]);
         $vnp_OrderType = "Shine Shop";
         $vnp_Amount = $res['totalAmount'] * 100;
         $vnp_Locale = "vn";
-        $vnp_BankCode = "";
+        $vnp_BankCode = "VNBANK";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
         $inputData = array(
@@ -352,7 +368,7 @@ class OrderController extends Controller
             "vnp_OrderInfo" => $vnp_OrderInfo,
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef
+            "vnp_TxnRef" => $vnp_TxnRef,
         );
 
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
@@ -387,6 +403,12 @@ class OrderController extends Controller
     // method: GET
     // require: authToken
     // API: /api/paymentResult
+    // {
+    //     "vnp_TxnRef": "99", 
+    //     "vnp_ResponseCode": "00",
+    //     "vnp_VoucherId": "1",
+    //     "vnp_Email": "vuidap007@gmail.com"
+    // }
 
     public function paymentResult(Request $request)
     {
@@ -405,7 +427,7 @@ class OrderController extends Controller
 
         // $vnpSecureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
         // \Log::debug('Generated vnpSecureHash for comparison: ' . $vnpSecureHash);
-
+        $value = unserialize(urldecode($request->input('vnp_OrderInfo')));
         $orderId = $request->input('vnp_TxnRef');
         \Log::debug('Order ID from vnp_TxnRef: ' . $orderId);
         $order = Order::with(['orderDetail','user'])->find($orderId);
@@ -424,11 +446,14 @@ class OrderController extends Controller
                 'order' => $order,
                 'orderDetails' => $order->orderDetail->toArray(),
             ];
+
+            $voucher = Voucher::find($value['vnp_VoucherId']);
+            $voucher->incrementUsage(Auth::id());
             
             SendEmailAfterOrder::dispatch(
                 'emails.information-order', 
                 $information, 
-                $order->user->email, 
+                $value['vnp_email'], 
                 'Thông tin đơn hàng');
 
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);

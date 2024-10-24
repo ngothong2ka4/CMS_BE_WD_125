@@ -331,7 +331,8 @@ class ProductController extends Controller
             $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user,$id_order) {
                 $query->where('id', $id_order)
                         ->where('id_user', $user->id)
-                        ->where('status', 6);
+                        ->where('status', 6)
+                        ->where('status_payment', 2);
             })->where('id_product', $id_product)->exists();
 
             if (!$hasPurchased) {
