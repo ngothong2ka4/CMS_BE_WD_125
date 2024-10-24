@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
 {
+    // method: POST
+    // API: //vouchers/apply
+    // parram: (voucher_code, order_amount, user_id)
+    // response:200
+    //              {
+    //                  "status": true,
+    //                  "message": "Voucher áp dụng thành công",
+    //                  "data": {
+    //                      "voucherId": 1,
+    //                      "discount": 10000,
+    //                      "final_amount": 90000
+    //              }
     public function applyVoucher(Request $request)
     {
         $request->validate([
@@ -29,9 +41,8 @@ class VoucherController extends Controller
 
         $discount = $voucher->calculateDiscount($request->order_amount);
 
-        $voucher->incrementUsage(Auth::id());
-
         $data = [
+            'voucherId' => $voucher->id,
             'discount' => $discount,
             'final_amount' => $request->order_amount - $discount,
         ];
