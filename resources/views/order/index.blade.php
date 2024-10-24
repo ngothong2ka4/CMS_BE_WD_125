@@ -32,7 +32,7 @@
                                 <tr>
                                     <td>#{{ $order->id }}</td>
                                     <td>{{ $order->recipient_name }}</td>   
-                                    <td>{{ number_format($order->total_payment) }}</td>
+                                    <td>{{ number_format($order->total_payment) }} đ</td>
 
                                     <td>
                                         @if($order->	status == 1)

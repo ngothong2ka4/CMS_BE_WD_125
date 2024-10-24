@@ -24,6 +24,10 @@
                             <input required type="text" class="form-control mb-3 @error('code') is-invalid @enderror" id="basiInput"
                                 name="code" value="{{ old('code') }}">
                         </div>
+                        <div>
+                            <label for="basiInput" class="form-label">Mô tả</label>
+                            <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
+                        </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Loại giảm giá</label>
                             <select required name="discount_type" class="form-select mb-3" id=" "

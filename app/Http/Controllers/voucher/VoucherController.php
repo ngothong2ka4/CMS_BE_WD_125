@@ -29,6 +29,7 @@ class VoucherController extends Controller
                 'end_date' => 'required',
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
+                'description' => 'nullable'
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
@@ -97,6 +98,7 @@ class VoucherController extends Controller
                 'end_date' => 'required',
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
+                'description' => 'nullable'
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
@@ -108,7 +110,7 @@ class VoucherController extends Controller
                 'usage_per_user.min'=> 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
                 'usage_limit.min'=> 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
             ]);
-          
+
             if($request->discount_type == 1 && $request->discount_value > 100 ){
                 toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
                 return back()->withInput();
