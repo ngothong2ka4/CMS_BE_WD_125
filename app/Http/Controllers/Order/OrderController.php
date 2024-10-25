@@ -50,7 +50,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $orderdetails = OrderDetail::where('id_order', $id)->get();
         $orderhistories = OrderHistory::where('id_order', $id)->get();
-        return view('order.show', compact('order','orderdetails','orderhistories','user'));
+        return view('order.show', compact('order', 'orderdetails', 'orderhistories', 'user'));
     }
 
     /**
@@ -69,42 +69,41 @@ class OrderController extends Controller
         $user = Auth::user();
         $orderDetail = $order->orderDetail;
         try {
-            DB::beginTransaction();
+
             $request->validate([
                 'to_status' => 'required'
-            ],[
+            ], [
                 'to_status.required' => 'Vui lòng chọn trạng thái'
             ]);
-            if($request->to_status == 7){
-                if($request->note == '' || $request->note == null){
-                    toastr()->error('Phải có ghi chú hủy đơn' );
-                 return back();
-
+            if ($request->to_status == 7) {
+                if ($request->note == '' || $request->note == null) {
+                    toastr()->error('Phải có ghi chú hủy đơn');
+                    return back();
                 };
-                if($orderDetail != [] && $orderDetail){
-                    foreach($orderDetail as $variant){
-                        Variant::where('id',$variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
+                if ($orderDetail != [] && $orderDetail) {
+                    foreach ($orderDetail as $variant) {
+                        Variant::where('id', $variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
                     }
                 }
             }
 
-            if($request->to_status == 5){
-                if($orderDetail != [] && $orderDetail){
-                    foreach($orderDetail as $variant){
-                        Variant::where('id',$variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
+            if ($request->to_status == 5) {
+                if ($orderDetail != [] && $orderDetail) {
+                    foreach ($orderDetail as $variant) {
+                        Variant::where('id', $variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
                     }
                 }
             }
-    
+
             $data = ['status' => $request->to_status];
-            if($request->to_status == 4){
-              $data['status_payment']  = 2;
-            
-            if($orderDetail != [] && $orderDetail){
-                foreach($orderDetail as $variant){
-                    Product::where('id',$variant->id_product)->update(['sold' => $variant->orderProduct->sold + $variant->quantity]);
+            if ($request->to_status == 4) {
+                $data['status_payment']  = 2;
+
+                if ($orderDetail != [] && $orderDetail) {
+                    foreach ($orderDetail as $variant) {
+                        Product::where('id', $variant->id_product)->update(['sold' => $variant->orderProduct->sold + $variant->quantity]);
+                    }
                 }
-            }
             };
             $data_his = [
                 'id_order' => $order->id,
@@ -113,15 +112,17 @@ class OrderController extends Controller
                 'to_status' => $request->to_status,
                 'note' => $request->note,
             ];
-            $order->update($data);
-            OrderHistory::create($data_his);
-            $this->sendEmail($order);
-            DB::commit();
-            toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
+            if ($order->status != $request->to_status) {
+                $order->update($data);
+                OrderHistory::create($data_his);
+                $this->sendEmail($order);
+                toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
+            }
+
             return redirect()->back();
         } catch (\Exception $e) {
-        toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
-        return redirect()->back();
+            toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+            return redirect()->back();
         }
     }
 
@@ -133,15 +134,18 @@ class OrderController extends Controller
         //
     }
 
-    private function sendEmail($order){
+    private function sendEmail($order)
+    {
         $email = $order->email;
 
-        Mail::send('emails.status',compact('order'),
-            function ($message) use ($email){
-                $message->from(config('mail.from.address'),'Shine');
+        Mail::send(
+            'emails.status',
+            compact('order'),
+            function ($message) use ($email) {
+                $message->from(config('mail.from.address'), 'Shine');
                 $message->to($email);
                 $message->subject('Trạng thái đơn hàng');
             }
-    );
+        );
     }
 }
