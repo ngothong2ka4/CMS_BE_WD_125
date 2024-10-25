@@ -143,7 +143,7 @@ class OrderController extends Controller
 
         $data = $request->all();
         
-        $voucher = Voucher::find($data['voucherId']);
+        $voucher = !empty($data['voucherId']) ? Voucher::find($data['voucherId']) : null;
 
         try {
             DB::beginTransaction();
@@ -152,7 +152,7 @@ class OrderController extends Controller
 
                 $res = $this->processCartPayment($data, $user->id);
                 if ($res['payment_role'] == 2) {
-                    $res['id_voucher'] = $voucher->id;
+                    $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
@@ -163,7 +163,9 @@ class OrderController extends Controller
                     'orderDetails' => $res['order_details'],
                 ];
 
-                $voucher->incrementUsage($user->id);
+                if ($voucher) {
+                    $voucher->incrementUsage($user->id);
+                }
 
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order', 
@@ -176,7 +178,7 @@ class OrderController extends Controller
 
                 $res = $this->processDirectPayment($data, $user->id);
                 if ($res['payment_role'] == 2) {
-                    $res['id_voucher'] = $voucher->id;
+                    $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
@@ -187,7 +189,9 @@ class OrderController extends Controller
                     'orderDetails' => [$res['order_details']],
                 ];
 
-                $voucher->incrementUsage($user->id);
+                if ($voucher) {
+                    $voucher->incrementUsage($user->id);
+                }
 
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order', 
@@ -448,7 +452,9 @@ class OrderController extends Controller
             ];
 
             $voucher = Voucher::find($value['vnp_VoucherId']);
-            $voucher->incrementUsage(Auth::id());
+            if ($voucher) {
+                $voucher->incrementUsage(Auth::id());
+            } 
             
             SendEmailAfterOrder::dispatch(
                 'emails.information-order', 
