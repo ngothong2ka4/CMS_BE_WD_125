@@ -23,6 +23,7 @@ class StatisticController extends Controller
         $dangGiao = Order::where('status', '3')->count();
         $giaoThanhCong = Order::where('status', '4')->count();
         $giaoThatBai = Order::where('status', '5')->count();
+        $hoanThanh = Order::where('status', '6')->count();
         $daHuy = Order::where('status', '7')->count();
 
         $year = $request->input('year', now()->year);
@@ -243,7 +244,7 @@ class StatisticController extends Controller
         // dd($topProfit);
 
 
-        return view('statistic.index', compact('choXacNhan', 'daXacNhan', 'dangGiao', 'giaoThanhCong', 'giaoThatBai', 'daHuy', 'completeStatistic', 'Statistic', 'year', 'message', 'title', 'cotY', 'topSellers', 'topRevenue', 'topProfit'));
+        return view('statistic.index', compact('choXacNhan', 'daXacNhan', 'dangGiao', 'giaoThanhCong', 'giaoThatBai', 'hoanThanh', 'daHuy', 'completeStatistic', 'Statistic', 'year', 'message', 'title', 'cotY', 'topSellers', 'topRevenue', 'topProfit'));
     }
 
     /**
