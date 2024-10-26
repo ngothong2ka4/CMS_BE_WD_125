@@ -1,6 +1,7 @@
 <?php
 
 use App\Common\Common;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\comment\CommentController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\AuthController as LoginController;
@@ -41,13 +42,13 @@ Common::autoUpdateStatus();
 //     return view('test');
 // })->name('login');
 
-// Route::get('/signup', function () {
-//     return view('auth.signup');
-// })->name('signup');
+Route::get('/signup', function () {
+    return view('auth.signup');
+})->name('signup');
 
-// Route::get('/forgot', function () {
-//     return view('auth.forgot');
-// })->name('forgot');
+Route::get('/forgot', function () {
+    return view('auth.forgot');
+})->name('forgot');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin']);
@@ -55,7 +56,9 @@ Route::post('/login', [LoginController::class, 'postLogin']);
 Route::get('/signup', [LoginController::class, 'register'])->name('signup');
 Route::post('/signup', [LoginController::class, 'postRegister']);
 
-Route::get('/forgot', [LoginController::class, 'forgot'])->name('forgot');
+Route::get('/forgot', [AuthController::class, 'forgot'])->name('forgot');
+Route::post('/forgot', [AuthController::class, 'sendPassword']);
+
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -77,7 +80,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::resource('/admin', AdminController::class);
             Route::patch('/admin/status/{id}', [AdminController::class, 'status'])->name('admin_status');
             Route::get('/admin/changepassword/{id}', [AdminController::class, 'changePassword']);
-            Route::post('/admin/changepassword/{id}', [AdminController::class, 'getchangePassword'])->name('changePassword');
+            Route::post('/admin/changepassword/{id}', [AdminController::class, 'updatechangePassword'])->name('changePassword');
         });
 
 

@@ -21,6 +21,7 @@ class Voucher extends Model
         'usage_limit',
         'usage_per_user',
         'status',
+        'description'
     ];
     public function product()
     {

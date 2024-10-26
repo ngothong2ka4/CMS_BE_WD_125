@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Password;
 
 class AuthController extends Controller
 {
@@ -36,7 +37,7 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
         $request->session()->regenerate();
-        return redirect()->intended('dashboard');
+        return redirect()->intended('statistic');
     }
     return back()->withErrors([
         'login' => 'Email hoặc mật khẩu không đúng.',
@@ -60,7 +61,7 @@ class AuthController extends Controller
         $user=User::query()->create($data);
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect()->route('dashboard');
+        return redirect()->route('statistic');
        
     }
 
@@ -73,6 +74,26 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+    public function forgot()
+    {
+        return view('auth.forgot');
+    }
+    public function sendPassword(Request $request)
+    {
+        $request->validate([
+            'email'=>'required|email|exists:users,email',
+        ],[
+            'email.required'=>'Chưa nhập email. Hãy nhập email của bạn!',
+            'email.exists'=>'Email chưa được đăng ký trên hệ thống.'
+        ]);
+        // $status = Password::sendResetLink(
+        //     $request->only('email')
+        // );
+     
+        // return $status === Password::RESET_LINK_SENT
+        //             ? back()->with(['status' => __($status)])
+        //             : back()->withErrors(['email' => __($status)]);
     }
 }
 

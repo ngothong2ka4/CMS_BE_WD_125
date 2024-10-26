@@ -12,6 +12,7 @@ class Comment extends Model
     protected $table = 'comments';
     protected $fillable = [
         'id_product',
+        'id_variant',
         'id_user',
         'content',
         'rating',
@@ -25,4 +26,10 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class,'id_user','id');
     }
+
+    public function variant()
+    {
+        return $this->belongsTo(Variant::class, 'id_variant');
+    }
+    
 }

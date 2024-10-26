@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCommentRequest;
+use App\Http\Resources\Product\ListCommentResource;
 use App\Http\Resources\Product\ProductDetailResource;
 use App\Http\Resources\Product\RelatedProductsResource;
 use App\Models\Comment;
@@ -242,7 +244,8 @@ class ProductController extends Controller
             'stone',
             'comments' => function ($query) {
                 $query->where('status', 1);
-            }
+            },
+            'comments.user'
         ])->find($id);
 
         if (!$product) {
@@ -312,18 +315,13 @@ class ProductController extends Controller
     //                  }
     //              }
 
-    public function addCommentProduct(Request $request)
+    public function addCommentProduct(StoreCommentRequest $request)
     {
-        $validatedData = $request->validate([
-            'id_order' => 'required|exists:order,id',
-            'id_product' => 'required|exists:products,id', 
-            'content' => 'required|string|max:500', 
-            'rating' => 'required|integer|min:1|max:5', 
-        ]);
         try {
             $user = Auth::user();
-            $id_product = $validatedData['id_product'];
-            $id_order = $validatedData['id_order'];
+            $id_product = $request->id_product;
+            $id_variant = $request->id_variant;
+            $id_order = $request->id_order;
             if (!$user) {
                 return $this->jsonResponse('Bạn phải đăng nhập mới có thể Đánh giá');
             }
@@ -331,18 +329,22 @@ class ProductController extends Controller
             $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user,$id_order) {
                 $query->where('id', $id_order)
                         ->where('id_user', $user->id)
-                        ->where('status', 6);
-            })->where('id_product', $id_product)->exists();
+                        ->where('status', 6)
+                        ->where('status_payment', 2);
+            })->where('id_product', $id_product)
+                ->where('id_variant', $id_variant)
+                ->exists();
 
             if (!$hasPurchased) {
                 return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi đánh giá.');
             }
             DB::beginTransaction();
                 $comment = Comment::create([
-                    'id_product' => $validatedData['id_product'],
+                    'id_product' => $request->id_product,
+                    'id_variant' => $request->id_variant,
                     'id_user' => $user->id,
-                    'content' => $validatedData['content'],
-                    'rating' => $validatedData['rating'] ?? null, 
+                    'content' => $request->content,
+                    'rating' => $request->rating ?? null, 
                     'status' => 1, 
                 ]);
             DB::commit();
@@ -350,6 +352,41 @@ class ProductController extends Controller
             return $this->jsonResponse('Thêm đánh giá thành công', true, $comment);
         } catch (\Exception $exception) {
             DB::rollBack();
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse('Có lỗi xảy ra');
+        }
+    }
+
+    // method: GET
+    // API: /api/listCommentUser
+    // response:200
+    //              {
+    //                  "content": "đ biết nói gì",
+    //                  "rating": 3,
+    //                  "created_at": "2024-10-19T08:34:35.000000Z",
+    //                  "product_name": "Nhẫn cưới Vàng 18K& Platinum 950 Kim cương tự nhiên",
+    //                  "color": "xanh dương",
+    //                  "size": "1.7"
+    //              },...
+
+    public function listCommentUser(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return $this->jsonResponse('Bạn phải đăng nhập mới có thể xem Đánh giá');
+            }
+
+            $comments = Comment::with([
+                'variant.product',
+                'variant.color',
+                'variant.size',
+                ])
+                ->where('id_user', $user->id)
+                ->get();
+
+            return $this->jsonResponse('Lấy danh sách đánh giá thành công', true, ListCommentResource::collection($comments));
+        } catch (\Exception $exception) {
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Có lỗi xảy ra');
         }
