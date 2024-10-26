@@ -63,11 +63,21 @@ class Voucher extends Model
         $this->used_count++;
         $this->save();
 
-        DB::table('voucher_user')->insert([
-            'voucher_id' => $this->id,
-            'user_id' => $userId,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        $voucherUser = DB::table('voucher_user')
+            ->where('voucher_id', $this->id)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($voucherUser) {
+            DB::table('voucher_user')->where('id', $voucherUser->id)->increment('usage_count');
+        } else {
+            DB::table('voucher_user')->insert([
+                'voucher_id' => $this->id,
+                'user_id' => $userId,
+                'usage_count' => 1, 
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
     }
 }
