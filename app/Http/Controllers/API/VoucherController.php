@@ -26,7 +26,7 @@ class VoucherController extends Controller
         $request->validate([
             'voucher_code' => 'required|string',
             'order_amount' => 'required|numeric|min:0',
-            'user_id' => 'required|integer', 
+            'user_id' => 'required|integer',
         ]);
 
         $voucher = Voucher::where('code', $request->voucher_code)->first();
@@ -47,6 +47,23 @@ class VoucherController extends Controller
             'final_amount' => $request->order_amount - $discount,
         ];
 
-        return $this->jsonResponse('Voucher áp dụng thành công',true, $data);
+        return $this->jsonResponse('Voucher áp dụng thành công', true, $data);
+    }
+
+    public function listVoucher()
+    {
+        $user = Auth::user();
+
+        $vouchers = Voucher::join('voucher_user', 'vouchers.id', '=', 'voucher_user.voucher_id')
+            ->where('voucher_user.user_id', $user->id)
+            ->where('vouchers.status', '=', 1)
+            ->whereColumn('voucher_user.usage_count', '<', 'vouchers.usage_per_user')
+            ->select('vouchers.code','vouchers.description','vouchers.start_date','vouchers.end_date', 'voucher_user.usage_count')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $vouchers
+        ]);
     }
 }
