@@ -19,6 +19,7 @@ class ListCommentResource extends JsonResource
             'rating' => $this->rating,
             'created_at' => $this->created_at,
             'product_name' => $this->variant->product->name,
+            'image_variant' => $this->variant->image_color,
             'color' => $this->variant->color->name,
             'size' => $this->variant->size->name,
         ];
