@@ -62,161 +62,189 @@
                 </div>
             </div>
         </div><!--end col-->
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-secondary text-truncate mb-0"> Chờ xác nhận</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $choXacNhan }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+        <div class="d-flex" style="overflow-x: auto;">
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-secondary text-truncate mb-0"> Chờ xác nhận</p>
+                            </div>
                         </div>
                         <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-secondary"></i>
-                            </span>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $choXacNhan }} ĐƠN</h6>
                         </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-secondary"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+    
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Đã xác nhận</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daXacNhan }} ĐƠN</h6>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-success"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+    
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Đang giao</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $dangGiao }} ĐƠN</h6>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-success"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+    
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Giao thành công</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThanhCong }} ĐƠN</h6>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-success"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+    
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-warning text-truncate mb-0"> Giao thất bại</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThatBai }} ĐƠN</h6>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-warning"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+    
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-danger text-truncate mb-0"> Đã huỷ</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-danger"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
 
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Đã xác nhận</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daXacNhan }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+            <div class="col-2 me-1">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Hoàn thành</p>
+                            </div>
                         </div>
                         <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-success"></i>
-                            </span>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
                         </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Đang giao</p>
+                        <div class="d-flex align-items-end justify-content-between mt-2">
+                            <div>
+                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                            </div>
+                            <div>
+                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-detail text-success"></i>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $dangGiao }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
-                        </div>
-                        <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-success"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Giao thành công</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThanhCong }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
-                        </div>
-                        <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-success"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-warning text-truncate mb-0"> Giao thất bại</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThatBai }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
-                        </div>
-                        <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-warning"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
-        <div class="col-xl-2 col-md-4">
-            <!-- card -->
-            <div class="card card-animate">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 overflow-hidden">
-                            <p class="text-uppercase fw-medium text-danger text-truncate mb-0"> Đã huỷ</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <div>
-                            <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
-                        </div>
-                        <div>
-                            <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                <i class="bx bx-detail text-danger"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+        </div>
     </div>
 
 
@@ -320,13 +348,13 @@
                                                         <td>
                                                             <div class="d-flex align-items-center">
                                                                 <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                                    <img src="{{ $item->product_image }}" alt=""
+                                                                    <img src="{{ $item->product_image }}" alt="Ảnh"
                                                                         class="img-fluid d-block" />
                                                                 </div>
                                                                 <div>
                                                                     <h5 class="fs-14 my-1">
                                                                         <a href="apps-ecommerce-product-details.html"
-                                                                            class="text-reset">{{ Str::limit($item->product_name, 22, '...') }}</a>
+                                                                            class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                     </h5>
                                                                 </div>
 
@@ -336,12 +364,12 @@
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }}
                                                                 VNĐ
                                                             </h5>
-                                                            <span class="text-muted">Giá</span>
+                                                            <span class="text-muted fs-12">Giá</span>
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->total_quantity }}
                                                             </h5>
-                                                            <span class="text-muted">Đã bán</span>
+                                                            <span class="text-muted fs-12">Đã bán</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -374,7 +402,7 @@
                                                                 <div>
                                                                     <h5 class="fs-14 my-1">
                                                                         <a href="apps-ecommerce-product-details.html"
-                                                                            class="text-reset">{{ Str::limit($item->product_name, 22, '...') }}</a>
+                                                                            class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                     </h5>
                                                                 </div>
 
@@ -384,12 +412,12 @@
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }}
                                                                 VNĐ
                                                             </h5>
-                                                            <span class="text-muted">Giá</span>
+                                                            <span class="text-muted fs-12">Giá</span>
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->total_revenue }}
                                                                 VNĐ</h5>
-                                                            <span class="text-muted">Doanh thu</span>
+                                                            <span class="text-muted fs-12">Doanh thu</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -423,7 +451,7 @@
                                                             <div>
                                                                 <h5 class="fs-14 my-1">
                                                                     <a href="apps-ecommerce-product-details.html"
-                                                                        class="text-reset">{{ Str::limit($item->product_name, 22, '...') }}</a>
+                                                                        class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                 </h5>
                                                             </div>
 
@@ -432,12 +460,12 @@
                                                     <td>
                                                         <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }} VNĐ
                                                         </h5>
-                                                        <span class="text-muted">Giá</span>
+                                                        <span class="text-muted fs-12">Giá</span>
                                                     </td>
                                                     <td>
                                                         <h5 class="fs-14 my-1 fw-normal">{{ $item->total_profit }} VNĐ
                                                         </h5>
-                                                        <span class="text-muted">Lợi nhuận</span>
+                                                        <span class="text-muted fs-12">Lợi nhuận</span>
                                                     </td>
                                                 </tr>
                                             @endforeach

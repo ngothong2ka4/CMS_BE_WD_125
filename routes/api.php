@@ -64,4 +64,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/listStatusOrderHistory',[OrderController::class, 'listStatusOrderHistory']);
 
     Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
+    Route::get('/vouchers/list', [VoucherController::class, 'listVoucher']);
 });
