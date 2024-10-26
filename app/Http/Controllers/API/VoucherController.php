@@ -54,11 +54,13 @@ class VoucherController extends Controller
     {
         $user = Auth::user();
 
-        $vouchers = Voucher::join('voucher_user', 'vouchers.id', '=', 'voucher_user.voucher_id')
-            ->where('voucher_user.user_id', $user->id)
+        $vouchers = Voucher::leftJoin('voucher_user', 'vouchers.id', '=', 'voucher_user.voucher_id')
             ->where('vouchers.status', '=', 1)
-            ->whereColumn('voucher_user.usage_count', '<', 'vouchers.usage_per_user')
-            ->select('vouchers.code','vouchers.description','vouchers.start_date','vouchers.end_date', 'voucher_user.usage_count')
+            ->where(function ($query) use ($user) {
+                $query->where('voucher_user.user_id', $user->id)
+                    ->orWhereNull('voucher_user.user_id');
+            })
+            ->select('vouchers.code', 'vouchers.description', 'vouchers.start_date', 'vouchers.end_date', 'voucher_user.usage_count')
             ->get();
 
         return response()->json([
