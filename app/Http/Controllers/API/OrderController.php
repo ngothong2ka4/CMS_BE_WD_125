@@ -292,7 +292,7 @@ class OrderController extends Controller
         $variant = Variant::with('product')->find($data['variantId']);
         
         if (!$variant) {
-            return $this->jsonResponse('Sản phẩm không tồn tại', false);
+            return $this->jsonResponse(message: 'Sản phẩm không tồn tại');
         }
 
         if ($variant->quantity - $data['quantity'] < 0) {
