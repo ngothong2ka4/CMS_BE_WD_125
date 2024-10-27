@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use App\Models\UserResetToken;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -125,5 +127,83 @@ class AuthController extends Controller
         }
     
         return $this->jsonResponse('Người dùng không được xác thực');
+    }
+
+    public function forgotPassword(Request $request){
+
+       try{
+        $request->validate([
+            'email'=> 'required|email|exists:users|unique:password_reset_tokens,email'
+        ],[
+            'email.required' => 'Email không được để trống',
+            'email.email' => 'Email chưa đúng định dạng',
+            'email.exists' => 'Email không tồn tại trong hệ thống',
+            'email.unique' => 'Yêu cầu của bạn đã được xử lý. Vui lòng kiểm tra email của bạn'
+        ]);
+
+        $user = User::where('email',$request->email)->where('role','1')->where('status',1)->first();
+        
+        if(!$user){
+            return $this->jsonResponse('Email không hợp lệ!');
+        }
+
+        $email = $request->email;
+        $token = \Str::random(50);
+        $data = [
+            'email'  => $request->email,
+            'token' => $token,
+        ];
+
+        if(UserResetToken::create($data)){
+        Mail::send('emails.forgot-password',compact('user','token'),
+            function ($message) use ($email){
+                $message->from(config('mail.from.address'),'Shine');
+                $message->to($email);
+                $message->subject('Đặt lại mật khẩu của bạn');
+            }
+    );
+        return $this->jsonResponse('Vui lòng kiểm tra email của bạn!');
+
+        }
+        return $this->jsonResponse('Email không hợp lệ!');
+   
+    } catch (\Exception $exception) {
+        DB::rollBack();
+        \Log::error($exception->getMessage());
+        return $this->jsonResponse($exception->getMessage());
+    }
+    }
+
+    public function resetPassword(Request $request, $token){
+
+        try{
+        $request->validate([
+            'password' => 'required|min:8|max:32|confirmed',
+        ],[
+            'password.required' => 'Mật khẩu là trường bắt buộc.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.max' => 'Mật khẩu không được quá 32 ký tự.',
+            'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
+        ]);
+        $dataToken = UserResetToken::where('token', $token)->firstOrFail();
+        $user = User::where('email', $dataToken->email)->firstOrFail();
+
+        $data = [
+            'password' => bcrypt($request->password),
+        ];
+        $check = $user->update($data);
+        // dd($data);
+        if($check){
+        UserResetToken::where('token', $token)->delete();
+        return $this->jsonResponse('Đổi mật khẩu thành công!');
+
+    }
+    return $this->jsonResponse('Có lỗi xảy ra!');
+} catch (\Exception $exception) {
+    DB::rollBack();
+    \Log::error($exception->getMessage());
+    return $this->jsonResponse($exception->getMessage());
+}
+
     }
 }

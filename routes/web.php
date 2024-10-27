@@ -24,6 +24,7 @@ use App\Models\Material;
 use Illuminate\Support\Facades\Route;
 
 Common::autoUpdateStatus();
+Common::deleteToken();
 // use App\Http\Controllers\AuthController as LoginController;
 /*
 |--------------------------------------------------------------------------

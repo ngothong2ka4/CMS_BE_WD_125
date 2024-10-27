@@ -9,9 +9,10 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Common\Common;
+use App\Http\Controllers\AuthController as ControllersAuthController;
 
 Common::autoUpdateStatus();
-
+Common::deleteToken();
 
 
 /*
@@ -32,6 +33,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('forgotpassword', [AuthController::class, 'forgotPassword']);
+Route::post('resetpassword/{token}', [AuthController::class, 'resetPassword']);
 
 Route::apiResource('category',CategoryController::class);
 // API sản phẩm mới (5 cái)
