@@ -35,7 +35,7 @@ class VoucherController extends Controller
             return $this->jsonResponse('Mã voucher không hợp lệ');
         }
 
-        if (!$voucher->isValid($request->order_amount, $request->user_id)) {
+        if (!$voucher->isValid()) {
             return response()->json(['error' => 'Voucher không hợp lệ hoặc không đủ điều kiện'], 400);
         }
 
@@ -58,6 +58,7 @@ class VoucherController extends Controller
             ->where('vouchers.status', '=', 1)
             ->where(function ($query) use ($user) {
                 $query->where('voucher_user.user_id', $user->id)
+                    ->where('voucher_user.usage_count', '<', 'vouchers.usage_per_user')
                     ->orWhereNull('voucher_user.user_id');
             })
             ->select('vouchers.code', 'vouchers.description', 'vouchers.start_date', 'vouchers.end_date', 'voucher_user.usage_count')

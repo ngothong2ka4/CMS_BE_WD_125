@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,7 +29,7 @@ class Voucher extends Model
         return $this->belongsTo(Product::class, 'id_product', 'id');
     }
 
-    public function isValid($orderAmount, $userId)
+    public function isValid()
     {
         $currentDate = Carbon::now();
 
@@ -38,9 +39,10 @@ class Voucher extends Model
         }
 
         $userUsageCount = DB::table('voucher_user')->where('voucher_id', $this->id)
-                                                  ->where('user_id', $userId)
-                                                  ->count();
-        if ($userUsageCount >= $this->usage_per_user) {
+                                                  ->where('user_id', Auth::id())
+                                                  ->first();
+        
+        if ($userUsageCount->usage_count >= $this->usage_per_user) {
             return false;
         }
 
@@ -62,6 +64,9 @@ class Voucher extends Model
     {
         $this->used_count++;
         $this->save();
+        if ($this->used_count == $this->usage_limit) {
+            $this->update(['status' => 2]);
+        }
 
         $voucherUser = DB::table('voucher_user')
             ->where('voucher_id', $this->id)
