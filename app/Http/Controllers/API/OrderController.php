@@ -149,6 +149,10 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
+            if($request->used_accum > $user->accum_point){
+                return $this->jsonResponse('Điểm tích lũy không đủ');
+            }
+
             if (!empty($data['cartIds'])) {
 
                 $res = $this->processCartPayment($data, $user->id);
