@@ -228,6 +228,7 @@ class OrderController extends Controller
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
             'note' => $data['note'] ?? null,
+            'used_accum' => $data['used_accum'] ?? 0,
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
