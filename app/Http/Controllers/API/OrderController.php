@@ -228,7 +228,6 @@ class OrderController extends Controller
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
             'note' => $data['note'] ?? null,
-            'used_accum' => $data['used_accum'] ?? 0,
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
@@ -456,8 +455,6 @@ class OrderController extends Controller
             $order->status_payment = Order::STATUS_PAYMENT_COMPLETED;
             $order->save();
 
-            $user = User::find($order->id_user);
-            $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
 
             $information = [
                 'order' => $order,
@@ -480,6 +477,9 @@ class OrderController extends Controller
         } else {
             $order->status_payment = Order::STATUS_PAYMENT_CANCELED;
             $order->save();
+            $user = User::find($order->id_user);
+            $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
+            
             \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thất bại', false, $order);
         }
