@@ -39,6 +39,9 @@
         }
         .order-details p {
             margin: 5px 0;
+            color: red;
+            text-align: center;
+
         }
    
         .footer {
@@ -56,6 +59,7 @@
 
         <div class="order-details">
             <h2><a href="{{config('app.url')}}:5173/reset-password/{{$token}}">Nhấn vào đây để tạo lại mật khẩu mới của bạn.</a></h2>
+            <p>Vui lòng đổi mật khẩu ngay, Sau 2 phút đường dẫn sẽ bị vô hiệu hóa!</p>
     
         </div>
 

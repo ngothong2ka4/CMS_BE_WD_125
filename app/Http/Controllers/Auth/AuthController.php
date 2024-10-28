@@ -162,7 +162,7 @@ class AuthController extends Controller
                 $message->subject('Đặt lại mật khẩu của bạn');
             }
     );
-        return $this->jsonResponse('Vui lòng kiểm tra email của bạn!');
+        return $this->jsonResponse('Vui lòng kiểm tra email của bạn!', true);
 
         }
         return $this->jsonResponse('Email không hợp lệ!');
@@ -199,7 +199,7 @@ class AuthController extends Controller
         // dd($data);
         if($check){
         UserResetToken::where('token', $token)->delete();
-        return $this->jsonResponse('Đổi mật khẩu thành công!');
+        return $this->jsonResponse('Đổi mật khẩu thành công!', true);
 
     }
     return $this->jsonResponse('Có lỗi xảy ra!');
