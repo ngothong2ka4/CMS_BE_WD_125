@@ -18,7 +18,8 @@ class OrderDetail extends Model
         'selling_price',
         'product_name',
         'product_image',
-        'quantity'
+        'quantity',
+        'is_comment'
     ];
 
     public function order()

@@ -551,7 +551,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Bạn chưa đăng nhập']);
         }
         $orders = Order::with(['orderDetail' => function ($query) {
-            $query->select('id', 'id_order', 'id_product', 'id_variant', 'import_price', 'list_price', 'selling_price', 'product_name', 'product_image', 'quantity')
+            $query->select('id', 'id_order', 'id_product', 'id_variant', 'import_price', 'list_price', 'selling_price', 'product_name', 'product_image', 'quantity', 'is_comment')
                 ->with(['productVariant' => function ($query) {
                     $query->select('id', 'id_attribute_color', 'id_attribute_size')
                         ->with(['color' => function ($query) {

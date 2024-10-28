@@ -307,7 +307,7 @@ class ProductController extends Controller
 
     // method: POST
     // API: /api/addCommentProduct
-    // parram: (id_order, id_product, content,rating)
+    // parram: (id_order, id_product, id_variant, content,rating)
     // response:200
     //              {
     //                  "status": true,
@@ -335,18 +335,19 @@ class ProductController extends Controller
                 return $this->jsonResponse('Bạn phải đăng nhập mới có thể Đánh giá');
             }
 
-            $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user, $id_order) {
+            $orderDetail = OrderDetail::whereHas('order', function ($query) use ($user, $id_order) {
                 $query->where('id', $id_order)
                     ->where('id_user', $user->id)
                     ->where('status', 6)
                     ->where('status_payment', 2);
             })->where('id_product', $id_product)
                 ->where('id_variant', $id_variant)
-                ->exists();
-
-            if (!$hasPurchased) {
+                ->first();
+            
+            if (!$orderDetail) {
                 return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi đánh giá.');
             }
+            
             DB::beginTransaction();
             $comment = Comment::create([
                 'id_product' => $request->id_product,
@@ -356,6 +357,8 @@ class ProductController extends Controller
                 'rating' => $request->rating ?? null,
                 'status' => 1,
             ]);
+
+            $orderDetail->update(['is_comment' => 2]);
             DB::commit();
 
             return $this->jsonResponse('Thêm đánh giá thành công', true, $comment);
