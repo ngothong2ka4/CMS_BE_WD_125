@@ -29,6 +29,7 @@ class OrderRequest extends FormRequest
             'phone_number' => 'required|regex:/^0[1-9]{1}[0-9]{8}$/',
             'recipient_address' => 'required|min:2|max:255',
             'note' => 'nullable|max:255',
+            'used_accum' => 'nullable|integer|min:0'
         ];
     }
 

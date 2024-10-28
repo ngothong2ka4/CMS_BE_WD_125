@@ -142,7 +142,7 @@ class OrderController extends Controller
         }
 
         $data = $request->all();
-        
+  
         $voucher = !empty($data['voucherId']) ? Voucher::find($data['voucherId']) : null;
 
         try {
@@ -151,6 +151,7 @@ class OrderController extends Controller
             if (!empty($data['cartIds'])) {
 
                 $res = $this->processCartPayment($data, $user->id);
+    
                 if ($res['payment_role'] == 2) {
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
@@ -226,6 +227,7 @@ class OrderController extends Controller
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
             'note' => $data['note'] ?? null,
+            'used_accum' => $data['used_accum'],
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
@@ -306,6 +308,7 @@ class OrderController extends Controller
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
             'note' => $data['note'],
+            'used_accum' => $data['used_accum'],
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
