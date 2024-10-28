@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
+use App\Models\User;
 use App\Models\Variant;
 use App\Models\Voucher;
 use Auth;
@@ -142,7 +143,7 @@ class OrderController extends Controller
         }
 
         $data = $request->all();
-        
+  
         $voucher = !empty($data['voucherId']) ? Voucher::find($data['voucherId']) : null;
 
         try {
@@ -151,6 +152,7 @@ class OrderController extends Controller
             if (!empty($data['cartIds'])) {
 
                 $res = $this->processCartPayment($data, $user->id);
+    
                 if ($res['payment_role'] == 2) {
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
@@ -226,12 +228,16 @@ class OrderController extends Controller
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
             'note' => $data['note'] ?? null,
+            'used_accum' => $data['used_accum'] ?? 0,
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
             'status' => Order::STATUS_PENDING,
         ]);
 
+        $user = User::find($userId);
+        $user->update(['accum_point' => $user->accum_point - $order->used_accum]);
+        
         $insertData = $productPayment->map(function ($cart) use ($order) {
             return [
                 'id_order' => $order->id,
@@ -306,11 +312,15 @@ class OrderController extends Controller
             'phone_number' => $data['phone_number'],
             'recipient_address' => $data['recipient_address'],
             'note' => $data['note'],
+            'used_accum' => $data['used_accum'] ?? 0,
             'total_payment' => $data['total_payment'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
             'status' => Order::STATUS_PENDING,
         ]);
+
+        $user = User::find($userId);
+        $user->update(['accum_point' => $user->accum_point - $order->used_accum]);
 
         $insertData = [
             'id_order' => $order->id,
@@ -445,6 +455,9 @@ class OrderController extends Controller
         if ($request->input('vnp_ResponseCode') == '00') {
             $order->status_payment = Order::STATUS_PAYMENT_COMPLETED;
             $order->save();
+
+            $user = User::find($order->id_user);
+            $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
 
             $information = [
                 'order' => $order,

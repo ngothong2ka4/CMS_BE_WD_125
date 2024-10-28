@@ -55,7 +55,7 @@
         </div>
 
         <div class="order-details">
-            <h2><a href="{{config('app.url')}}/reset-password/{{$token}}">Nhấn vào đây để tạo lại mật khẩu mới của bạn.</a></h2>
+            <h2><a href="{{config('app.url')}}:5173/reset-password/{{$token}}">Nhấn vào đây để tạo lại mật khẩu mới của bạn.</a></h2>
     
         </div>
 
