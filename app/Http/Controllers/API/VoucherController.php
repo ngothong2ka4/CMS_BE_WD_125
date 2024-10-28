@@ -36,15 +36,17 @@ class VoucherController extends Controller
         }
 
         if (!$voucher->isValid()) {
-            return response()->json(['error' => 'Voucher không hợp lệ hoặc không đủ điều kiện'], 400);
+            return $this->jsonResponse('Voucher không hợp lệ hoặc không đủ điều kiện');
         }
 
         $discount = $voucher->calculateDiscount($request->order_amount);
 
+        $finalAmount = max(0, $request->order_amount - $discount);
+
         $data = [
             'voucherId' => $voucher->id,
             'discount' => $discount,
-            'final_amount' => $request->order_amount - $discount,
+            'final_amount' => $finalAmount,
         ];
 
         return $this->jsonResponse('Voucher áp dụng thành công', true, $data);

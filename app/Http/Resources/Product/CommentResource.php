@@ -16,6 +16,8 @@ class CommentResource extends JsonResource
     {
         $data = [
             'user_name' => $this->user->name,
+            'color' => $this->variant->color->name,
+            'size' => $this->variant->size->name,
             'content' => $this->content,
             'rating' => $this->rating,
             'created_at' => $this->created_at,

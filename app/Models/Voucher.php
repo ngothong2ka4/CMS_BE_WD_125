@@ -41,11 +41,10 @@ class Voucher extends Model
         $userUsageCount = DB::table('voucher_user')->where('voucher_id', $this->id)
                                                   ->where('user_id', Auth::id())
                                                   ->first();
-        
-        if ($userUsageCount->usage_count >= $this->usage_per_user) {
+                
+        if ($userUsageCount && $userUsageCount->usage_count >= $this->usage_per_user) {
             return false;
         }
-
         return true;
     }
 

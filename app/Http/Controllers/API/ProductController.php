@@ -249,7 +249,9 @@ class ProductController extends Controller
             'comments' => function ($query) {
                 $query->where('status', 1);
             },
-            'comments.user'
+            'comments.user',
+            'comments.variant.color',
+            'comments.variant.size',
         ])->find($id);
 
         if (!$product) {
