@@ -460,7 +460,6 @@ class OrderController extends Controller
             $order->status_payment = Order::STATUS_PAYMENT_COMPLETED;
             $order->save();
 
-
             $information = [
                 'order' => $order,
                 'orderDetails' => $order->orderDetail->toArray(),
@@ -484,6 +483,16 @@ class OrderController extends Controller
             $order->save();
             $user = User::find($order->id_user);
             $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
+            $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
+                return [$detail->id_variant => $detail->quantity];
+            })->toArray();
+
+            if (!empty($variantDatas)) {
+                foreach ($variantDatas as $key => $value) {
+                    Variant::where('id', $key)
+                        ->increment('quantity', $value);
+                }
+            }
             
             \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thất bại', false, $order);
