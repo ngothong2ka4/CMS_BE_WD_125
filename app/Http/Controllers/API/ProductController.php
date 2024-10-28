@@ -25,17 +25,19 @@ class ProductController extends Controller
         $id_category = $request->input('id_category');
         $sortBy = $request->input('sort_by', 'price');
         $sortOrder = $request->input('sort', 'asc');
-        $products = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                // ->limit(1)
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
+        $products = Product::with([
+            'variants' => function ($query) {
+                $query->select('id_product', 'selling_price', 'list_price')
+                    // ->limit(1)
+                    ->whereIn('id_product', function ($subQuery) {
+                        $subQuery->select('id_product')
+                            ->from('variants')
+                            ->whereNull('deleted_at')
+                            ->groupBy('id_product')
+                            ->havingRaw('selling_price = MIN(selling_price)');
+                    });
+            }
+        ])
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%");  // Tìm kiếm theo tên sản phẩm
             })
@@ -104,17 +106,19 @@ class ProductController extends Controller
     }
     public function getNewProducts() //5 sản phẩm mới nhất
     {
-        $products = Product::with(['variants' => function ($query) {
-            $query->select('id_product', 'selling_price', 'list_price')
-                // ->limit(1)
-                ->whereIn('id_product', function ($subQuery) {
-                    $subQuery->select('id_product')
-                        ->from('variants')
-                        ->whereNull('deleted_at')
-                        ->groupBy('id_product')
-                        ->havingRaw('selling_price = MIN(selling_price)');
-                });
-        }])
+        $products = Product::with([
+            'variants' => function ($query) {
+                $query->select('id_product', 'selling_price', 'list_price')
+                    // ->limit(1)
+                    ->whereIn('id_product', function ($subQuery) {
+                        $subQuery->select('id_product')
+                            ->from('variants')
+                            ->whereNull('deleted_at')
+                            ->groupBy('id_product')
+                            ->havingRaw('selling_price = MIN(selling_price)');
+                    });
+            }
+        ])
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get(['id', 'name', 'thumbnail']);
@@ -251,6 +255,9 @@ class ProductController extends Controller
         if (!$product) {
             return $this->jsonResponse('Không tìm thấy sản phẩm');
         }
+        // Tăng số lượt xem lên 1
+        $product->last_viewed_at = now();
+        $product->save();
 
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
@@ -263,9 +270,9 @@ class ProductController extends Controller
             return ['link_image' => $link];
         });
 
-        $averageRating = $product->comments->avg('rating'); 
+        $averageRating = $product->comments->avg('rating');
         $product->average_rating = $averageRating ? number_format($averageRating, 2) : null;
-        
+
         return $this->jsonResponse('Success', true, new ProductDetailResource($product));
     }
 
@@ -325,12 +332,12 @@ class ProductController extends Controller
             if (!$user) {
                 return $this->jsonResponse('Bạn phải đăng nhập mới có thể Đánh giá');
             }
-            
-            $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user,$id_order) {
+
+            $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user, $id_order) {
                 $query->where('id', $id_order)
-                        ->where('id_user', $user->id)
-                        ->where('status', 6)
-                        ->where('status_payment', 2);
+                    ->where('id_user', $user->id)
+                    ->where('status', 6)
+                    ->where('status_payment', 2);
             })->where('id_product', $id_product)
                 ->where('id_variant', $id_variant)
                 ->exists();
@@ -339,14 +346,14 @@ class ProductController extends Controller
                 return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi đánh giá.');
             }
             DB::beginTransaction();
-                $comment = Comment::create([
-                    'id_product' => $request->id_product,
-                    'id_variant' => $request->id_variant,
-                    'id_user' => $user->id,
-                    'content' => $request->content,
-                    'rating' => $request->rating ?? null, 
-                    'status' => 1, 
-                ]);
+            $comment = Comment::create([
+                'id_product' => $request->id_product,
+                'id_variant' => $request->id_variant,
+                'id_user' => $user->id,
+                'content' => $request->content,
+                'rating' => $request->rating ?? null,
+                'status' => 1,
+            ]);
             DB::commit();
 
             return $this->jsonResponse('Thêm đánh giá thành công', true, $comment);
@@ -381,7 +388,7 @@ class ProductController extends Controller
                 'variant.product',
                 'variant.color',
                 'variant.size',
-                ])
+            ])
                 ->where('id_user', $user->id)
                 ->get();
 
@@ -390,5 +397,29 @@ class ProductController extends Controller
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Có lỗi xảy ra');
         }
+    }
+    public function getRecentViewedProducts()
+    {
+        $products = Product::with([
+            'variants' => function ($query) {
+                $query->select('id_product', 'selling_price', 'list_price')
+                    ->limit(1)
+                    ->whereIn(
+                        'id_product',
+                        function ($subQuery) {
+                            $subQuery->select('id_product')
+                                ->from('variants')
+                                ->whereNull('deleted_at')
+                                ->groupBy('id_product')
+                                ->havingRaw('selling_price = MIN(selling_price)');
+                        }
+                    );
+            }
+        ])
+            ->orderBy('last_viewed_at', 'desc')
+            ->take(10)
+            ->get(['id', 'name', 'thumbnail']);
+
+        return response()->json($products, 200);
     }
 }
