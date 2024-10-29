@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
@@ -54,16 +55,20 @@ class VoucherController extends Controller
 
     public function listVoucher()
     {
+        $now = Carbon::now();
+        Voucher::where('end_date', '<', $now)
+            ->where('status', 1)
+            ->update(['status' => 2]);
         $user = Auth::user();
 
         $vouchers = Voucher::leftJoin('voucher_user', 'vouchers.id', '=', 'voucher_user.voucher_id')
             ->where('vouchers.status', '=', 1)
             ->where(function ($query) use ($user) {
                 $query->where('voucher_user.user_id', $user->id)
-                    ->where('voucher_user.usage_count', '<', 'vouchers.usage_per_user')
+                    ->whereRaw('voucher_user.usage_count < vouchers.usage_per_user')
                     ->orWhereNull('voucher_user.user_id');
             })
-            ->select('vouchers.code', 'vouchers.description', 'vouchers.start_date', 'vouchers.end_date', 'voucher_user.usage_count')
+            ->select('vouchers.code', 'vouchers.description', 'vouchers.start_date', 'vouchers.end_date', 'voucher_user.usage_count', 'vouchers.usage_per_user')
             ->get();
 
         return response()->json([
