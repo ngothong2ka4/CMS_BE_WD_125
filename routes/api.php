@@ -46,10 +46,10 @@ Route::get('/products/new', [ProductController::class, 'getNewProducts']);
 
 Route::get('/products', [ProductController::class, 'index']);
 
-Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);
+Route::get('/detailProduct/{id}/{userID}',[ProductController::class, 'detailProduct']);
 Route::get('/relatedProducts/{id}',[ProductController::class, 'relatedProducts']);
 
-Route::get('/view',[ProductController::class,'getRecentViewedProducts']);
+Route::get('/view/{userID}',[ProductController::class,'getRecentViewedProducts']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);

@@ -33,7 +33,7 @@ class AuthController extends Controller
     {
         try {
             $credentials = $request->only('email', 'password');
-
+            
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
@@ -162,7 +162,7 @@ class AuthController extends Controller
                 $message->subject('Đặt lại mật khẩu của bạn');
             }
     );
-        return $this->jsonResponse('Vui lòng kiểm tra email của bạn!');
+        return $this->jsonResponse('Vui lòng kiểm tra email của bạn!', true);
 
         }
         return $this->jsonResponse('Email không hợp lệ!');
@@ -185,7 +185,11 @@ class AuthController extends Controller
             'password.max' => 'Mật khẩu không được quá 32 ký tự.',
             'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
         ]);
-        $dataToken = UserResetToken::where('token', $token)->firstOrFail();
+        $dataToken = UserResetToken::where('token', $token)->first();
+
+        if(!$dataToken){
+            return $this->jsonResponse('Đã quá thời hạn đổi mật khẩu!');
+        }
         $user = User::where('email', $dataToken->email)->firstOrFail();
 
         $data = [
@@ -195,7 +199,7 @@ class AuthController extends Controller
         // dd($data);
         if($check){
         UserResetToken::where('token', $token)->delete();
-        return $this->jsonResponse('Đổi mật khẩu thành công!');
+        return $this->jsonResponse('Đổi mật khẩu thành công!', true);
 
     }
     return $this->jsonResponse('Có lỗi xảy ra!');

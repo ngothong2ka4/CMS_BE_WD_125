@@ -19,7 +19,8 @@ class Order extends Model
         'payment_role',
         'status_payment',
         'status',
-        'total_payment'
+        'total_payment',
+        'used_accum'
     ];
 
     const PAYMENT_ROLE_COD = 1;

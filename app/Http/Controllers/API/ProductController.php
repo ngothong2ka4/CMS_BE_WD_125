@@ -10,6 +10,7 @@ use App\Http\Resources\Product\RelatedProductsResource;
 use App\Models\Comment;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\ProductView;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -238,7 +239,7 @@ class ProductController extends Controller
     //                "data": productDetail
     //            } 
 
-    public function detailProduct($id)
+    public function detailProduct($id,$userID)
     {
         $product = Product::with([
             'variants.color',
@@ -249,15 +250,24 @@ class ProductController extends Controller
             'comments' => function ($query) {
                 $query->where('status', 1);
             },
-            'comments.user'
+            'comments.user',
+            'comments.variant.color',
+            'comments.variant.size',
         ])->find($id);
 
         if (!$product) {
             return $this->jsonResponse('Không tìm thấy sản phẩm');
         }
+        if(!$userID){
+            return response()->json(['error' => 'Người dùng không tồn tại'], 400);
+        }
+        $product->increment('views');
         // Tăng số lượt xem lên 1
-        $product->last_viewed_at = now();
-        $product->save();
+        ProductView::create([
+            'id_product' => $id,
+            'viewed_at' => now(),
+            'id_user' => $userID,
+        ]);
 
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
@@ -273,9 +283,9 @@ class ProductController extends Controller
         $averageRating = $product->comments->avg('rating');
         $product->average_rating = $averageRating ? number_format($averageRating, 2) : null;
 
-        return $this->jsonResponse('Success', true, new ProductDetailResource($product));
-    }
-
+        return $this->jsonResponse('Success', true, new ProductDetailResource($product));  
+      }
+   
     // method: GET
     // API: /api/relatedProducts/{id category}
     // parram: (id category)
@@ -305,7 +315,7 @@ class ProductController extends Controller
 
     // method: POST
     // API: /api/addCommentProduct
-    // parram: (id_order, id_product, content,rating)
+    // parram: (id_order, id_product, id_variant, content,rating)
     // response:200
     //              {
     //                  "status": true,
@@ -333,18 +343,19 @@ class ProductController extends Controller
                 return $this->jsonResponse('Bạn phải đăng nhập mới có thể Đánh giá');
             }
 
-            $hasPurchased = OrderDetail::whereHas('order', function ($query) use ($user, $id_order) {
+            $orderDetail = OrderDetail::whereHas('order', function ($query) use ($user, $id_order) {
                 $query->where('id', $id_order)
                     ->where('id_user', $user->id)
                     ->where('status', 6)
                     ->where('status_payment', 2);
             })->where('id_product', $id_product)
                 ->where('id_variant', $id_variant)
-                ->exists();
+                ->first();
 
-            if (!$hasPurchased) {
+            if (!$orderDetail) {
                 return $this->jsonResponse('Bạn cần phải mua sản phẩm này trước khi đánh giá.');
             }
+
             DB::beginTransaction();
             $comment = Comment::create([
                 'id_product' => $request->id_product,
@@ -354,6 +365,8 @@ class ProductController extends Controller
                 'rating' => $request->rating ?? null,
                 'status' => 1,
             ]);
+
+            $orderDetail->update(['is_comment' => 2]);
             DB::commit();
 
             return $this->jsonResponse('Thêm đánh giá thành công', true, $comment);
@@ -398,27 +411,31 @@ class ProductController extends Controller
             return $this->jsonResponse('Có lỗi xảy ra');
         }
     }
-    public function getRecentViewedProducts()
+    public function getRecentViewedProducts($userID)
     {
-        $products = Product::with([
-            'variants' => function ($query) {
-                $query->select('id_product', 'selling_price', 'list_price')
-                    ->limit(1)
-                    ->whereIn(
-                        'id_product',
-                        function ($subQuery) {
-                            $subQuery->select('id_product')
-                                ->from('variants')
-                                ->whereNull('deleted_at')
-                                ->groupBy('id_product')
-                                ->havingRaw('selling_price = MIN(selling_price)');
-                        }
-                    );
-            }
-        ])
-            ->orderBy('last_viewed_at', 'desc')
+        $products = Product::whereHas('views', function ($query) use ($userID) {
+            $query->where('id_user', $userID);
+        })->with([
+                    'variants' => function ($query) {
+                        $query->select('id_product', 'selling_price', 'list_price')
+                            // ->limit(1)
+                            ->whereIn(
+                                'id_product',
+                                function ($subQuery) {
+                                    $subQuery->select('id_product')
+                                        ->from('variants')
+                                        ->whereNull('deleted_at')
+                                        ->groupBy('id_product')
+                                        ->havingRaw('selling_price = MIN(selling_price)');
+                                }
+                            );
+                    }
+                ])
+                ->join('product_views','product_views.id_product','=','products.id')
+                ->where('product_views.id_user',$userID)
+            ->orderBy('product_views.viewed_at', 'desc')
             ->take(10)
-            ->get(['id', 'name', 'thumbnail']);
+            ->get(['products.id', 'products.name', 'products.thumbnail']);
 
         return response()->json($products, 200);
     }

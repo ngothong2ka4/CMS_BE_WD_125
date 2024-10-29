@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderHistory;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,6 +68,8 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $user = Auth::user();
+        $user_order = User::findOrFail($order->id_user);
+
         $orderDetail = $order->orderDetail;
         try {
 
@@ -80,6 +83,9 @@ class OrderController extends Controller
                     toastr()->error('Phải có ghi chú hủy đơn');
                     return back();
                 };
+                if ($order->used_accum > 0) {
+                    $user_order->update(['accum_point' => $user_order->accum_point + $order->used_accum]);
+                }
                 if ($orderDetail != [] && $orderDetail) {
                     foreach ($orderDetail as $variant) {
                         Variant::where('id', $variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
@@ -88,6 +94,9 @@ class OrderController extends Controller
             }
 
             if ($request->to_status == 5) {
+                if ($order->used_accum > 0) {
+                    $user_order->update(['accum_point' => $user_order->accum_point + $order->used_accum]);
+                }
                 if ($orderDetail != [] && $orderDetail) {
                     foreach ($orderDetail as $variant) {
                         Variant::where('id', $variant->id_variant)->update(['quantity' => $variant->orderVariant->quantity + $variant->quantity]);
@@ -98,6 +107,12 @@ class OrderController extends Controller
             $data = ['status' => $request->to_status];
             if ($request->to_status == 4) {
                 $data['status_payment']  = 2;
+
+                $user_order->update([
+                    'accum_point' => $user_order->accum_point + ceil($order->total_payment/ 20000) ,
+                    'accumulated_points' => $user_order->accumulated_points + ceil($order->total_payment/ 20000) 
+                ]);
+              
 
                 if ($orderDetail != [] && $orderDetail) {
                     foreach ($orderDetail as $variant) {
@@ -114,6 +129,7 @@ class OrderController extends Controller
             ];
             if ($order->status != $request->to_status) {
                 $order->update($data);
+         
                 OrderHistory::create($data_his);
                 $this->sendEmail($order);
                 toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
