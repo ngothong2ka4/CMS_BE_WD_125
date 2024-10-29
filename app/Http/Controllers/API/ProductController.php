@@ -265,7 +265,7 @@ class ProductController extends Controller
             ProductView::create([
                 'id_product' => $id,
                 'viewed_at' => now(),
-                'id_user' => Auth::id()
+                'id_user' => Auth::guard('sanctum')->id(),
             ]);
         }
         $imageLinks = $product->images->pluck('link_image')->toArray();
