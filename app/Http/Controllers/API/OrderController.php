@@ -626,6 +626,13 @@ class OrderController extends Controller
                     if (empty($note)) {
                         return response()->json(['message' => 'Lý do huỷ không được để trống'], 400);
                     }
+                    foreach ($order->orderDetail as $orderDetail) {
+                        $variant = Variant::find($orderDetail->id_variant);
+                        if ($variant) {
+                            $variant->quantity += $orderDetail->quantity; 
+                            $variant->save();
+                        }
+                    }
                     $order->status = 7;
                     OrderHistory::create([
                         'id_order' => $order->id,

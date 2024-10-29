@@ -10,28 +10,25 @@
         google.charts.setOnLoadCallback(drawVisualization);
 
         function drawVisualization() {
-            // Some raw data (not necessarily accurate)
             var data = google.visualization.arrayToDataTable([
-                ['Ngày', 'Doanh thu', 'Lợi nhuận', 'Vốn đầu tư'],
+                ['Ngày', 'Doanh thu', 'Lợi nhuận'],
 
                 @foreach ($completeStatistic as $statistic)
-                    ['{{ $statistic['time'] }}', {{ $statistic['total_revenue'] }}, {{ $statistic['profit'] }},
-                        {{ $statistic['total_cost'] }}
-                    ],
+                    ['{{ $statistic['time'] }}', {{ $statistic['total_revenue'] }}, {{ $statistic['profit'] }}],
                 @endforeach
             ]);
 
             var options = {
                 title: '{{ $title }}',
-                colors: ['#0ab39c', '#405189', '#3577f1'],
+                colors: ['#2d65cd', '#0ab39c'],
                 titleTextStyle: {
                     fontSize: 18, // Kích thước chữ tiêu đề
                     bold: true
                 },
                 chartArea: {
-                    top: 80, // Điều chỉnh margin trên của biểu đồ (tạo khoảng trống cho tiêu đề)
+                    top: 60, // Điều chỉnh margin trên của biểu đồ (tạo khoảng trống cho tiêu đề)
                     height: '70%', // Giảm chiều cao của vùng biểu đồ để tạo thêm khoảng cách phía dưới
-                    width: '70%'
+                    width: '75%'
                 },
                 vAxis: {
                     title: 'Việt Nam Đồng'
@@ -40,11 +37,11 @@
                     title: '{{ $cotY }}'
                 },
                 seriesType: 'bars',
-                series: {
-                    1: {
-                        type: 'line'
-                    }
-                }
+                // series: {
+                //     1: {
+                //         type: 'line'
+                //     }
+                // }
             };
 
             var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
@@ -62,8 +59,8 @@
                 </div>
             </div>
         </div><!--end col-->
-        <div class="d-flex" style="overflow-x: auto;">
-            <div class="col-2 me-1">
+        <div class="row">
+            <div class="col-2">
                 <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
@@ -88,8 +85,8 @@
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col -->
-    
-            <div class="col-2 me-1">
+
+            <div class="col-2">
                 <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
@@ -114,8 +111,8 @@
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col -->
-    
-            <div class="col-2 me-1">
+
+            <div class="col-2">
                 <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
@@ -140,18 +137,18 @@
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col -->
-    
-            <div class="col-2 me-1">
+
+            <div class="col-2">
                 <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 overflow-hidden">
-                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Giao thành công</p>
+                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Thành công</p>
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThanhCong }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $thanhCong }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
@@ -166,8 +163,8 @@
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col -->
-    
-            <div class="col-2 me-1">
+
+            <div class="col-2">
                 <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
@@ -192,8 +189,8 @@
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col -->
-    
-            <div class="col-2 me-1">
+
+            <div class="col-2">
                 <!-- card -->
                 <div class="card card-animate">
                     <div class="card-body">
@@ -218,32 +215,6 @@
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col -->
-
-            <div class="col-2 me-1">
-                <!-- card -->
-                <div class="card card-animate">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1 overflow-hidden">
-                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Hoàn thành</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
-                        </div>
-                        <div class="d-flex align-items-end justify-content-between mt-2">
-                            <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
-                            </div>
-                            <div>
-                                <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
-                                    <i class="bx bx-detail text-success"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div><!-- end col -->
         </div>
     </div>
 
@@ -256,10 +227,11 @@
                 </div>
                 <div class="card-body">
                     <div class="row gx-0">
+                        <div></div>
                         <div class="col-6">
                             <form action="{{ route('statistic.index') }}" method="get">
                                 @csrf
-                                <div class="row gx-2">
+                                {{-- <div class="row gx-2">
                                     <div class="col">
                                         <label for="year" class="form-label">Năm</label>
                                         <input type="number" class="form-control" name="year" placeholder="Nhập năm"
@@ -283,10 +255,32 @@
                                         <button type="submit" style="height: 50%; margin-top: 29px"
                                             class="btn btn-sm btn-success">Gửi</button>
                                     </div>
+                                </div> --}}
+
+                                <div class="row gx-2">
+                                    <div class="col">
+                                        <label class="form-label">Loại thời gian</label>
+                                        <select class="form-select" name="timeType" onchange="updateInputType(this)">
+                                            <option selected value="">-Lựa chọn-</option>
+                                            <option value="year">Năm</option>
+                                            <option value="month">Tháng</option>
+                                            <option value="day">Ngày</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="year" class="form-label">Thời điểm</label>
+                                        <input type="month" id="timeInput" class="form-control" name="time"
+                                            required>
+                                    </div>
+                                    <div class="col d-flex align-item-center">
+                                        <button type="submit" style="height: 50%; margin-top: 29px"
+                                            class="btn btn-sm btn-secondary">Gửi</button>
+                                    </div>
+
                                 </div>
                             </form>
                         </div>
-                        <div class="col-6 ms-6">
+                        <div class="col-6">
                             <form action="{{ route('statistic.index') }}" method="get">
                                 @csrf
                                 <div class="row gx-2">
@@ -309,13 +303,92 @@
                         </div>
                     </div>
                     {{-- <div id="chart_div" style="width: 900px; height: 500px;"></div> --}}
-                    @if ($message)
+                    {{-- @if ($message)
                         <div class="alert alert-warning">{{ $message }}</div>
-                    @endif
+                    @endif --}}
 
                     @if (!$Statistic->isEmpty())
+                        <div class="row mt-3">
+                            <div class="col-3">
+                                <!-- card -->
+                                <div class="card card-animate" style="background-color: rgb(239, 249, 248)">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-secondary text-truncate mb-0">Vốn
+                                                    đầu tư</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">
+                                                {{ number_format($totalStatistic->total_cost, 0, ',', '.') }} VNĐ</h6>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+
+                            <div class="col-3">
+                                <!-- card -->
+                                <div class="card card-animate" style="background-color: rgb(239, 249, 248)">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p style="display: inline"
+                                                    class="text-uppercase fw-medium text-success text-truncate mb-0"> Doanh thu
+                                                </p>
+                                                @if ($percentageChange !== null)
+                                                <p style="display: inline"
+                                                class="ms-5 text-uppercase fw-medium text-secondary text-truncate mb-0">
+                                                {{ number_format($percentageChange, 2) . '%' . PHP_EOL }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">
+                                                {{ number_format($totalStatistic->total_revenue, 0, ',', '.') }} VNĐ</h6>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+
+                            <div class="col-3">
+                                <!-- card -->
+                                <div class="card card-animate" style="background-color: rgb(239, 249, 248)">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Lợi
+                                                    nhuận</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">
+                                                {{ number_format($totalStatistic->profit, 0, ',', '.') }} VNĐ</h6>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+
+                            <div class="col-3">
+                                <!-- card -->
+                                <div class="card card-animate" style="background-color: rgb(239, 249, 248)">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-success text-truncate mb-0"> Tổng
+                                                    số đơn</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">
+                                                {{ $totalStatistic->total_orders }} ĐƠN</h6>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                        </div>
                         <center>
-                            <div id="chart_div" style="width: 100%; height: 600px;"></div>
+                            <div id="chart_div" style="width: 970px; height: 450px;"></div>
                         </center>
                     @else
                         <div class="alert alert-warning" role="alert">
@@ -433,7 +506,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
-                                    <h2 class="h5">TOP 5 SẢN PHẨM CÓ LỢI NHUẬN CAO NHẤT</h2>
+                                <h2 class="h5">TOP 5 SẢN PHẨM CÓ LỢI NHUẬN CAO NHẤT</h2>
                             </div><!-- end card header -->
 
                             <div class="card-body">
@@ -547,5 +620,26 @@
                 endInput.value = startDate.toISOString().split('T')[0];
             }
         });
+    </script>
+
+    <script>
+        function updateInputType(select) {
+            const timeInput = document.getElementById('timeInput');
+
+            if (select.value === 'year') {
+                timeInput.type = 'number';
+                timeInput.min = 2000; // Giới hạn năm nhỏ nhất
+                timeInput.max = new Date().getFullYear(); // Giới hạn năm lớn nhất là năm hiện tại
+                timeInput.placeholder = "Nhập năm";
+            } else if (select.value === 'month') {
+                timeInput.type = 'month';
+                timeInput.removeAttribute('min');
+                timeInput.removeAttribute('max');
+            } else {
+                timeInput.type = 'date';
+                timeInput.removeAttribute('min');
+                timeInput.removeAttribute('max');
+            }
+        }
     </script>
 @endpush
