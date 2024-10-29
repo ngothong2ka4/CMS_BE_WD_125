@@ -35,6 +35,10 @@ class Product extends Model
     public function comments(){
         return $this->hasMany(Comment::class,'id_product','id');
     }
+    public function views()
+    {
+        return $this->hasMany(ProductView::class,'id_product','id');
+    }
 
     public function getAverageRatingAttribute()
     {
