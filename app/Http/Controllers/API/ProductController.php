@@ -239,8 +239,10 @@ class ProductController extends Controller
     //                "data": productDetail
     //            } 
 
-    public function detailProduct($id,$userID)
+    public function detailProduct($id)
     {
+        // $userID= Auth::check();
+        // $userID= auth()->id();
         $product = Product::with([
             'variants.color',
             'variants.size',
@@ -258,17 +260,14 @@ class ProductController extends Controller
         if (!$product) {
             return $this->jsonResponse('Không tìm thấy sản phẩm');
         }
-        if(!$userID){
-            return response()->json(['error' => 'Người dùng không tồn tại'], 400);
+        //  $product->increment('views');
+        if (Auth::guard('sanctum')->check()) {
+            ProductView::create([
+                'id_product' => $id,
+                'viewed_at' => now(),
+                'id_user' => Auth::id()
+            ]);
         }
-        $product->increment('views');
-        // Tăng số lượt xem lên 1
-        ProductView::create([
-            'id_product' => $id,
-            'viewed_at' => now(),
-            'id_user' => $userID,
-        ]);
-
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
             if (!empty($variant->image_color)) {
@@ -283,9 +282,9 @@ class ProductController extends Controller
         $averageRating = $product->comments->avg('rating');
         $product->average_rating = $averageRating ? number_format($averageRating, 2) : null;
 
-        return $this->jsonResponse('Success', true, new ProductDetailResource($product));  
-      }
-   
+        return $this->jsonResponse('Success', true, new ProductDetailResource($product));
+    }
+
     // method: GET
     // API: /api/relatedProducts/{id category}
     // parram: (id category)
@@ -431,8 +430,8 @@ class ProductController extends Controller
                             );
                     }
                 ])
-                ->join('product_views','product_views.id_product','=','products.id')
-                ->where('product_views.id_user',$userID)
+            ->join('product_views', 'product_views.id_product', '=', 'products.id')
+            ->where('product_views.id_user', $userID)
             ->orderBy('product_views.viewed_at', 'desc')
             ->take(10)
             ->get(['products.id', 'products.name', 'products.thumbnail']);
