@@ -261,6 +261,7 @@ class ProductController extends Controller
         if(!$userID){
             return response()->json(['error' => 'Người dùng không tồn tại'], 400);
         }
+        $product->increment('views');
         // Tăng số lượt xem lên 1
         ProductView::create([
             'id_product' => $id,
