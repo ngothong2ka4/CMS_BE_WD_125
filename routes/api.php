@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Common\Common;
+use App\Http\Controllers\API\FavoriteProductController;
 use App\Http\Controllers\AuthController as ControllersAuthController;
 
 Common::autoUpdateStatus();
@@ -70,4 +71,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
     Route::get('/vouchers/list', [VoucherController::class, 'listVoucher']);
+
+    Route::resource('favoriteProduct', FavoriteProductController::class);
 });
