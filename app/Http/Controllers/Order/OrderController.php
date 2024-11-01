@@ -20,8 +20,20 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('status') && $request->has('status2')) {
+            $status = $request->input('status');
+            $orders = Order::where('status', $status)
+                ->get();
+            return view('order.index', compact('orders'));
+        }
+        if ($request->has('status') && $request->has('status2')) {
+            $status = $request->input('status');
+            $status2 = $request->input('status2');
+            $orders = Order::whereIn('status', [$status, $status2])->get();
+            return view('order.index', compact('orders'));
+        }
         $orders = Order::all();
         return view('order.index', compact('orders'));
     }
@@ -109,10 +121,10 @@ class OrderController extends Controller
                 $data['status_payment']  = 2;
 
                 $user_order->update([
-                    'accum_point' => $user_order->accum_point + ceil($order->total_payment/ 20000) ,
-                    'accumulated_points' => $user_order->accumulated_points + ceil($order->total_payment/ 20000) 
+                    'accum_point' => $user_order->accum_point + ceil($order->total_payment / 20000),
+                    'accumulated_points' => $user_order->accumulated_points + ceil($order->total_payment / 20000)
                 ]);
-              
+
 
                 if ($orderDetail != [] && $orderDetail) {
                     foreach ($orderDetail as $variant) {
@@ -129,7 +141,7 @@ class OrderController extends Controller
             ];
             if ($order->status != $request->to_status) {
                 $order->update($data);
-         
+
                 OrderHistory::create($data_his);
                 $this->sendEmail($order);
                 toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
