@@ -24,7 +24,7 @@
                         </div>
                         <div class="">
                             <label for="basiInput" class="form-label">Loại giảm giá</label>
-                            <select required name="discount_type" class="form-select mb-3" id=" "
+                            <select required name="discount_type" class="form-select mb-3" id="discount_type" onchange="toggleDiscountFields()"
                                 aria-label="Default select example" disabled>
                                 <option value="">Chọn</option>
                                 <option value="1" {{ $voucher->discount_type == 1 ? 'selected' : ''}} >Giảm giá theo phần trăm</option>
@@ -36,6 +36,48 @@
                             <label for="basiInput" class="form-label">Mức ưu đãi</label>
                             <input type="number" class="form-control mb-3 @error('discount_value') is-invalid @enderror"
                                 id="basiInput" name="discount_value" value="{{ $voucher->discount_value }}" disabled>
+                        </div>
+                        <div id="percentageDiscount" style="display: {{ old('discount_type') == 1 ? 'block' : 'none' }};">
+
+                            <div class="">
+                                <label for="basiInput" class="form-label">Số tiền giảm tối đa</label>
+                                <input type="number"
+                                    class="form-control mb-3 @error('max_discount_amount') is-invalid @enderror"
+                                    id="basiInput" name="max_discount_amount" 
+                                    placeholder="Nhập tiền giảm tối đa (VD: 1000 = 1000đ)"
+                                    value="{{ $voucher->max_discount_amount }}" disabled>
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="basiInput" class="form-label">Người có thể sử dụng ưu đãi</label>
+                            <select required name="user_voucher_limit" class="form-select mb-3" id="user_voucher_limit"
+                                aria-label="Default select example" onchange="toggleFields()" disabled>
+                                <option value="">Chọn</option>
+                                <option value="1" {{ $voucher->user_voucher_limit == 1 ? 'selected' : '' }}>Tất cả mọi
+                                    người</option>
+                                <option value="2" {{ $voucher->user_voucher_limit == 2 ? 'selected' : '' }}>Người có
+                                    điểm
+                                    tích lũy trong khoảng</option>
+                            </select>
+                        </div>
+                        <div id="conditionalFields"
+                            style="display: {{ old('user_voucher_limit') == 2 ? 'block' : 'none' }};">
+                            <div class="d-flex gap-3">
+                                <div class="col-6">
+                                    <label for="basiInput" class="form-label">Từ</label>
+                                    <input type="number"
+                                        class="form-control mb-3 @error('min_accumulated_points') is-invalid @enderror"
+                                        id="basiInput" name="min_accumulated_points"
+                                        value="{{ $voucher->min_accumulated_points }}" placeholder="Nhập điểm tích lũy nhỏ" disabled>
+                                </div>
+                                <div class="col-6">
+                                    <label for="basiInput" class="form-label">Đến</label>
+                                    <input type="number"
+                                        class="form-control mb-3 @error('max_accumulated_points') is-invalid @enderror"
+                                        id="basiInput" name="max_accumulated_points"
+                                        value="{{ $voucher->max_accumulated_points }}" placeholder="Nhập điểm tích lũy lớn" disabled>
+                                </div>
+                            </div>
                         </div>
                         <div class="d-flex gap-3 mb-3">
                             <div class="">
@@ -70,4 +112,30 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleDiscountFields();
+        toggleFields();
+    });
+    function toggleDiscountFields() {
+        const discountType = document.getElementById('discount_type').value;
+        const percentageDiscount = document.getElementById('percentageDiscount');
+
+        if (discountType == 1) {
+            percentageDiscount.style.display = 'block';
+        } else {
+            percentageDiscount.style.display = 'none';
+        }
+    }
+
+    function toggleFields() {
+        const userVoucherLimit = document.getElementById('user_voucher_limit').value;
+        const conditionalFields = document.getElementById('conditionalFields');
+        if (userVoucherLimit == 2) {
+            conditionalFields.style.display = 'block';
+        } else {
+            conditionalFields.style.display = 'none';
+        }
+    }
+</script>
 @endpush

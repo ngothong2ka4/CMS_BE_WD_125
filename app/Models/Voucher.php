@@ -15,6 +15,7 @@ class Voucher extends Model
     protected $fillable = [
         'id_product',
         'code',
+        'description',
         'discount_type',
         'discount_value',
         'start_date',
@@ -22,7 +23,11 @@ class Voucher extends Model
         'usage_limit',
         'usage_per_user',
         'status',
-        'description'
+        'user_voucher_limit',
+        'max_discount_amount',
+        'min_accumulated_points',
+        'max_accumulated_points',
+         
     ];
     public function product()
     {
@@ -45,13 +50,16 @@ class Voucher extends Model
         if ($userUsageCount && $userUsageCount->usage_count >= $this->usage_per_user) {
             return false;
         }
+
+
         return true;
     }
 
     public function calculateDiscount($orderAmount)
     {
         if ($this->discount_type == 1) { 
-            return $orderAmount * ($this->discount_value / 100);
+            $discount = $orderAmount * ($this->discount_value / 100);
+            return min($discount, $this->max_discount_amount);
         } elseif ($this->discount_type == 2) {
             return min($this->discount_value, $orderAmount);
         }
