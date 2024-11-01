@@ -30,6 +30,7 @@ class VoucherController extends Controller
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
                 'description' => 'nullable',
+                'user_voucher_limit'=>'nullable|in:1,2',
                 'max_discount_amount' => 'nullable|numeric',
                 'min_accumulated_points' => 'nullable',
                 'max_accumulated_points' => 'nullable',
@@ -44,19 +45,23 @@ class VoucherController extends Controller
                 'usage_per_user.min' => 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
                 'usage_limit.min' => 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
             ]);
-            // if ($request->min_accumulated_points <= 0) {
+            // if ($request->user_voucher_limit == 1) {
+            //     $request->min_accumulated_points = null;
+            //     $request->max_accumulated_points = null;
+                
+            // }
+            // if ($request->discount_type == 2) {
+            //     $request->max_discount_amount = null;
+            // }
+            // if ( $request->discount_type == 2 && $request->min_accumulated_points <= 0) {
             //     toastr()->error('Điển tích lũy nhỏ phải lớn hơn hoắc bằng 0');
             //     return back()->withInput();
             // }
-            // if ($request->min_accumulated_points > $request->max_accumulated_points) {
+            // if ($request->discount_type == 2 && $request->min_accumulated_points > $request->max_accumulated_points) {
             //     toastr()->error('Điển tích lũy nhỏ phải nhỏ hơn điểm tích lũy lớn ');
             //     return back()->withInput();
             // }
-            if ($request->discount_type == 2) {
-                $request->max_discount_amount = null;
-                // toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
-                // return back()->withInput();
-            }
+            
             if ($request->discount_type == 1 && $request->discount_value > 100) {
                 toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100');
                 return back()->withInput();
@@ -116,10 +121,10 @@ class VoucherController extends Controller
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
                 'description' => 'nullable',
-                'user_voucher_limit' => 'required',
-                'max_discount_amount' => 'required',
-                'min_accumulated_points' => 'required',
-                'max_accumulated_points' => 'required'
+                'user_voucher_limit'=>'nullable|in:1,2',
+                'max_discount_amount' => 'nullable|numeric',
+                'min_accumulated_points' => 'nullable',
+                'max_accumulated_points' => 'nullable',
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
