@@ -63,6 +63,25 @@ class FavoriteProductController extends Controller
         }
     }
 
+
+    public function isFavorite(Request $request)
+    {
+        $id_user = Auth::id();
+        if (!$id_user) {
+            return response()->json(['message' => 'Bạn chưa đăng nhập'], 401);
+        } else {
+            $product_id = $request->input('product_id');
+            $isFavorite = FavoriteProduct::where('id_user', $id_user)
+                ->where('id_product', $product_id)
+                ->exists();
+
+            return response()->json([
+                'is_favorite' => $isFavorite
+            ]);
+        }
+    }
+
+
     /**
      * Display the specified resource.
      */

@@ -71,6 +71,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
     Route::get('/vouchers/list', [VoucherController::class, 'listVoucher']);
-
+    
+    Route::get('favoriteProduct/check', [FavoriteProductController::class, 'isFavorite']);
     Route::resource('favoriteProduct', FavoriteProductController::class);
+    
 });
