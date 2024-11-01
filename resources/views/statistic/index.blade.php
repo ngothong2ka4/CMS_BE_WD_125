@@ -155,7 +155,7 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index', ['status' => 5, 'status2' => 6]) }}"
+                                <a href="{{ route('order.index', ['status' => '4&6']) }}"
                                     class="text-decoration-underline">Xem chi tiết</a>
                             </div>
                             <div>

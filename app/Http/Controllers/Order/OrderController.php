@@ -22,16 +22,15 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->status && $request->status != 'all'){
-        $status = $request->status;
-        $orders = Order::where('status',$status)->get();
-        if($request->status == '4&6'){
-            $orders = Order::whereIn('status',[4,6])->get();
-        }
-        }else{
+        if ($request->status && $request->status != 'all') {
+            $status = $request->status;
+            $orders = Order::where('status', $status)->get();
+            if ($request->status == '4&6') {
+                $orders = Order::whereIn('status', [4, 6])->get();
+            }
+        } else {
             $orders = Order::all();
         }
-
         return view('order.index', compact('orders'));
     }
 
@@ -74,10 +73,7 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $order)
-   {
-    
-   }
+    public function update(Request $request, Order $order) {}
 
     /**
      * Remove the specified resource from storage.
@@ -102,7 +98,8 @@ class OrderController extends Controller
         );
     }
 
-    public function updateStatus(Request $request, $id){
+    public function updateStatus(Request $request, $id)
+    {
         $order = Order::findOrFail($id);
         $user = Auth::user();
         $user_order = User::findOrFail($order->id_user);
@@ -174,6 +171,5 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
         }
-            
     }
 }
