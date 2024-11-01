@@ -44,4 +44,8 @@ class Product extends Model
     {
         return $this->comments()->avg('rating');
     }
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteProduct::class, 'id_product');
+    }
 }

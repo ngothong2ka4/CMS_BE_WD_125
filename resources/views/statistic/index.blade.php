@@ -74,7 +74,8 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                <a href="{{ route('order.index', ['status' => 1]) }}" class="text-decoration-underline">Xem
+                                    chi tiết</a>
                             </div>
                             <div>
                                 <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
@@ -100,7 +101,8 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                <a href="{{ route('order.index', ['status' => 2]) }}" class="text-decoration-underline">Xem
+                                    chi tiết</a>
                             </div>
                             <div>
                                 <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
@@ -126,7 +128,8 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                <a href="{{ route('order.index', ['status' => 3]) }}" class="text-decoration-underline">Xem
+                                    chi tiết</a>
                             </div>
                             <div>
                                 <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
@@ -152,7 +155,8 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                <a href="{{ route('order.index', ['status' => 5, 'status2' => 6]) }}"
+                                    class="text-decoration-underline">Xem chi tiết</a>
                             </div>
                             <div>
                                 <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
@@ -178,7 +182,8 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                <a href="{{ route('order.index', ['status' => 5]) }}" class="text-decoration-underline">Xem
+                                    chi tiết</a>
                             </div>
                             <div>
                                 <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
@@ -204,7 +209,8 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
-                                <a href="{{ route('order.index') }}" class="text-decoration-underline">Xem chi tiết</a>
+                                <a href="{{ route('order.index', ['status' => 7]) }}" class="text-decoration-underline">Xem
+                                    chi tiết</a>
                             </div>
                             <div>
                                 <span class="mr-2 avatar-title bg-info-subtle rounded fs-3">
@@ -257,42 +263,43 @@
                                     </div>
                                 </div> --}}
 
-                                <div class="row gx-2">
-                                    <div class="col">
+                                <div class="d-flex row gx-2">
+                                    <div class="col-4">
                                         <label class="form-label">Loại thời gian</label>
                                         <select class="form-select" name="timeType" onchange="updateInputType(this)">
                                             <option selected value="">-Lựa chọn-</option>
                                             <option value="year">Năm</option>
                                             <option value="month">Tháng</option>
                                             <option value="day">Ngày</option>
+                                            <option value="khoang">Khoảng</option>
                                         </select>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-6" id="thoiDiem" style="display: none">
                                         <label for="year" class="form-label">Thời điểm</label>
                                         <input type="month" id="timeInput" class="form-control" name="time"
                                             required>
                                     </div>
-                                    <div class="col d-flex align-item-center">
-                                        <button type="submit" style="height: 50%; margin-top: 29px"
-                                            class="btn btn-sm btn-secondary">Gửi</button>
+                                    <div class="col-1" id="thoiDiem2" style="display: none">
+                                        <div class="col d-flex align-item-center">
+                                            <button type="submit" style="height: 50%; margin-top: 29px"
+                                                class="btn btn-sm btn-secondary">Gửi</button>
+                                        </div>
                                     </div>
 
                                 </div>
                             </form>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6" id="khoangTime" style="display: none">
                             <form action="{{ route('statistic.index') }}" method="get">
                                 @csrf
                                 <div class="row gx-2">
                                     <div class="col">
                                         <label for="year" class="form-label">Bắt đầu</label>
-                                        <input type="date" class="form-control" name="start" id="start"
-                                            placeholder="Nhập năm" required>
+                                        <input type="date" class="form-control" name="start" id="start" required>
                                     </div>
                                     <div class="col">
                                         <label for="year" class="form-label">Kết thúc</label>
-                                        <input type="date" class="form-control" name="end" id="end"
-                                            placeholder="Nhập năm" required>
+                                        <input type="date" class="form-control" name="end" id="end" required>
                                     </div>
                                     <div class="col d-flex align-item-center">
                                         <button type="submit" style="height: 50%; margin-top: 29px"
@@ -334,12 +341,13 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <p style="display: inline"
-                                                    class="text-uppercase fw-medium text-success text-truncate mb-0"> Doanh thu
+                                                    class="text-uppercase fw-medium text-success text-truncate mb-0"> Doanh
+                                                    thu
                                                 </p>
                                                 @if ($percentageChange !== null)
-                                                <p style="display: inline"
-                                                class="ms-5 text-uppercase fw-medium text-secondary text-truncate mb-0">
-                                                {{ number_format($percentageChange, 2) . '%' . PHP_EOL }}</p>
+                                                    <p style="display: inline"
+                                                        class="ms-5 text-uppercase fw-medium text-secondary text-truncate mb-0">
+                                                        {{ number_format($percentageChange, 2) . '%' . PHP_EOL }}</p>
                                                 @endif
                                             </div>
                                         </div>
@@ -404,58 +412,10 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body bg-light">
                     <div class="row">
                         <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header align-items-center d-flex">
-                                    <h2 class="h5">TOP 5 SẢN PHẨM BÁN CHẠY NHẤT</h2>
-                                </div><!-- end card header -->
-
-                                <div class="card-body">
-                                    <div class="table-responsive table-card">
-                                        <table class="table table-hover table-centered align-middle table-nowrap mb-0">
-                                            <tbody>
-                                                @foreach ($topSellers as $item)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                                    <img src="{{ $item->product_image }}" alt="Ảnh"
-                                                                        class="img-fluid d-block" />
-                                                                </div>
-                                                                <div>
-                                                                    <h5 class="fs-14 my-1">
-                                                                        <a href="apps-ecommerce-product-details.html"
-                                                                            class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
-                                                                    </h5>
-                                                                </div>
-
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }}
-                                                                VNĐ
-                                                            </h5>
-                                                            <span class="text-muted fs-12">Giá</span>
-                                                        </td>
-                                                        <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->total_quantity }}
-                                                            </h5>
-                                                            <span class="text-muted fs-12">Đã bán</span>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-6">
-                            <div class="card">
+                            <div class="card" style="border-top: 1px solid black; border-left: 1px solid black;">
                                 <div class="card-header align-items-center d-flex">
                                     <h2 class="h5">TOP 5 SẢN PHẨM CÓ DOANH THU CAO NHẤT</h2>
                                 </div><!-- end card header -->
@@ -477,15 +437,13 @@
                                                                         <a href="apps-ecommerce-product-details.html"
                                                                             class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                     </h5>
+                                                                    <h5 class="fs-14 my-1 fw-normal">
+                                                                        {{ $item->selling_price }}
+                                                                        VNĐ
+                                                                    </h5>
                                                                 </div>
 
                                                             </div>
-                                                        </td>
-                                                        <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }}
-                                                                VNĐ
-                                                            </h5>
-                                                            <span class="text-muted fs-12">Giá</span>
                                                         </td>
                                                         <td>
                                                             <h5 class="fs-14 my-1 fw-normal">{{ $item->total_revenue }}
@@ -501,51 +459,144 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- end row-->
+                        <div class="col-xl-6">
+                            <div class="card" style="border-top: 1px solid black; border-left: 1px solid black;">
+                                <div class="card-header align-items-center d-flex">
+                                    <h2 class="h5">TOP 5 SẢN PHẨM CÓ LỢI NHUẬN CAO NHẤT</h2>
+                                </div><!-- end card header -->
+
+                                <div class="card-body">
+                                    <div class="table-responsive table-card">
+                                        <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                                            <tbody>
+                                                @foreach ($topProfit as $item)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                                    <img src="{{ $item->product_image }}" alt=""
+                                                                        class="img-fluid d-block" />
+                                                                </div>
+                                                                <div>
+                                                                    <h5 class="fs-14 my-1">
+                                                                        <a href="apps-ecommerce-product-details.html"
+                                                                            class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
+                                                                    </h5>
+                                                                    <h5 class="fs-14 my-1 fw-normal">
+                                                                        {{ $item->selling_price }}
+                                                                        VNĐ
+                                                                    </h5>
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                        <td>
+                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->total_profit }} VNĐ
+                                                            </h5>
+                                                            <span class="text-muted fs-12">Lợi nhuận</span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <div class="row">
-                        <div class="card">
-                            <div class="card-header align-items-center d-flex">
-                                <h2 class="h5">TOP 5 SẢN PHẨM CÓ LỢI NHUẬN CAO NHẤT</h2>
-                            </div><!-- end card header -->
+                        <div class="col-xl-6">
+                            <div class="card" style="border-top: 1px solid black; border-left: 1px solid black;">
+                                <div class="card-header align-items-center d-flex">
+                                    <h2 class="h5">TOP 5 SẢN PHẨM BÁN CHẠY NHẤT</h2>
+                                </div><!-- end card header -->
 
-                            <div class="card-body">
-                                <div class="table-responsive table-card">
-                                    <table class="table table-hover table-centered align-middle table-nowrap mb-0">
-                                        <tbody>
-                                            @foreach ($topProfit as $item)
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm bg-light rounded p-1 me-2">
-                                                                <img src="{{ $item->product_image }}" alt=""
-                                                                    class="img-fluid d-block" />
-                                                            </div>
-                                                            <div>
-                                                                <h5 class="fs-14 my-1">
-                                                                    <a href="apps-ecommerce-product-details.html"
-                                                                        class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
-                                                                </h5>
-                                                            </div>
+                                <div class="card-body">
+                                    <div class="table-responsive table-card">
+                                        <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                                            <tbody>
+                                                @foreach ($topSellers as $item)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                                    <img src="{{ $item->product_image }}" alt="Ảnh"
+                                                                        class="img-fluid d-block" />
+                                                                </div>
+                                                                <div>
+                                                                    <h5 class="fs-14 my-1">
+                                                                        <a href="apps-ecommerce-product-details.html"
+                                                                            class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
+                                                                    </h5>
+                                                                    <h5 class="fs-14 my-1 fw-normal">
+                                                                        {{ $item->selling_price }}
+                                                                        VNĐ
+                                                                    </h5>
+                                                                </div>
 
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="fs-14 my-1 fw-normal">{{ $item->selling_price }} VNĐ
-                                                        </h5>
-                                                        <span class="text-muted fs-12">Giá</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="fs-14 my-1 fw-normal">{{ $item->total_profit }} VNĐ
-                                                        </h5>
-                                                        <span class="text-muted fs-12">Lợi nhuận</span>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->total_quantity }}
+                                                            </h5>
+                                                            <span class="text-muted fs-12">Đã bán</span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="card" style="border-top: 1px solid black; border-left: 1px solid black;">
+                                <div class="card-header align-items-center d-flex">
+                                    <h2 class="h5">TOP 5 SẢN PHẨM ĐƯỢC YÊU THÍCH NHẤT</h2>
+                                </div><!-- end card header -->
 
+                                <div class="card-body">
+                                    <div class="table-responsive table-card">
+                                        <table class="table table-hover table-centered align-middle table-nowrap mb-0">
+                                            <tbody>
+                                                @foreach ($topFavourite as $item)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar-sm bg-light rounded p-1 me-2">
+                                                                    <img src="{{ $item->thumbnail }}" alt="Ảnh"
+                                                                        class="img-fluid d-block" />
+                                                                </div>
+                                                                <div>
+                                                                    <h5 class="fs-14 my-1">
+                                                                        <a href="apps-ecommerce-product-details.html"
+                                                                            class="fs-14 my-1 fw-normal">{{ Str::limit($item->name, 22, '...') }}</a>
+                                                                    </h5>
+                                                                    <h5 class="fs-14 my-1 fw-normal">
+                                                                        {{ $item->variants->first()->selling_price }}
+                                                                        VNĐ
+                                                                    </h5>
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <h5 class="fs-14 my-1 fw-normal">
+                                                                {{ $item->favorites_count }}
+                                                            </h5>
+                                                            <span class="text-muted fs-12">Lượt thích</span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -625,21 +676,44 @@
     <script>
         function updateInputType(select) {
             const timeInput = document.getElementById('timeInput');
+            const khoangTime = document.getElementById('khoangTime');
+            const thoiDiem = document.getElementById('thoiDiem');
+            const thoiDiem2 = document.getElementById('thoiDiem2');
 
+            if (select.value === 'khoang') {
+                khoangTime.style.display = 'block';
+                thoiDiem.style.display = 'none'; 
+                thoiDiem2.style.display = 'none'; 
+            } else {
+                khoangTime.style.display = 'none'; 
+            }
             if (select.value === 'year') {
+                thoiDiem.style.display = 'block'; 
+                thoiDiem2.style.display = 'block'; 
                 timeInput.type = 'number';
-                timeInput.min = 2000; // Giới hạn năm nhỏ nhất
-                timeInput.max = new Date().getFullYear(); // Giới hạn năm lớn nhất là năm hiện tại
+                timeInput.min = 2020; 
+                timeInput.max = new Date().getFullYear(); 
                 timeInput.placeholder = "Nhập năm";
             } else if (select.value === 'month') {
+                thoiDiem.style.display = 'block'; 
+                thoiDiem2.style.display = 'block'; 
                 timeInput.type = 'month';
                 timeInput.removeAttribute('min');
                 timeInput.removeAttribute('max');
-            } else {
+            } else if (select.value === 'day') {
+                thoiDiem.style.display = 'block'; 
+                thoiDiem2.style.display = 'block'; 
                 timeInput.type = 'date';
                 timeInput.removeAttribute('min');
                 timeInput.removeAttribute('max');
+            } else{
+                thoiDiem.style.display = 'none'; 
+                thoiDiem2.style.display = 'none'; 
             }
         }
+
+        if (condition) {
+                document.getElementById('myDiv').style.display = 'none'; // Ẩn div
+            }
     </script>
 @endpush

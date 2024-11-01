@@ -5,6 +5,7 @@ namespace App\Http\Controllers\statistic;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Product;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -378,8 +379,13 @@ class StatisticController extends Controller
 
         // dd($topProfit);
 
+        $topFavourite = Product::withCount('favorites') 
+        ->orderBy('favorites_count', 'desc') 
+        ->take(5) 
+        ->get(); 
+        // dd($topProducts);
 
-        return view('statistic.index', compact('choXacNhan', 'daXacNhan', 'dangGiao', 'giaoThatBai', 'thanhCong', 'daHuy', 'completeStatistic', 'Statistic', 'totalStatistic', 'time', 'title', 'cotY', 'topSellers', 'topRevenue', 'topProfit', 'percentageChange'));
+        return view('statistic.index', compact('choXacNhan', 'daXacNhan', 'dangGiao', 'giaoThatBai', 'thanhCong', 'daHuy', 'completeStatistic', 'Statistic', 'totalStatistic', 'time', 'title', 'cotY', 'topSellers', 'topRevenue', 'topProfit', 'topFavourite', 'percentageChange'));
     }
 
     /**
