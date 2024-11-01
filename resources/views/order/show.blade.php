@@ -209,13 +209,13 @@ toastr()->error($error);
             <div class="card-header">
                 <h4 class="mb-0">Thay đổi trạng thái đơn hàng</h4>
             </div>
-            <form action="{{ route('order.update', $order->id) }}" method="POST">
+            <form id="test-form">
                 @csrf
-                @method('PUT')
+                <!-- @method('PUT') -->
                 <div class="card-body">
                     <div>
                         <label for="basiInput" class="form-label">Trạng thái</label>
-                        <select name="to_status" class="form-select mb-3" aria-label="Default select example">
+                        <select name="to_status" class="form-select mb-3" id="test-select" aria-label="Default select example">
                             <option value="">Chọn trạng thái</option>
                             
                             <option value="2" @if($order->status >= 2) disabled @endif >Đã xác nhận</option>
@@ -250,4 +250,22 @@ toastr()->error($error);
         @endif
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+        $('#test-form').submit( function(e){
+            e.preventDefault();
+            $.ajax({
+                url : '/order/{{$order->id}}',
+                type: 'POST',
+                data: $('#test-form').serialize(),
+                success: function(res){
+                    window.location.reload();
+                },
+                error: function(){
+                    window.location.reload();
+                }
+            })
+        })
+    })
+    </script>
     @endsection

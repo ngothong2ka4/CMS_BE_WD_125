@@ -22,19 +22,16 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('status') && $request->has('status2')) {
-            $status = $request->input('status');
-            $orders = Order::where('status', $status)
-                ->get();
-            return view('order.index', compact('orders'));
+        if($request->status && $request->status != 'all'){
+        $status = $request->status;
+        $orders = Order::where('status',$status)->get();
+        if($request->status == '4&6'){
+            $orders = Order::whereIn('status',[4,6])->get();
         }
-        if ($request->has('status') && $request->has('status2')) {
-            $status = $request->input('status');
-            $status2 = $request->input('status2');
-            $orders = Order::whereIn('status', [$status, $status2])->get();
-            return view('order.index', compact('orders'));
+        }else{
+            $orders = Order::all();
         }
-        $orders = Order::all();
+
         return view('order.index', compact('orders'));
     }
 
@@ -78,7 +75,35 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Order $order)
+   {
+    
+   }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
+        //
+    }
+
+    private function sendEmail($order)
+    {
+        $email = $order->email;
+
+        Mail::send(
+            'emails.status',
+            compact('order'),
+            function ($message) use ($email) {
+                $message->from(config('mail.from.address'), 'Shine');
+                $message->to($email);
+                $message->subject('Trạng thái đơn hàng');
+            }
+        );
+    }
+
+    public function updateStatus(Request $request, $id){
+        $order = Order::findOrFail($id);
         $user = Auth::user();
         $user_order = User::findOrFail($order->id_user);
 
@@ -146,34 +171,9 @@ class OrderController extends Controller
                 $this->sendEmail($order);
                 toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
             }
-
-            return redirect()->back();
         } catch (\Exception $e) {
             toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
-            return redirect()->back();
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    private function sendEmail($order)
-    {
-        $email = $order->email;
-
-        Mail::send(
-            'emails.status',
-            compact('order'),
-            function ($message) use ($email) {
-                $message->from(config('mail.from.address'), 'Shine');
-                $message->to($email);
-                $message->subject('Trạng thái đơn hàng');
-            }
-        );
+            
     }
 }
