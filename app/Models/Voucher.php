@@ -22,7 +22,11 @@ class Voucher extends Model
         'usage_limit',
         'usage_per_user',
         'status',
-        'description'
+        'user_voucher_limit',
+        'max_discount_amount',
+        'min_accumulated_points',
+        'max_accumulated_points',
+         
     ];
     public function product()
     {

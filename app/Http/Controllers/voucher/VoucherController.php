@@ -19,7 +19,7 @@ class VoucherController extends Controller
     }
     public function store(Request $request)
     {
-        $voucher = Voucher::all();
+        // $voucher = Voucher::all();
         try {
             $params = $request->validate([
                 'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,',
@@ -29,7 +29,10 @@ class VoucherController extends Controller
                 'end_date' => 'required',
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
-                'description' => 'nullable'
+                'description' => 'nullable',
+                'max_discount_amount' => 'nullable|numeric',
+                'min_accumulated_points' => 'nullable',
+                'max_accumulated_points' => 'nullable',
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
@@ -37,23 +40,36 @@ class VoucherController extends Controller
                 'code.regex' => 'Mã code chỉ được chứa chữ cái, số và khoảng trắng.',
                 'code.unique' => 'Mã code đã tồn tại, vui lòng chọn tên khác.',
 
-                'discount_value.min'=> 'Mức ưu đãi phải lớn hơn không',
-                'usage_per_user.min'=> 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
-                'usage_limit.min'=> 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
+                'discount_value.min' => 'Mức ưu đãi phải lớn hơn không',
+                'usage_per_user.min' => 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
+                'usage_limit.min' => 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
             ]);
-          
-            if($request->discount_type == 1 && $request->discount_value > 100 ){
-                toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
+            // if ($request->min_accumulated_points <= 0) {
+            //     toastr()->error('Điển tích lũy nhỏ phải lớn hơn hoắc bằng 0');
+            //     return back()->withInput();
+            // }
+            // if ($request->min_accumulated_points > $request->max_accumulated_points) {
+            //     toastr()->error('Điển tích lũy nhỏ phải nhỏ hơn điểm tích lũy lớn ');
+            //     return back()->withInput();
+            // }
+            if ($request->discount_type == 2) {
+                $request->max_discount_amount = null;
+                // toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
+                // return back()->withInput();
+            }
+            if ($request->discount_type == 1 && $request->discount_value > 100) {
+                toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100');
                 return back()->withInput();
             }
-            if($request->discount_type == 2 && $request->discount_value < 10000 ){
-                toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000' );
+            if ($request->discount_type == 2 && $request->discount_value < 10000) {
+                toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000');
                 return back()->withInput();
             }
-            if($request->start_date >= $request->end_date){
-                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc' );
+            if ($request->start_date >= $request->end_date) {
+                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc');
                 return back()->withInput();
             }
+            // dd($params);
             Voucher::create($params);
             toastr()->success('Thêm voucher thành công!');
             return redirect()->route('voucher.index');
@@ -72,7 +88,7 @@ class VoucherController extends Controller
     }
     public function destroy($id)
     {
-        $voucher= Voucher::findOrFail($id);
+        $voucher = Voucher::findOrFail($id);
         $voucher->delete();
         toastr()->success('Xoá voucher thành công!');
         return redirect()->back();
@@ -89,16 +105,21 @@ class VoucherController extends Controller
      */
     public function update(Request $request, Voucher $voucher)
     {
+        // dd($request);
         try {
             $params = $request->validate([
-                'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,'. $voucher->id,
+                'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,' . $voucher->id,
                 'discount_type' => 'required|in:1,2',
                 'discount_value' => 'required|numeric|min:1',
                 'start_date' => 'required',
                 'end_date' => 'required',
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
-                'description' => 'nullable'
+                'description' => 'nullable',
+                'user_voucher_limit' => 'required',
+                'max_discount_amount' => 'required',
+                'min_accumulated_points' => 'required',
+                'max_accumulated_points' => 'required'
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
@@ -106,21 +127,21 @@ class VoucherController extends Controller
                 'code.regex' => 'Mã code chỉ được chứa chữ cái, số và khoảng trắng.',
                 'code.unique' => 'Mã code đã tồn tại, vui lòng chọn tên khác.',
 
-                'discount_value.min'=> 'Mức ưu đãi phải lớn hơn không',
-                'usage_per_user.min'=> 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
-                'usage_limit.min'=> 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
+                'discount_value.min' => 'Mức ưu đãi phải lớn hơn không',
+                'usage_per_user.min' => 'Giới hạn sử dụng trên mỗi người dùng phải lớn hơn không',
+                'usage_limit.min' => 'Giới hạn sử dụng mỗi mã giảm giá phải lớn hơn không',
             ]);
 
-            if($request->discount_type == 1 && $request->discount_value > 100 ){
-                toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100' );
+            if ($request->discount_type == 1 && $request->discount_value > 100) {
+                toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100');
                 return back()->withInput();
             }
-            if($request->discount_type == 2 && $request->discount_value < 10000 ){
-                toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000' );
+            if ($request->discount_type == 2 && $request->discount_value < 10000) {
+                toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000');
                 return back()->withInput();
             }
-            if($request->start_date >= $request->end_date){
-                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc' );
+            if ($request->start_date >= $request->end_date) {
+                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc');
                 return back()->withInput();
             }
             $voucher->update($params);
