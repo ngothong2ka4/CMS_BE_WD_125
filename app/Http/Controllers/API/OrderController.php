@@ -114,6 +114,7 @@ class OrderController extends Controller
     //              "recipient_address": "123 Đường ABC, Quận 1, TP HCM",
     //              "note": "Giao hàng vào buổi chiều",
     //              "total_payment": 500000,
+    //              "discount_amount": 10000,
     //              "payment_role": payment_role
     //          }
     //        mua ở trang chi tiết(truyền payment_role thích hợp )
@@ -127,6 +128,7 @@ class OrderController extends Controller
     //              "recipient_address": "123 Đường ABC, Quận 1, TP HCM",
     //              "note": "Giao hàng vào buổi chiều",
     //              "total_payment": 200000,
+    //              "discount_amount": 10000,
     //              "payment_role": payment_role
     //          }
     // response:200
@@ -179,7 +181,7 @@ class OrderController extends Controller
                     $data['email'], 
                     'Thông tin đơn hàng');
 
-                return $this->jsonResponse('Đặt hàng thành công', true, data: $res);
+                return $this->jsonResponse('Đặt hàng thành công', true,  $res);
             } elseif (!empty($data['variantId']) && !empty($data['quantity'])) {
 
                 $res = $this->processDirectPayment($data, $user->id);
@@ -234,6 +236,7 @@ class OrderController extends Controller
             'note' => $data['note'] ?? null,
             'used_accum' => $data['used_accum'] ?? 0,
             'total_payment' => $data['total_payment'],
+            'discount_amount' => $data['discount_amount'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
             'status' => Order::STATUS_PENDING,
@@ -318,6 +321,7 @@ class OrderController extends Controller
             'note' => $data['note'],
             'used_accum' => $data['used_accum'] ?? 0,
             'total_payment' => $data['total_payment'],
+            'discount_amount' => $data['discount_amount'],
             'payment_role' => $data['payment_role'],
             'status_payment' => Order::STATUS_PAYMENT_PENDING,
             'status' => Order::STATUS_PENDING,
@@ -351,6 +355,7 @@ class OrderController extends Controller
             'id_order' => $order->id,
             'payment_role' => $order->payment_role,
             'totalAmount' => $order->total_payment,
+            'discount_amount' => $order->discount_amount,
             'order_details' => $insertData,  
             'order' => $order,
         ];
