@@ -59,7 +59,7 @@ class Voucher extends Model
     {
         if ($this->discount_type == 1) { 
             $discount = $orderAmount * ($this->discount_value / 100);
-            return min($discount, $this->max_discount_amount);
+            return $this->max_discount_amount !== null ? min( $discount, $this->max_discount_amount) : $discount;
         } elseif ($this->discount_type == 2) {
             return min($this->discount_value, $orderAmount);
         }
