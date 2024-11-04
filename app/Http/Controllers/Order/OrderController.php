@@ -10,6 +10,8 @@ use App\Models\OrderHistory;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Variant;
+use Illuminate\Auth\Events\Validated;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -114,8 +116,9 @@ class OrderController extends Controller
             ]);
             if ($request->to_status == 7) {
                 if ($request->note == '' || $request->note == null) {
-                    toastr()->error('Phải có ghi chú hủy đơn');
-                    return back();
+                    
+                    return response()->json(['error' =>'Phải có ghi chú hủy đơn!','status'=> false]);
+                    
                 };
                 if ($order->used_accum > 0) {
                     $user_order->update(['accum_point' => $user_order->accum_point + $order->used_accum]);
@@ -164,12 +167,13 @@ class OrderController extends Controller
             if ($order->status != $request->to_status) {
                 $order->update($data);
 
-                OrderHistory::create($data_his);
+                $his = OrderHistory::create($data_his);
                 $this->sendEmail($order);
-                toastr()->success('Thay đổi trạng thái đơn hàng thành công!');
+                return response()->json(['data'=> $his,'status'=> true,'message' =>'Thay đổi trạng thái đơn hàng thành công!']);
+          
             }
         } catch (\Exception $e) {
-            toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+            return response()->json(['error' =>$e->getMessage(),'status'=> false]);
         }
     }
 }
