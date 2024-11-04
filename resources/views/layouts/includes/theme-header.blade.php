@@ -18,6 +18,11 @@
     <script src="{{ asset('admin/assets/js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
     <link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- swal -->
+    <script src="{{ asset('admin/assets/js/sweetalert2.all.min.js') }}"></script>
+
+    <link href="{{ asset('admin/assets/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- Icons Css -->
     <link href="{{ asset('admin/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
