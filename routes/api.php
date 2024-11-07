@@ -74,5 +74,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::get('favoriteProduct/check', [FavoriteProductController::class, 'isFavorite']);
     Route::resource('favoriteProduct', FavoriteProductController::class);
+
+    Route::post('updateUser', [AuthController::class, 'updateUser']);
+    Route::post('changePassword', [AuthController::class, 'changePassword']);
+
     
 });
