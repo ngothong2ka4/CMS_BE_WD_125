@@ -28,10 +28,10 @@ class Voucher extends Model
         'max_accumulated_points',
          
     ];
-    public function products()
-    {
-        return $this->belongsToMany(Product::class, 'product_voucher', 'id_voucher', 'id_product');
-    }
+    // public function products()
+    // {
+    //     return $this->belongsToMany(Product::class, 'product_voucher', 'id_voucher', 'id_product');
+    // }
 
     public function users()
     {

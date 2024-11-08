@@ -27,7 +27,7 @@ class VoucherController extends Controller
     {
         try {
             $params = $request->validate([
-                'id_product' => 'nullable|array',
+                // 'id_product' => 'nullable|array',
                 'id_user' => 'nullable|array',
                 'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,',
                 'discount_type' => 'required|in:1,2',
@@ -83,17 +83,17 @@ class VoucherController extends Controller
                 toastr()->error('Ngày bắt đầu phải trước ngày kết thúc');
                 return back()->withInput();
             }
-            if (isset($params['id_product']) && !is_array($params['id_product'])) {
-                $params['id_product'] = explode(',', $params['id_product']);
-            }
+            // if (isset($params['id_product']) && !is_array($params['id_product'])) {
+            //     $params['id_product'] = explode(',', $params['id_product']);
+            // }
             if (isset($params['id_user'] ) && !is_array($params['id_user'])) {
                 $params['id_user'] = explode(',', $params['id_user']);
             }
 
             $voucher = Voucher::create($params);
-            if (!empty($params['id_product'])) {
-                $voucher->products()->sync($params['id_product']);
-            }
+            // if (!empty($params['id_product'])) {
+            //     $voucher->products()->sync($params['id_product']);
+            // }
             if (!empty($params['id_user'])) {
                 $voucher->users()->sync($params['id_user']);
             }
@@ -138,7 +138,7 @@ class VoucherController extends Controller
 
         try {
             $params = $request->validate([
-                'id_product' => 'nullable',
+                // 'id_product' => 'nullable',
                 'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,' . $voucher->id,
                 'discount_type' => 'required|in:1,2',
                 'discount_value' => 'required|numeric|min:1',
