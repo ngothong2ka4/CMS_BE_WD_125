@@ -50,11 +50,12 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);
 Route::get('/relatedProducts/{id}',[ProductController::class, 'relatedProducts']);
 
-Route::get('/view/{userID}',[ProductController::class,'getRecentViewedProducts']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
     Route::get('/listCommentUser',[ProductController::class, 'listCommentUser']);
+    Route::get('/view',[ProductController::class,'getRecentViewedProducts']);
+
 
     Route::get('/listCart',[CartController::class, 'listProductInCart']);
     Route::post('/addCart',[CartController::class, 'addProductToCart']);

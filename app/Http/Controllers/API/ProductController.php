@@ -410,8 +410,10 @@ class ProductController extends Controller
             return $this->jsonResponse('Có lỗi xảy ra');
         }
     }
-    public function getRecentViewedProducts($userID)
+    public function getRecentViewedProducts()
     {
+        $user = Auth::user();
+        $userID = $user->id;
         $products = Product::whereHas('views', function ($query) use ($userID) {
             $query->where('id_user', $userID);
         })->with([
