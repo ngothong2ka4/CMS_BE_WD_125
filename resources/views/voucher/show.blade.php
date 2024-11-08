@@ -111,31 +111,3 @@
     </div>
 @endsection
 
-@push('scripts')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        toggleDiscountFields();
-        toggleFields();
-    });
-    function toggleDiscountFields() {
-        const discountType = document.getElementById('discount_type').value;
-        const percentageDiscount = document.getElementById('percentageDiscount');
-
-        if (discountType == 1) {
-            percentageDiscount.style.display = 'block';
-        } else {
-            percentageDiscount.style.display = 'none';
-        }
-    }
-
-    function toggleFields() {
-        const userVoucherLimit = document.getElementById('user_voucher_limit').value;
-        const conditionalFields = document.getElementById('conditionalFields');
-        if (userVoucherLimit == 2) {
-            conditionalFields.style.display = 'block';
-        } else {
-            conditionalFields.style.display = 'none';
-        }
-    }
-</script>
-@endpush

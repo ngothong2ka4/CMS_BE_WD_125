@@ -36,11 +36,12 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('forgotpassword', [AuthController::class, 'forgotPassword']);
 Route::post('resetpassword/{token}', [AuthController::class, 'resetPassword']);
+Route::get('/search-user', [AuthController::class, 'searchUser']);
 
 Route::apiResource('category',CategoryController::class);
 // API sản phẩm mới (5 cái)
 Route::get('/products/new', [ProductController::class, 'getNewProducts']);
-
+Route::get('/search-product', [ProductController::class, 'searchProduct']);
 // Route::get('/products/search', [ProductController::class, 'searchProductsByName']);
 // Route::get('/products/filter_cate', [ProductController::class, 'productByCate']);
 // Route::get('/products/filter', [ProductController::class, 'filterProducts']);
