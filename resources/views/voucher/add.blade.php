@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <form action="{{ route('voucher.store') }}" method="POST">
                         @csrf
-                        <div class="d-flex">
+                        {{-- <div class="d-flex">
                             <label for="basiInput" class="form-label">Chọn sản phẩm sử dụng voucher</label>
                             <div class="mx-3">
                                 <select id="id_product" name="id_product[]" value="{{ old('id_product') }}" class="form-control" multiple="multiple" style="width: 100%;">
@@ -21,9 +21,9 @@
                                 @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="">
-                            <label for="basiInput" class="form-label">Mã code<span>*</span></label>
+                            <label for="basiInput" class="form-label">Mã code<span class="text-danger">*</span></label>
                             <input required type="text"
                                 class="form-control w-50 mb-3 @error('code') is-invalid @enderror" id="basiInput"
                                 name="code" value="{{ old('code') }}">
@@ -33,7 +33,7 @@
                             <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
                         </div>
                         <div class="">
-                            <label for="basiInput" class="form-label">Loại giảm giá</label>
+                            <label for="basiInput" class="form-label">Loại giảm giá <span class="text-danger">*</span></label>
                             <select required name="discount_type" class="form-select mb-3 w-25" id="discount_type"
                                 aria-label="Default select example" onchange="toggleDiscountFields()">
                                 {{-- <option value="">Chọn</option> --}}
@@ -47,7 +47,7 @@
                         </div>
                         <div class="d-flex">
                             <div class="w-50">
-                                <label for="basiInput" class="form-label">Mức ưu đãi</label>
+                                <label for="basiInput" class="form-label">Mức ưu đãi <span class="text-danger">*</span></label>
                                 <input type="number"
                                     class="form-control mb-3 @error('discount_value') is-invalid @enderror"
                                     id="discount_value" name="discount_value" value="{{ old('discount_value') }}"
@@ -57,7 +57,7 @@
                                 style="display: {{ old('discount_type') == 1 ? 'block' : 'none' }};">
 
                                 <div class="">
-                                    <label for="basiInput" class="form-label">Số tiền giảm tối đa</label>
+                                    <label for="basiInput" class="form-label">Số tiền giảm tối đa<span class="text-danger">*</span></label>
                                     <input type="number"
                                         class="form-control mb-3 @error('max_discount_amount') is-invalid @enderror"
                                         id="basiInput" name="max_discount_amount"
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <div class="">
-                            <label for="basiInput" class="form-label">Người có thể sử dụng ưu đãi</label>
+                            <label for="basiInput" class="form-label">Người có thể sử dụng ưu đãi<span class="text-danger">*</span></label>
                             <select required name="user_voucher_limit" class="form-select mb-3 w-25" id="user_voucher_limit"
                                 aria-label="Default select example" onchange="toggleFields()">
                                 {{-- <option value="">Chọn</option> --}}
@@ -100,7 +100,7 @@
                         <div id="conditionalUserField" style="display: {{ old('user_voucher_limit') == 3 ? 'block' : 'none' }};">
                             <div class="d-flex gap-3">
                                 <div class="m-3">
-                                    <label for="id_user" class="form-label">Chọn người dùng</label>
+                                    <label for="id_user" class="form-label">Chọn người dùng<span class="text-danger">*</span></label>
                                     <select id="id_user" name="id_user[]" class="form-control" multiple="multiple" style="width: 100%;">
                                         @foreach ($users as $user)
                                         <option value="{{ $user->id }}" 
@@ -113,13 +113,13 @@
                         </div>
                         <div class="d-flex gap-3 mb-3">
                             <div class="">
-                                <label for="basiInput" class="form-label">Ngày bắt đầu</label>
+                                <label for="basiInput" class="form-label">Ngày bắt đầu<span class="text-danger">*</span></label>
                                 <input required type="date"
                                     class="form-control @error('start_date') is-invalid @enderror" id="basiInput"
                                     name="start_date" value="{{ old('start_date') }}">
                             </div>
                             <div class="">
-                                <label for="basiInput" class="form-label">Ngày kết thúc</label>
+                                <label for="basiInput" class="form-label">Ngày kết thúc<span class="text-danger">*</span></label>
                                 <input required type="date"
                                     class="form-control @error('end_date') is-invalid @enderror" id="basiInput"
                                     name="end_date" value="{{ old('end_date') }}">

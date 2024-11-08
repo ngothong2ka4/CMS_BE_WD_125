@@ -60,10 +60,10 @@ class Product extends Model
         return $this->hasMany(ProductView::class, 'id_product', 'id');
     }
 
-    public function vouchers()
-    {
-        return $this->belongsToMany(Voucher::class, 'product_voucher', 'id_product', 'id_voucher');
-    }
+    // public function vouchers()
+    // {
+    //     return $this->belongsToMany(Voucher::class, 'product_voucher', 'id_product', 'id_voucher');
+    // }
 
     
     public function getAverageRatingAttribute()
