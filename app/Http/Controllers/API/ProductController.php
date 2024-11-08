@@ -438,4 +438,18 @@ class ProductController extends Controller
 
         return response()->json($products, 200);
     }
+    public function searchProduct(Request $request)
+    {
+        $query = $request->get('query');
+    if (strlen($query) < 3) {
+        return response()->json([]);
+    }
+    $products = Product::where('name', 'LIKE', "%{$query}%")
+                       ->take(10) // Giới hạn số lượng kết quả trả về
+                       ->get(['id', 'name']); // Chỉ lấy trường cần thiết
+
+    return response()->json($products);
+    }
+   
+
 }

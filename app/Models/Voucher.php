@@ -13,7 +13,6 @@ class Voucher extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'id_product',
         'code',
         'description',
         'discount_type',
@@ -29,9 +28,14 @@ class Voucher extends Model
         'max_accumulated_points',
          
     ];
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class, 'id_product', 'id');
+        return $this->belongsToMany(Product::class, 'product_voucher', 'id_voucher', 'id_product');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_voucher', 'id_voucher', 'id_user');
     }
 
     public function isValid()

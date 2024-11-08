@@ -210,4 +210,17 @@ class AuthController extends Controller
 }
 
     }
+
+    public function searchUser(Request $request)
+    {
+        $query = $request->get('query');
+    if (strlen($query) < 3) {
+        return response()->json([]);
+    }
+    $products = User::where('name', 'LIKE', "%{$query}%")
+                       ->take(10) // Giới hạn số lượng kết quả trả về
+                       ->get(['id', 'name']); // Chỉ lấy trường cần thiết
+
+    return response()->json($products);
+    }
 }
