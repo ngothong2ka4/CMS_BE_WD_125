@@ -18,6 +18,11 @@
     <script src="{{ asset('admin/assets/js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
     <link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- swal -->
+    <script src="{{ asset('admin/assets/js/sweetalert2.all.min.js') }}"></script>
+
+    <link href="{{ asset('admin/assets/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- Icons Css -->
     <link href="{{ asset('admin/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
@@ -31,5 +36,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css"/>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>

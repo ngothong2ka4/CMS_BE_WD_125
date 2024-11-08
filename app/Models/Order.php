@@ -20,6 +20,7 @@ class Order extends Model
         'status_payment',
         'status',
         'total_payment',
+        'discount_amount',
         'used_accum'
     ];
 

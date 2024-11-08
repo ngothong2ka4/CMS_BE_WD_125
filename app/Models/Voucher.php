@@ -54,13 +54,16 @@ class Voucher extends Model
         if ($userUsageCount && $userUsageCount->usage_count >= $this->usage_per_user) {
             return false;
         }
+
+
         return true;
     }
 
     public function calculateDiscount($orderAmount)
     {
         if ($this->discount_type == 1) { 
-            return $orderAmount * ($this->discount_value / 100);
+            $discount = $orderAmount * ($this->discount_value / 100);
+            return $this->max_discount_amount !== null ? min( $discount, $this->max_discount_amount) : $discount;
         } elseif ($this->discount_type == 2) {
             return min($this->discount_value, $orderAmount);
         }

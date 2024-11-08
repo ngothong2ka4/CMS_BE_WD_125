@@ -2,13 +2,7 @@
 
 
 @section('content')
-@if ($errors->any())
-@foreach ($errors->all() as $error)
-@php
-toastr()->error($error);
-@endphp
-@endforeach
-@endif
+
 <div class="row">
     <div class="col-lg-12">
         <div class="card mb-1">
@@ -33,27 +27,27 @@ toastr()->error($error);
                     <div class="col-lg-6">
                         <label for="basiInput" class="form-label">Phương thức thanh toán</label>
                         <input type="text" class="form-control mb-3" id="basiInput" name="name"
-                        @if($order->	payment_role == 1)
-                                       value = "Thanh toán khi nhận hàng"
-                                        @endif
-                                        @if($order->payment_role == 2)
-                                       value = "Thanh toán qua VNPay"
-                                        @endif 
-                                        @if($order->payment_role == 3)
-                                       value = "Thanh toán qua Momo"
-                                        @endif disabled>
+                            @if($order-> payment_role == 1)
+                        value = "Thanh toán khi nhận hàng"
+                        @endif
+                        @if($order->payment_role == 2)
+                        value = "Thanh toán qua VNPay"
+                        @endif
+                        @if($order->payment_role == 3)
+                        value = "Thanh toán qua Momo"
+                        @endif disabled>
 
                     </div>
 
                     <div class="col-lg-6">
                         <label for="basiInput" class="form-label">Trạng thái thanh toán</label>
                         <input type="text" class="form-control mb-3" id="basiInput" name="name"
-                            @if($order->	status_payment == 1)
-                                       value = "Chưa thanh toán"
-                                        @endif
-                                        @if($order->status_payment == 2)
-                                       value = "Đã thanh toán"
-                                        @endif disabled>
+                            @if($order-> status_payment == 1)
+                        value = "Chưa thanh toán"
+                        @endif
+                        @if($order->status_payment == 2)
+                        value = "Đã thanh toán"
+                        @endif disabled>
 
                     </div>
                 </div>
@@ -67,14 +61,14 @@ toastr()->error($error);
 
                     <div class="col-lg-6">
                         <label for="basiInput" class="form-label">Điện thoại</label>
-                        <input type="text" class="form-control mb-3" id="basiInput" 
+                        <input type="text" class="form-control mb-3" id="basiInput"
                             value="{{ $order->phone_number }}" disabled>
 
                     </div>
                 </div>
                 <div>
                     <label for="basiInput" class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control mb-3" id="basiInput" 
+                    <input type="text" class="form-control mb-3" id="basiInput"
                         value="{{ $order->	recipient_address}}" disabled>
 
                 </div>
@@ -109,7 +103,7 @@ toastr()->error($error);
 
                             <td>{{ $orderdetail->	quantity }}</td>
                             <td>{{ number_format($orderdetail->	selling_price) }} đ</td>
-                            <td>{{number_format($orderdetail->	quantity * $orderdetail->	selling_price) }} đ</td>
+                            <td>{{number_format($orderdetail-> quantity * $orderdetail->	selling_price) }} đ</td>
                         </tr>
 
                         @endforeach
@@ -142,61 +136,61 @@ toastr()->error($error);
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach ($orderhistories as $index => $orderhis)
-                            <tr>
-                                <td>{{$index + 1}}</td>
-                                <td>@if($orderhis->from_status == 1)
-                                        Chờ xác nhận
-                                        @endif
-                                        @if($orderhis->from_status == 2)
-                                        Đã xác nhận
-                                        @endif
-                                        @if($orderhis->from_status == 3)
-                                        Đang giao
-                                        @endif
-                                        @if($orderhis->from_status == 4)
-                                        Giao hàng thành công
-                                        @endif
-                                        @if($orderhis->from_status == 5)
-                                        Giao hàng thất bại
-                                        @endif
-                                        @if($orderhis->from_status == 6)
-                                        Hoàn thành
-                                        @endif
-                                        @if($orderhis->from_status == 7)
-                                        Đã hủy
-                                        @endif
-                                     --> 
-                                        @if($orderhis->to_status == 1)
-                                        Chờ xác nhận
-                                        @endif
-                                        @if($orderhis->to_status == 2)
-                                        Đã xác nhận
-                                        @endif
-                                        @if($orderhis->to_status == 3)
-                                        Đang giao
-                                        @endif
-                                        @if($orderhis->to_status == 4)
-                                        Giao hàng thành công
-                                        @endif
-                                        @if($orderhis->to_status == 5)
-                                        Giao hàng thất bại
-                                        @endif
-                                        @if($orderhis->to_status == 6)
-                                        Hoàn thành
-                                        @endif
-                                        @if($orderhis->to_status == 7)
-                                        Đã hủy
-                                        @endif </td>
-                                <td>{{$orderhis->note}}</td>
-                                <td>{{$orderhis->idUser?->name}}
-                                    @if($orderhis->id_user == 0)
-                                        Hệ thống
-                                    @endif
-                                </td>
-                                <td>{{$orderhis->created_at}}</td>
-                            </tr>
-                    @endforeach
+                        @foreach ($orderhistories as $index => $orderhis)
+                        <tr>
+                            <td>{{$index + 1}}</td>
+                            <td>@if($orderhis->from_status == 1)
+                                Chờ xác nhận
+                                @endif
+                                @if($orderhis->from_status == 2)
+                                Đã xác nhận
+                                @endif
+                                @if($orderhis->from_status == 3)
+                                Đang giao
+                                @endif
+                                @if($orderhis->from_status == 4)
+                                Giao hàng thành công
+                                @endif
+                                @if($orderhis->from_status == 5)
+                                Giao hàng thất bại
+                                @endif
+                                @if($orderhis->from_status == 6)
+                                Hoàn thành
+                                @endif
+                                @if($orderhis->from_status == 7)
+                                Đã hủy
+                                @endif
+                                -->
+                                @if($orderhis->to_status == 1)
+                                Chờ xác nhận
+                                @endif
+                                @if($orderhis->to_status == 2)
+                                Đã xác nhận
+                                @endif
+                                @if($orderhis->to_status == 3)
+                                Đang giao
+                                @endif
+                                @if($orderhis->to_status == 4)
+                                Giao hàng thành công
+                                @endif
+                                @if($orderhis->to_status == 5)
+                                Giao hàng thất bại
+                                @endif
+                                @if($orderhis->to_status == 6)
+                                Hoàn thành
+                                @endif
+                                @if($orderhis->to_status == 7)
+                                Đã hủy
+                                @endif </td>
+                            <td>{{$orderhis->note}}</td>
+                            <td>{{$orderhis->idUser?->name}}
+                                @if($orderhis->id_user == 0)
+                                Hệ thống
+                                @endif
+                            </td>
+                            <td>{{$orderhis->created_at}}</td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
@@ -204,50 +198,83 @@ toastr()->error($error);
             </div>
         </div>
         <div class="card mt-2">
-        @if($order->status <=3)
+            @if($order->status <=3)
 
-            <div class="card-header">
+                <div class="card-header">
                 <h4 class="mb-0">Thay đổi trạng thái đơn hàng</h4>
-            </div>
-            <form action="{{ route('order.update', $order->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="card-body">
-                    <div>
-                        <label for="basiInput" class="form-label">Trạng thái</label>
-                        <select name="to_status" class="form-select mb-3" aria-label="Default select example">
-                            <option value="">Chọn trạng thái</option>
-                            
-                            <option value="2" @if($order->status >= 2) disabled @endif >Đã xác nhận</option>
-                           
-                           
-                            <option value="3" @if($order->status == 1 || $order->status >= 3 ) disabled @endif >Đang giao hàng</option>
-                            
-                            <option value="4" @if($order->status <= 2) disabled @endif >Giao hàng thành công</option>
-                            <option value="5" @if($order->status <= 2) disabled @endif >Giao hàng thất bại</option>
-                            <option value="7" @if($order->status >= 2) disabled @endif >Hủy</option>
+        </div>
+        <form id="test-form">
+            @csrf
+            <!-- @method('PUT') -->
+            <div class="card-body">
+                <div>
+                    <label for="basiInput" class="form-label">Trạng thái</label>
+                    <select name="to_status" class="form-select mb-3" id="test-select" aria-label="Default select example">
+                        <option value="">Chọn trạng thái</option>
 
-                           
-                        </select>
+                        <option value="2" @if($order->status >= 2) disabled @endif >Đã xác nhận</option>
 
-                    </div>
-                    <div>
-                        <label for="basiInput" class="form-label">Ghi chú</label>
-                        <textarea class="form-control" name="note" id="meassageInput" rows="3" placeholder="Nhập ghi chú"></textarea>
-                    </div>
 
-                    <div class="mt-3 text-center mb-2">
-                        <a href="{{ route('order.index') }}" class="btn btn-success">Quay lại</a>
-                        <button class="btn btn-primary" type="submit">Lưu</button>
-                    </div>
-            </form>
+                        <option value="3" @if($order->status == 1 || $order->status >= 3 ) disabled @endif >Đang giao hàng</option>
+
+                        <option value="4" @if($order->status <= 2) disabled @endif>Giao hàng thành công</option>
+                        <option value="5" @if($order->status <= 2) disabled @endif>Giao hàng thất bại</option>
+                        <option value="7" @if($order->status >= 2) disabled @endif >Hủy</option>
+
+
+                    </select>
+
+                </div>
+                <div>
+                    <label for="basiInput" class="form-label">Ghi chú</label>
+                    <textarea class="form-control" name="note" id="meassageInput" rows="3" placeholder="Nhập ghi chú"></textarea>
+                </div>
+
+                <div class="mt-3 text-center mb-2">
+                    <a href="{{ route('order.index') }}" class="btn btn-success">Quay lại</a>
+                    <button class="btn btn-primary" type="submit">Lưu</button>
+                </div>
+        </form>
         @endif
         @if($order->status >=4)
         <div class="mt-3 text-center mb-2">
-                        <a href="{{ route('order.index') }}" class="btn btn-success">Quay lại</a>
-                   
-                    </div>
-        @endif
+            <a href="{{ route('order.index') }}" class="btn btn-success">Quay lại</a>
+
         </div>
+        @endif
     </div>
-    @endsection
+</div>
+<script>
+    $(document).ready(function() {
+        $('#test-form').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/order/{{$order->id}}',
+                type: 'POST',
+                data: $('#test-form').serialize(),
+                success: function(res) {
+                    if (res.status) {
+                        console.log(res.message);
+                        Swal.fire({
+                            icon: "success",
+                            title: res.message,
+                        }).then((result) => {
+                            if (result.isConfirmed) window.location.reload();
+                        });
+                    } else {
+                        console.log(res.error);
+                        Swal.fire({
+                            icon: "error",
+                            title: res.error,
+                        })
+                    }
+
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        })
+    })
+</script>
+@endsection

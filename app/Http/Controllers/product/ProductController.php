@@ -319,7 +319,7 @@ class ProductController extends Controller
         return redirect()->back();
     } catch (\Exception $e) {
         toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
-        return redirect()->back();
+        return redirect()->back()->withInput();
     }
 
 

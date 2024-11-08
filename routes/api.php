@@ -51,11 +51,12 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);
 Route::get('/relatedProducts/{id}',[ProductController::class, 'relatedProducts']);
 
-Route::get('/view/{userID}',[ProductController::class,'getRecentViewedProducts']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
     Route::get('/listCommentUser',[ProductController::class, 'listCommentUser']);
+    Route::get('/view',[ProductController::class,'getRecentViewedProducts']);
+
 
     Route::get('/listCart',[CartController::class, 'listProductInCart']);
     Route::post('/addCart',[CartController::class, 'addProductToCart']);
@@ -72,6 +73,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
     Route::get('/vouchers/list', [VoucherController::class, 'listVoucher']);
-
+    
+    Route::get('favoriteProduct/check', [FavoriteProductController::class, 'isFavorite']);
     Route::resource('favoriteProduct', FavoriteProductController::class);
+
+    Route::post('updateUser', [AuthController::class, 'updateUser']);
+    Route::post('changePassword', [AuthController::class, 'changePassword']);
+
+    
 });

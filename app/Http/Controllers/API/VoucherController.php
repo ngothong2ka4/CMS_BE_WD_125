@@ -36,6 +36,15 @@ class VoucherController extends Controller
             return $this->jsonResponse('Mã voucher không hợp lệ');
         }
 
+        if ($voucher->user_voucher_limit == 2) {
+            $userPoints = Auth::user()->accumulated_points;
+
+            if (($voucher->min_accumulated_points && $userPoints < $voucher->min_accumulated_points) || 
+                ($voucher->max_accumulated_points && $userPoints > $voucher->max_accumulated_points)) {
+                return $this->jsonResponse('Bạn không đủ điểm để sử dụng voucher này');
+            }
+        }
+
         if (!$voucher->isValid()) {
             return $this->jsonResponse('Voucher không hợp lệ hoặc không đủ điều kiện');
         }

@@ -206,6 +206,55 @@
                                     </div>
                                 </div>
                             @endforeach
+                            @if(old('new_id_attribute_color'))
+                        @foreach(old('new_id_attribute_color') as $key => $value)
+                        <div class="form-group d-flex variant-row" id="variant-{{$key + 1}}">
+                            <div class="form-group me-1">
+                                <label for="color-{{$key + 1}} " class="form-label">Màu sắc</label>
+                                <select required name="new_id_attribute_color[]" class="form-select mb-3 variant-select color-select " id="color-{{$key + 1}}" aria-label="Default select example">
+                                    <option value="">Chọn màu sắc</option>
+                                    @foreach ($colors as $color)
+                                    <option value="{{ $color->id }}"
+                                        {{ $value == $color->id ? 'selected' : '' }}>{{ $color->name }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group me-1">
+                                <label for="size-{{$key + 1}}" class="form-label">Kích thước</label>
+                                <select name="new_id_attribute_size[]" class="form-select mb-3 variant-select size-select " id="size-{{$key + 1}}" aria-label="Default select example">
+                                    <option value="">Chọn kích thước</option>
+                                    @foreach ($sizes as $size)
+                                    <option value="{{ $size->id }}"
+                                        {{ old('new_id_attribute_size')[$key] == $size->id ? 'selected' : '' }}>{{ $size->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="me-1">
+                                <label for="price_in-{{$key + 1}}" class="form-label">Giá nhập</label>
+                                <input name="import_price[]" value="{{old('import_price')[$key]}}" type="number" required min=0 class="form-control price-validate price_in" id="price_in-{{$key + 1}}" placeholder="Nhập giá nhập">
+                            </div>
+                            <div class="me-1">
+                                <label for="price_out-{{$key + 1}}" class="form-label">Giá niêm yết</label>
+                                <input name="new_list_price[]" value="{{old('new_list_price')[$key]}}" type="number" required min=0 class="form-control price-validate price_out" id="price_out-{{$key + 1}}" placeholder="Nhập giá niêm yết">
+                            </div>
+                            <div class="me-1">
+                                <label for="sale_price-{{$key + 1}}" class="form-label">Giá bán</label>
+                                <input name="new_selling_price[]" value="{{old('new_selling_price')[$key]}}" type="number" required min=0 class="form-control price-validate sale_price" id="sale_price-{{$key + 1}}" placeholder="Nhập giá bán">
+                            </div>
+                            <div class="me-1">
+                                <label for="quantity-{{$key + 1}}" class="form-label">Số lượng</label>
+                                <input name="new_quantity[]" value="{{old('new_quantity')[$key]}}" type="number" required min=0 class="form-control" id="quantity-{{$key + 1}}" placeholder="Nhập số lượng">
+                            </div>
+                            <div class="me-1">
+                                <label for="image_color-{{$key + 1}}" class="form-label">Ảnh</label>
+                                <input name="new_image_color[]" type="file" min=0 class="form-control" id="image_color-{{$key + 1}}" placeholder="Nhập ảnh">
+                            </div>
+                            <div style="margin-top: 27px">
+                                <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-{{$key + 1}}" type="button">Xoá</button>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
 
                         </div>
 
@@ -227,7 +276,9 @@
 
 @push('scripts')
     <script>
-        let variantCounter = 1;
+        <?php $count = old('new_id_attribute_color') ? count(old('new_id_attribute_color')) + 1 : 1; ?>
+    let variantCounter = <?= $count; ?>;
+    console.log(variantCounter)
 
         $('#add-variant-btn').click(function() {
             variantCounter++;
@@ -270,7 +321,7 @@
                     </div>
                     <div class="me-1">
                         <label for="image_color-${variantCounter}" class="form-label">Ảnh</label>
-                        <input name="new_image_color[]" type="file" required min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
+                        <input name="new_image_color[]" type="file" min=0 class="form-control" id="image_color-${variantCounter}" placeholder="Nhập ảnh">
                     </div>
                     <div style="margin-top: 27px">
                         <button class="btn btn-danger remove-variant-btn" data-variant-id="variant-${variantCounter}" type="button">Xoá</button>

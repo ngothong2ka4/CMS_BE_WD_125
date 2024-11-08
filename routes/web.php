@@ -73,6 +73,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::resource('comment', CommentController::class);
         Route::patch('comment/status/{id}', [CommentController::class, 'status'])->name('comment_status');
 
+        Route::post('/order/{id}', [OrderController::class, 'updateStatus']);
+
         Route::resource('order', OrderController::class);
         Route::resource('statistic', StatisticController::class);
         Route::prefix('user')->group(function () {
