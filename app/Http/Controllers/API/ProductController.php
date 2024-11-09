@@ -263,7 +263,7 @@ class ProductController extends Controller
         //  $product->increment('views');
         if (Auth::guard('sanctum')->check()) {
             $view = ProductView::where('id_user', Auth::guard('sanctum')->id())
-            ->where('id_product', $id)->get();
+            ->where('id_product', $id)->first();
             if($view){
                 $view->update(['viewed_at' => now(),]);
             }else{
