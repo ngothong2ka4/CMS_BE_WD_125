@@ -262,11 +262,18 @@ class ProductController extends Controller
         }
         //  $product->increment('views');
         if (Auth::guard('sanctum')->check()) {
-            ProductView::create([
-                'id_product' => $id,
-                'viewed_at' => now(),
-                'id_user' => Auth::guard('sanctum')->id(),
-            ]);
+            $view = ProductView::where('id_user', Auth::guard('sanctum')->id())
+            ->where('id_product', $id)->get();
+            if($view){
+                $view->update(['viewed_at' => now(),]);
+            }else{
+                ProductView::create([
+                    'id_product' => $id,
+                    'viewed_at' => now(),
+                    'id_user' => Auth::guard('sanctum')->id(),
+                ]);
+            }
+           
         }
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
