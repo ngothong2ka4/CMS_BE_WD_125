@@ -13,7 +13,7 @@
                 <h5 class="card-title mb-0 col-lg-9">Quản lý đơn hàng</h5>
                 <form class="col-lg-3">
                     <select name="status" onchange="this.form.submit()" class=" form-select">
-                        <option value="all" {{!request('status') ?'selected' : '' }}> Tất cả đơn hàng</option>
+                        <option value="all" {{!request('status') || request('status') == 'all' ?'selected' : '' }}> Tất cả đơn hàng</option>
                         <option value="1" {{request('status') == 1 ?'selected' : '' }}>Chờ xác nhận</option>
                         <option value="2" {{request('status') == 2 ?'selected' : '' }}>Đã xác nhận</option>
                         <option value="3" {{request('status') == 3 ?'selected' : '' }}>Đang giao hàng</option>
@@ -42,7 +42,7 @@
                     <tbody>
                         @foreach ($orders as $index => $order)
                         <tr>
-                            <td>#{{ $order->id }}</td>
+                            <td>{{ $order->id }}</td>
                             <td>{{ $order->recipient_name }}</td>
                             <td>{{ number_format($order->total_payment) }} đ</td>
 
@@ -94,9 +94,7 @@
 @push('scripts')
 <script>
     new DataTable("#example", {
-        order: [
-            [0, 'desc']
-        ],
+        order: [0, 'desc'],
         "language": {
             "sProcessing": "Đang xử lý...",
             "sLengthMenu": "Hiển thị _MENU_ mục",

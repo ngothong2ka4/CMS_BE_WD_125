@@ -33,13 +33,17 @@
                         Nhập email của bạn và hướng dẫn sẽ được gửi đến bạn!
                     </div>
                     <div class="p-2">
-                        <form>
+                        <form method="post">
+                            @csrf
                             <div class="mb-4">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email"
-                                    placeholder="Nhập email của bạn...">
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Nhập email của bạn..." value="{{old('email')}}">
+                                  
                             </div>
-
+                            <div class="float-end mb-4">
+                                <a href="{{ route('login') }}" class="text-muted">Đăng nhập</a>
+                            </div>
                             <div class="text-center mt-4">
                                 <button class="btn btn-success w-100" type="submit">Gửi</button>
                             </div>
@@ -50,17 +54,6 @@
             </div>
             <!-- end card -->
 
-            <div class="mt-4 text-center">
-                @auth
-                    <p class="mb-0">Quay lại..<a href="{{ route('changePassword',Auth::user()->id) }}"
-                            class="fw-semibold text-primary text-decoration-underline">Tại đây. </a> </p>
-                @endauth
-                @guest
-                    <p class="mb-0">Nhập mật khẩu...<a href="{{ route('login') }}"
-                        class="fw-semibold text-primary text-decoration-underline">Tại đây. </a> </p>
-                @endguest
-                
-            </div>
 
         </div>
     </div>

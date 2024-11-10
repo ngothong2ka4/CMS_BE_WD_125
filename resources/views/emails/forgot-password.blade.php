@@ -54,11 +54,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Xin chào {{$user->name}}!</h1>
+            <h1>Xin chào 
+                @if($user->role == 2)
+                 quản trị viên
+                @endif
+                 {{$user->name}}!</h1>
         </div>
 
         <div class="order-details">
-            <h2><a href="{{config('app.url')}}:5173/reset-password/{{$token}}">Nhấn vào đây để tạo lại mật khẩu mới của bạn.</a></h2>
+            <h2><a href="{{config('app.url')}}:{{$user->role == 2 ? '8000' : '5173'}}/reset-password/{{$token}}">Nhấn vào đây để tạo lại mật khẩu mới của bạn.</a></h2>
             <p>Vui lòng đổi mật khẩu ngay, Sau 2 phút đường dẫn sẽ bị vô hiệu hóa!</p>
     
         </div>

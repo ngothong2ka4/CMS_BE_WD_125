@@ -43,13 +43,6 @@ Common::deleteToken();
 //     return view('test');
 // })->name('login');
 
-Route::get('/signup', function () {
-    return view('auth.signup');
-})->name('signup');
-
-Route::get('/forgot', function () {
-    return view('auth.forgot');
-})->name('forgot');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin']);
@@ -58,7 +51,9 @@ Route::get('/signup', [LoginController::class, 'register'])->name('signup');
 Route::post('/signup', [LoginController::class, 'postRegister']);
 
 Route::get('/forgot', [AuthController::class, 'forgot'])->name('forgot');
-Route::post('/forgot', [AuthController::class, 'sendPassword']);
+Route::post('/forgot', [AuthController::class, 'forgotPassword']);
+Route::get('reset-password/{token}', [AuthController::class, 'resetPassword']);
+Route::post('reset-password/{token}', [AuthController::class, 'postResetPassword']);
 
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -67,7 +62,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
 
     Route::middleware(['auth', AdminMiddleware::class, CheckStatusUser::class])->group(function () {
-        Route::redirect('', 'dashboard');
+        Route::redirect('', 'statistic');
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
         Route::resource('category', CategoryController::class);
         Route::resource('comment', CommentController::class);

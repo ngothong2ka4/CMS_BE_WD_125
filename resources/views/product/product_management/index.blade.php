@@ -9,8 +9,17 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Quản lý sản phẩm</h5>
+                <div class="card-header row">
+                    <h5 class="card-title mb-0 col-lg-9">Quản lý sản phẩm</h5>
+                    <form class="col-lg-3">
+                    <select name="category" onchange="this.form.submit()" class=" form-select">
+                        <option value="all" {{!request('category') || request('category') == 'all' ?'selected' : '' }}> Tất cả sản phẩm</option>
+                        @foreach($categories as $category)
+                        <option value="{{$category->id}}" {{request('category') == $category->id ?'selected' : '' }}>{{$category->name}}</option>
+                        @endforeach
+                        
+                    </select>
+                </form>
                 </div>
                 <div class="card-body">
                     <a href="{{ route('product_management.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
@@ -19,7 +28,7 @@
                         style="width:100%">
                         <thead>
                         <tr>
-                            <th >STT</th>
+                            <th >Id</th>
                             <th >Tên sản phẩm</th>
                             <th >Hình ảnh</th>
                             <th >Danh mục</th>
@@ -32,7 +41,7 @@
                         <tbody>
                             @foreach ($products as $index => $product)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $product->id }}</td>
                                     <td>{{ $product->name }}</td>
                                     <td><img src="{{ $product->thumbnail}}" alt="" width = 80></td>
                                     <td>{{ $product->category?->name }}</td>
