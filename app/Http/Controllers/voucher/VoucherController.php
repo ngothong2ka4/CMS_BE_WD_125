@@ -110,9 +110,14 @@ class VoucherController extends Controller
     public function show($id)
     {
         $voucher = Voucher::findOrFail($id);
-        $products = Product::all();
-        $users= User::all();
-        return view('voucher.show', compact('voucher','products','users'));
+         
+        $users = User::all(); // Lấy tất cả người dùng
+        $selectedUserIds = DB::table('voucher_user_access')
+            ->where('id_voucher', $id)
+            ->pluck('id_user')
+            ->toArray(); // Lấy danh sách id_user đã có trong voucher_user_access
+    
+        return view('voucher.show', compact('voucher', 'users', 'selectedUserIds'));
     }
     public function destroy($id)
     {
