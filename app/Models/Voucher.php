@@ -35,7 +35,7 @@ class Voucher extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_voucher', 'id_voucher', 'id_user');
+        return $this->belongsToMany(User::class, 'voucher_user_access', 'id_voucher', 'id_user');
     }
 
     public function isValid()
