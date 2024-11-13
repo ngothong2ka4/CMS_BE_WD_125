@@ -18,9 +18,9 @@ class VoucherController extends Controller
     }
     public function create()
     {
-        $products = Product::all();
+        
         $users= User::all();
-        return view('voucher.add', compact('products','users'));
+        return view('voucher.add', compact('users'));
     }
      
     public function store(Request $request)
@@ -80,7 +80,7 @@ class VoucherController extends Controller
                 return back()->withInput();
             }
             if ($request->start_date > $request->end_date) {
-                toastr()->error('Ngày bắt đầu phải trước ngày kết thúc');
+                toastr()->error('Ngày bắt đầu phải trước hoặc bằng ngày kết thúc');
                 return back()->withInput();
             }
             // if (isset($params['id_product']) && !is_array($params['id_product'])) {
@@ -125,21 +125,24 @@ class VoucherController extends Controller
     public function edit(string $id)
     {
         $voucher = Voucher::findOrFail($id);
-        $products = Product::all();
-        $users= User::all();
-        return view('voucher.edit', compact('voucher','products','users'));
+        
+        $users = User::all(); // Lấy tất cả người dùng
+        $selectedUserIds = DB::table('voucher_user_access')
+            ->where('id_voucher', $id)
+            ->pluck('id_user')
+            ->toArray(); // Lấy danh sách id_user đã có trong voucher_user_access
+    
+        return view('voucher.edit', compact('voucher', 'users', 'selectedUserIds'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Voucher $voucher)
     {
 
         try {
             $params = $request->validate([
-                // 'id_product' => 'nullable',
-                'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,' . $voucher->id,
+                // 'id_product' => 'nullable|array',
+                'id_user' => 'nullable|array',
+                'code' => 'required|max:25|min:3|regex:/^[\p{L}\p{N}\s]+$/u|unique:vouchers,code,'. $voucher->id,
                 'discount_type' => 'required|in:1,2',
                 'discount_value' => 'required|numeric|min:1',
                 'start_date' => 'required',
@@ -147,10 +150,10 @@ class VoucherController extends Controller
                 'usage_limit' => 'required|integer|min:1',
                 'usage_per_user' => 'required|integer|min:1',
                 'description' => 'nullable',
-                'user_voucher_limit' => 'nullable|in:1,2',
+                'user_voucher_limit' => 'nullable|in:1,2,3',
                 'max_discount_amount' => 'nullable|numeric',
-                'min_accumulated_points' => 'nullable',
-                'max_accumulated_points' => 'nullable',
+                'min_accumulated_points' => 'nullable|numeric',
+                'max_accumulated_points' => 'nullable|numeric',
             ], [
                 'code.required' => 'Mã code là bắt buộc.',
                 'code.max' => 'Mã code không được vượt quá 25 ký tự.',
@@ -187,11 +190,14 @@ class VoucherController extends Controller
                 toastr()->error('Mức ưu đãi theo giá trị cố định phải lớn hoặc bằng 10000');
                 return back()->withInput();
             }
-            if ($request->start_date >= $request->end_date) {
+            if ($request->start_date > $request->end_date) {
                 toastr()->error('Ngày bắt đầu phải trước ngày kết thúc');
                 return back()->withInput();
             }
             $voucher->update($params);
+            if (!empty($params['id_user'])) {
+                $voucher->users()->sync($params['id_user']);
+            }
             toastr()->success('Sửa voucher thành công!');
             return redirect()->back()->withInput();
         } catch (\Illuminate\Validation\ValidationException $e) {
