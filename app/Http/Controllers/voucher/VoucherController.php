@@ -61,14 +61,15 @@ class VoucherController extends Controller
                 $params['max_discount_amount'] = null;
             }
 
-            if ($params['discount_type'] == 2 && $params['min_accumulated_points'] < 0) {
-                toastr()->error('Điểm tích lũy nhỏ phải lớn hơn hoặc bằng 0');
-                return back()->withInput();
-            }
-            
-            if ($params['discount_type'] == 2 && isset($params['max_accumulated_points']) && $params['min_accumulated_points'] > $params['max_accumulated_points']) {
-                toastr()->error('Điểm tích lũy nhỏ phải nhỏ hơn hoặc bằng điểm tích lũy lớn');
-                return back()->withInput();
+            if ($params['discount_type'] == 2 && isset($params['min_accumulated_points'], $params['max_accumulated_points'])) {
+                if ($params['min_accumulated_points'] < 0) {
+                    toastr()->error('Điểm tích lũy nhỏ phải lớn hơn hoặc bằng 0');
+                    return back()->withInput();
+                }
+                if ($params['min_accumulated_points'] > $params['max_accumulated_points']) {
+                    toastr()->error('Điểm tích lũy nhỏ phải nhỏ hơn điểm tích lũy lớn');
+                    return back()->withInput();
+                }
             }
             
             if ($params['discount_type'] == 1 && $params['discount_value'] > 100) {
@@ -111,11 +112,11 @@ class VoucherController extends Controller
     {
         $voucher = Voucher::findOrFail($id);
          
-        $users = User::all(); // Lấy tất cả người dùng
+        $users = User::all(); 
         $selectedUserIds = DB::table('voucher_user_access')
             ->where('id_voucher', $id)
             ->pluck('id_user')
-            ->toArray(); // Lấy danh sách id_user đã có trong voucher_user_access
+            ->toArray(); 
     
         return view('voucher.show', compact('voucher', 'users', 'selectedUserIds'));
     }
@@ -131,11 +132,11 @@ class VoucherController extends Controller
     {
         $voucher = Voucher::findOrFail($id);
         
-        $users = User::all(); // Lấy tất cả người dùng
+        $users = User::all(); 
         $selectedUserIds = DB::table('voucher_user_access')
             ->where('id_voucher', $id)
             ->pluck('id_user')
-            ->toArray(); // Lấy danh sách id_user đã có trong voucher_user_access
+            ->toArray(); 
     
         return view('voucher.edit', compact('voucher', 'users', 'selectedUserIds'));
     }
@@ -179,13 +180,15 @@ class VoucherController extends Controller
             if ($params['discount_type'] == 2) {
                 $params['max_discount_amount'] = null;
             }
-            if ($params['discount_type'] == 2 && $params['min_accumulated_points'] <= 0) {
-                toastr()->error('Điển tích lũy nhỏ phải lớn hơn hoắc bằng 0');
-                return back()->withInput();
-            }
-            if ($params['discount_type'] == 2 && $params['min_accumulated_points'] > $params['max_accumulated_points']) {
-                toastr()->error('Điển tích lũy nhỏ phải nhỏ hơn điểm tích lũy lớn ');
-                return back()->withInput();
+            if ($params['discount_type'] == 2 && isset($params['min_accumulated_points'], $params['max_accumulated_points'])) {
+                if ($params['min_accumulated_points'] < 0) {
+                    toastr()->error('Điểm tích lũy nhỏ phải lớn hơn hoặc bằng 0');
+                    return back()->withInput();
+                }
+                if ($params['min_accumulated_points'] > $params['max_accumulated_points']) {
+                    toastr()->error('Điểm tích lũy nhỏ phải nhỏ hơn điểm tích lũy lớn');
+                    return back()->withInput();
+                }
             }
             if ($params['discount_type'] == 1 && $params['discount_value'] > 100) {
                 toastr()->error('Mức ưu đãi theo phần trăm phải nhỏ hơn hoặc bằng 100');

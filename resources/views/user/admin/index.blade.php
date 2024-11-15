@@ -36,7 +36,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td> <img src="{{ $item->image }}" alt="" width="80"></td>
+                                    <td> <img src="{{ $item->image }}" class="rounded-circle" alt="" width=100 height=100></td>
                                     <td>{{ $item->role == 1 ? 'user' : 'admin' }}</td>
                                     <td>
                                         <form action="{{ route('user_status', $item->id) }}" method="POST" class="d-inline"
@@ -50,8 +50,8 @@
                                     <td>
                                         <a href="{{ route('admin.show', $item->id) }}"><button
                                                 class="btn btn-success me-3">Chi tiết</button></a>
-                                        <a href="{{ route('admin.edit', $item->id) }}"><button
-                                                class="btn btn-warning me-3">Sửa</button></a>
+                                        {{-- <a href="{{ route('admin.edit', $item->id) }}"><button
+                                                class="btn btn-warning me-3">Sửa</button></a> --}}
                                         {{-- <form action="{{ route('user.destroy', $item->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Bạn có đồng ý xóa không?')">
                                             @csrf
