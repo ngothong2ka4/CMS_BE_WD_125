@@ -26,12 +26,12 @@ class OrderController extends Controller
     {
         if ($request->status && $request->status != 'all') {
             $status = $request->status;
-            $orders = Order::where('status', $status)->get();
+            $orders = Order::where('status', $status)->orderBy('id', 'desc')->get();
             if ($request->status == '4&6') {
-                $orders = Order::whereIn('status', [4, 6])->get();
+                $orders = Order::whereIn('status', [4, 6])->orderBy('id', 'desc')->get();
             }
         } else {
-            $orders = Order::all();
+            $orders = Order::orderBy('id', 'desc')->get();
         }
         return view('order.index', compact('orders'));
     }

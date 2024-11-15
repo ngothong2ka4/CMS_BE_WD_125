@@ -26,7 +26,7 @@ class Voucher extends Model
         'max_discount_amount',
         'min_accumulated_points',
         'max_accumulated_points',
-         
+
     ];
     // public function products()
     // {
@@ -35,22 +35,30 @@ class Voucher extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_voucher', 'id_voucher', 'id_user');
+        return $this->belongsToMany(User::class, 'voucher_user_access', 'id_voucher', 'id_user');
     }
 
     public function isValid()
     {
         $currentDate = Carbon::now();
 
-        if ($this->status != 1 || $this->usage_limit <= $this->used_count || 
+        if ($this->status != 1 || $this->usage_limit <= $this->used_count ||
             $this->start_date > $currentDate || $this->end_date < $currentDate) {
+            return false;
+        }
+
+        $voucherUserAccess = DB::table('voucher_user_access')->where('id_voucher', $this->id)
+        ->where('id_user', Auth::id())
+        ->first();
+
+        if (!$voucherUserAccess) {
             return false;
         }
 
         $userUsageCount = DB::table('voucher_user')->where('voucher_id', $this->id)
                                                   ->where('user_id', Auth::id())
                                                   ->first();
-                
+
         if ($userUsageCount && $userUsageCount->usage_count >= $this->usage_per_user) {
             return false;
         }
@@ -61,7 +69,7 @@ class Voucher extends Model
 
     public function calculateDiscount($orderAmount)
     {
-        if ($this->discount_type == 1) { 
+        if ($this->discount_type == 1) {
             $discount = $orderAmount * ($this->discount_value / 100);
             return $this->max_discount_amount !== null ? min( $discount, $this->max_discount_amount) : $discount;
         } elseif ($this->discount_type == 2) {
@@ -90,7 +98,7 @@ class Voucher extends Model
             DB::table('voucher_user')->insert([
                 'voucher_id' => $this->id,
                 'user_id' => $userId,
-                'usage_count' => 1, 
+                'usage_count' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

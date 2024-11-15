@@ -95,6 +95,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php 
+                            $tong = 0;
+                        ?>
                         @foreach ($orderdetails as $index => $orderdetail)
                         <tr>
                             <td>{{ $index + 1 }}</td>
@@ -104,15 +107,46 @@
                             <td>{{ $orderdetail->	quantity }}</td>
                             <td>{{ number_format($orderdetail->	selling_price) }} đ</td>
                             <td>{{number_format($orderdetail-> quantity * $orderdetail->	selling_price) }} đ</td>
+                            <?php 
+                            $tong += $orderdetail->quantity * $orderdetail->	selling_price;
+                        ?>
                         </tr>
 
                         @endforeach
 
                     </tbody>
                 </table>
-                <div class="col-lg-12 text-center font-weight-bold">
-                    <h5>Tổng: {{number_format($order->total_payment)}} đ</h5>
+
+                <div class="row">
+                <div class="col-lg-7">
+                   
                 </div>
+                <div class="col-lg-5">
+                <div class="font-weight-bold  d-flex justify-content-around">
+                    <p>Tổng tiền hàng:</p>      
+                    <p> {{number_format($tong)}} đ</p>
+                </div>
+                @if($order->discount_amount)
+                <div class="font-weight-bold  d-flex justify-content-around">
+                    <p>Mã giảm giá:</p>      
+                    <p> -{{number_format($order->discount_amount)}} đ</p>
+                </div>
+                @endif
+                @if($order->used_accum)
+                <div class="font-weight-bold  d-flex justify-content-around">
+                    <p>Điểm tiêu dùng:</p>      
+                    <p> -{{number_format($order->used_accum * 1000)}} đ</p>
+                </div>
+                @endif
+                <hr>
+                <div class="font-weight-bold  d-flex justify-content-around">
+                    <h5>Thành tiền:</h5>      
+                    <h5> {{number_format($order->total_payment)}} đ</h5>
+                </div>
+                </div>
+              
+                </div>
+               
 
             </div>
         </div>

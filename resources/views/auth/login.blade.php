@@ -48,15 +48,13 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="float-end">
-                                <a href="{{ route('forgot') }}" class="text-muted">Quên mật khẩu?</a>
-                            </div> <br>
-                            <div class="form-check">
+                            <div class="form-check mb-3 float-start">
                                 <input class="form-check-input" type="checkbox" name="remember" id="auth-remember-check">
                                 <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
                             </div>
-
-
+                            <div class="float-end mb-3">
+                                <a href="{{ route('forgot') }}" class="text-muted ">Quên mật khẩu?</a>
+                            </div>
                             <div class="mt-4">
                                 <button class="btn btn-success w-100" type="submit">Đăng Nhập</button>
                             </div>
