@@ -21,6 +21,7 @@ class Order extends Model
         'status',
         'total_payment',
         'discount_amount',
+        'discount_value',
         'used_accum'
     ];
 

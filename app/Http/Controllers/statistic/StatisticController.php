@@ -19,14 +19,7 @@ class StatisticController extends Controller
      */
     public function index(Request $request)
     {
-        $choXacNhan = Order::where('status', '1')->count();
-        $daXacNhan = Order::where('status', '2')->count();
-        $dangGiao = Order::where('status', '3')->count();
-        $giaoThanhCong = Order::where('status', '4')->count();
-        $giaoThatBai = Order::where('status', '5')->count();
-        $hoanThanh = Order::where('status', '6')->count();
-        $daHuy = Order::where('status', '7')->count();
-        $thanhCong = $giaoThanhCong + $hoanThanh;
+        $orderStatus = $this->countOrderStatus();
 
         // $time = $request->input('year', now()->year);
 
@@ -353,13 +346,22 @@ class StatisticController extends Controller
             'product_name',
             'product_image',
             DB::raw('MIN(selling_price) as selling_price'),
-            DB::raw('SUM(quantity * selling_price) as total_revenue')
-        )->join('order', 'order_detail.id_order', '=', 'order.id')
+            DB::raw('SUM(
+                quantity * selling_price - 
+                (quantity * selling_price / (
+                    SELECT SUM(quantity * selling_price) 
+                    FROM order_detail 
+                    WHERE order_detail.id_order = order.id
+                ) * COALESCE(order.discount_value, 0))
+            ) as total_revenue')
+        )
+            ->join('order', 'order_detail.id_order', '=', 'order.id')
             ->where('order.status', '!=', 7)
             ->groupBy('id_product', 'product_name', 'product_image')
             ->orderBy('total_revenue', 'desc')
             ->take(5)
             ->get();
+
 
         // dd($topRevenue);
 
@@ -369,7 +371,14 @@ class StatisticController extends Controller
             'product_name',
             'product_image',
             DB::raw('MIN(selling_price) as selling_price'),
-            DB::raw('SUM(quantity * selling_price) - SUM(quantity * import_price) as total_profit')
+            DB::raw('SUM(
+                quantity * (selling_price - import_price) - 
+                (quantity * selling_price / (
+                    SELECT SUM(quantity * selling_price) 
+                    FROM order_detail 
+                    WHERE order_detail.id_order = order.id
+                ) * COALESCE(order.discount_value, 0))
+            ) as total_profit')
         )->join('order', 'order_detail.id_order', '=', 'order.id')
             ->where('order.status', '!=', 7)
             ->groupBy('id_product', 'product_name', 'product_image')
@@ -379,14 +388,28 @@ class StatisticController extends Controller
 
         // dd($topProfit);
 
-        $topFavourite = Product::withCount('favorites') 
-        ->orderBy('favorites_count', 'desc') 
-        ->take(5) 
-        ->get(); 
+        $topFavourite = Product::withCount('favorites')
+            ->orderBy('favorites_count', 'desc')
+            ->take(5)
+            ->get();
         // dd($topProducts);
 
-        return view('statistic.index', compact('choXacNhan', 'daXacNhan', 'dangGiao', 'giaoThatBai', 'thanhCong', 'daHuy', 'completeStatistic', 'Statistic', 'totalStatistic', 'time', 'title', 'cotY', 'topSellers', 'topRevenue', 'topProfit', 'topFavourite', 'percentageChange'));
+        return view('statistic.index', compact('orderStatus', 'completeStatistic', 'Statistic', 'totalStatistic', 'time', 'title', 'cotY', 'topSellers', 'topRevenue', 'topProfit', 'topFavourite', 'percentageChange'));
     }
+
+    private function countOrderStatus()
+{
+    return [
+        'choXacNhan' => Order::where('status', '1')->count(),
+        'daXacNhan' => Order::where('status', '2')->count(),
+        'dangGiao' => Order::where('status', '3')->count(),
+        'giaoThanhCong' => Order::where('status', '4')->count(),
+        'giaoThatBai' => Order::where('status', '5')->count(),
+        'hoanThanh' => Order::where('status', '6')->count(),
+        'daHuy' => Order::where('status', '7')->count(),
+        'thanhCong' => Order::whereIn('status', ['4', '6'])->count()
+    ];
+}
 
     /**
      * Show the form for creating a new resource.
