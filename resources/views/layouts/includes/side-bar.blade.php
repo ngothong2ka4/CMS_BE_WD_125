@@ -46,7 +46,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('products*') ? 'active' : '' }}" href="#sidebarProduct"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Sản phẩm</span>
+                        <i class="ri-record-circle-line"></i> <span data-key="t-dashboards">Sản phẩm</span>
                     </a>
                     <div class="collapse menu-dropdown {{ Request::is('products*') ? 'show' : '' }}"
                         id="sidebarProduct">
@@ -74,7 +74,7 @@
                                 <a href="{{ route('product_tag.index') }}"
                                     class="nav-link {{ Request::is('products/product_tag*') ? 'active' : '' }}"
                                     data-key="t-analytics">
-                                    Quản lý Thẻ </a>
+                                    Quản lý Loại đá và Chất liệu </a>
                             </li>
                         </ul>
                     </div>
@@ -82,7 +82,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('user*') ? 'active' : '' }}" href="#sidebarUser"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUser">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Người Dùng</span>
+                        <i class="ri-account-circle-line"> </i> <span data-key="t-dashboards">Người Dùng</span>
                     </a>
                     <div class="collapse menu-dropdown {{ Request::is('user*') ? 'show' : '' }}" id="sidebarUser">
                         <ul class="nav nav-sm flex-column">
@@ -108,18 +108,11 @@
                     </a>
                 </li>
 
-                {{-- <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::is('statistic*') ? 'active' : '' }}"
-                        href="{{ route('statistic.index') }}" role="button" aria-expanded="false"
-                        aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
-                    </a>
-                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('comment*') ? 'active' : '' }}"
                         href="{{ route('comment.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Bình luận</span>
+                        <i class="ri-file-list-3-line"></i> <span data-key="t-dashboards">Bình luận</span>
                     </a>
                 </li>
 

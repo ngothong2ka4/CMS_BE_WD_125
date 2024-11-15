@@ -65,7 +65,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|max:255|min:3|unique:users',
+            'name' => 'required|max:255|min:3',
             'email' => 'required|unique:users|email',
             'password' => 'required|min:8|confirmed',
             'image' => 'nullable|file|image|max:2048',
@@ -74,10 +74,10 @@ class AdminController extends Controller
             'role' => 'nullable|in:1,2',
             'status' => 'nullable|in:0,1',
         ], [
-            'name.required' => 'Tên sản phẩm là bắt buộc.',
-            'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự.',
-            'name.min' => 'Tên sản phẩm phải có ít nhất 6 ký tự.',
-            'name.unique' => 'Tên sản phẩm đã tồn tại, vui lòng chọn tên khác.',
+            'name.required' => 'Tên là bắt buộc.',
+            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+            'name.min' => 'Tên phải có ít nhất 6 ký tự.',
+            'name.unique' => 'Tên đã tồn tại, vui lòng chọn tên khác.',
 
             'email.required' => 'Email là bắt buộc.',
             'email.unique' => 'Email đã tồn tại, vui lòng chọn email khác.',
@@ -132,7 +132,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
 
         $data = $request->validate([
-            'name' => 'required|max:255|min:3|unique:users,name,' . $id,
+            'name' => 'required|max:255|min:3' . $id,
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable',
             'image' => 'nullable|file|image|max:2048',

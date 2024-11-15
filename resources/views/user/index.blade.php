@@ -35,8 +35,8 @@
                             @foreach ($users as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td> <img src="{{ $item->image }}" alt="" width="80"></td>
+                                    <td>{{ $item->name }}</td>  
+                                    <td> <img src="{{ $item->image }}"class="rounded-circle" alt="" width="100" height="100"></td>
                                     <td>{{ $item->role == 1 ? 'user' : 'admin' }}</td>
                                     <td>
                                         <form action="{{ route('user_status', $item->id) }}" method="POST" class="d-inline"
