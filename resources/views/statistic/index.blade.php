@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $choXacNhan }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $orderStatus['choXacNhan'] }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daXacNhan }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $orderStatus['daXacNhan'] }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $dangGiao }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $orderStatus['dangGiao'] }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $thanhCong }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $orderStatus['thanhCong'] }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $giaoThatBai }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $orderStatus['giaoThatBai'] }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
@@ -205,7 +205,7 @@
                             </div>
                         </div>
                         <div>
-                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $daHuy }} ĐƠN</h6>
+                            <h6 class="fs-18 fw-semibold ff-secondary mt-2">{{ $orderStatus['daHuy'] }} ĐƠN</h6>
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-2">
                             <div>
