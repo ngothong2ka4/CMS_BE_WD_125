@@ -18,7 +18,7 @@ class AuthController extends Controller
 
     // API: /api/login
     // param: (email, password )
-    // example: 
+    // example:
     //            {
     //              "email": "thongngo2ka4@gmail.com",
     //              "password": "thong15112004"
@@ -61,7 +61,7 @@ class AuthController extends Controller
     // method: POST
     // API: /api/register
     // param: (email, password, password_confirmation )
-    // example: 
+    // example:
     //            {
     //              "name": "thongngo",
     //              "email": "thongngo2ka4@gmail.com",
