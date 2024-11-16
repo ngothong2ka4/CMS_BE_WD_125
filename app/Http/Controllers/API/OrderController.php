@@ -23,7 +23,7 @@ class OrderController extends Controller
     // require: authToken
     // API: /api/listInformationOrder
     // parram: (cart_ids(mảng id cart thanh toán) || id_variant,quantity)
-    // example: 
+    // example:
     //          Mua ở giỏ hàng
     //          {
     //            "cart_ids" : [4,5]
@@ -35,7 +35,7 @@ class OrderController extends Controller
     //          }
     // response:200
     //             {
-    //                 "status": true,  
+    //                 "status": true,
     //                 "message": "Lấy thông tin thành công",
     //                 "data": order information
     //             }
@@ -87,7 +87,7 @@ class OrderController extends Controller
             $productInCart = [[
                         'variant' => $product,
                         'quantity' => $quantity
-            ]]; 
+            ]];
         }
 
         $data = [
@@ -103,7 +103,7 @@ class OrderController extends Controller
     // method: POST
     // require: authToken
     // API: /api/payment
-    // example: 
+    // example:
     //       Mua ở giỏ hàng(truyền payment_role thích hợp )
     //          {
     //              "cartIds": [6, 7],
@@ -133,7 +133,7 @@ class OrderController extends Controller
     //          }
     // response:200
     //             {
-    //                 "status": true,  
+    //                 "status": true,
     //                 "message": "Lấy thông tin thành công",
     //                 "data": order information
     //             }
@@ -145,7 +145,7 @@ class OrderController extends Controller
         }
 
         $data = $request->all();
-  
+
         $voucher = !empty($data['voucherId']) ? Voucher::find($data['voucherId']) : null;
 
         try {
@@ -158,7 +158,7 @@ class OrderController extends Controller
             if (!empty($data['cartIds'])) {
 
                 $res = $this->processCartPayment($data, $user->id);
-    
+
                 if ($res['payment_role'] == 2) {
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
@@ -176,9 +176,9 @@ class OrderController extends Controller
                 }
 
                 SendEmailAfterOrder::dispatch(
-                    'emails.information-order', 
-                    $information, 
-                    $data['email'], 
+                    'emails.information-order',
+                    $information,
+                    $data['email'],
                     'Thông tin đơn hàng');
 
                 return $this->jsonResponse('Đặt hàng thành công', true,  $res);
@@ -202,9 +202,9 @@ class OrderController extends Controller
                 }
 
                 SendEmailAfterOrder::dispatch(
-                    'emails.information-order', 
-                    $information, 
-                    $data['email'], 
+                    'emails.information-order',
+                    $information,
+                    $data['email'],
                     'Thông tin đơn hàng');
 
                 return $this->jsonResponse('Đặt hàng thành công', true, $res);
@@ -245,7 +245,7 @@ class OrderController extends Controller
 
         $user = User::find($userId);
         $user->update(['accum_point' => $user->accum_point - $order->used_accum]);
-        
+
         $insertData = $productPayment->map(function ($cart) use ($order) {
             return [
                 'id_order' => $order->id,
@@ -296,7 +296,7 @@ class OrderController extends Controller
             'id_order' => $order->id,
             'payment_role' => $order->payment_role,
             'totalAmount' => $order->total_payment,
-            'order_details' => $insertData,  
+            'order_details' => $insertData,
             'order' => $order,
         ];
     }
@@ -304,7 +304,7 @@ class OrderController extends Controller
     private function processDirectPayment($data, $userId)
     {
         $variant = Variant::with('product')->find($data['variantId']);
-        
+
         if (!$variant) {
             return $this->jsonResponse(message: 'Sản phẩm không tồn tại');
         }
@@ -358,7 +358,7 @@ class OrderController extends Controller
             'payment_role' => $order->payment_role,
             'totalAmount' => $order->total_payment,
             'discount_amount' => $order->discount_amount,
-            'order_details' => $insertData,  
+            'order_details' => $insertData,
             'order' => $order,
         ];
     }
@@ -429,7 +429,7 @@ class OrderController extends Controller
     // require: authToken
     // API: /api/paymentResult
     // {
-    //     "vnp_TxnRef": "99", 
+    //     "vnp_TxnRef": "99",
     //     "vnp_ResponseCode": "00",
     //     "vnp_VoucherId": "1",
     //     "vnp_Email": "vuidap007@gmail.com"
@@ -475,18 +475,19 @@ class OrderController extends Controller
             $voucher = Voucher::find($value['vnp_VoucherId']);
             if ($voucher) {
                 $voucher->incrementUsage(Auth::id());
-            } 
-            
+            }
+
             SendEmailAfterOrder::dispatch(
-                'emails.information-order', 
-                $information, 
-                $value['vnp_email'], 
+                'emails.information-order',
+                $information,
+                $value['vnp_email'],
                 'Thông tin đơn hàng');
 
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
         } else {
-            $order->status_payment = Order::STATUS_PAYMENT_CANCELED;
+            $order->status_payment = Order::STATUS_PAYMENT_PENDING;
+            $order->status = Order::STATUS_CANCELED;
             $order->save();
             $user = User::find($order->id_user);
             $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
@@ -500,7 +501,7 @@ class OrderController extends Controller
                         ->increment('quantity', $value);
                 }
             }
-            
+
             \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thất bại', false, $order);
         }
@@ -636,7 +637,7 @@ class OrderController extends Controller
                     foreach ($order->orderDetail as $orderDetail) {
                         $variant = Variant::find($orderDetail->id_variant);
                         if ($variant) {
-                            $variant->quantity += $orderDetail->quantity; 
+                            $variant->quantity += $orderDetail->quantity;
                             $variant->save();
                         }
                     }

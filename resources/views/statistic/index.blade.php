@@ -438,7 +438,7 @@
                                                                             class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                     </h5>
                                                                     <h5 class="fs-14 my-1 fw-normal">
-                                                                        {{ $item->selling_price }}
+                                                                        {{ number_format($item->selling_price, 0, ',', '.') }}
                                                                         VNĐ
                                                                     </h5>
                                                                 </div>
@@ -483,7 +483,7 @@
                                                                             class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                     </h5>
                                                                     <h5 class="fs-14 my-1 fw-normal">
-                                                                        {{ $item->selling_price }}
+                                                                        {{ number_format($item->selling_price, 0, ',', '.') }}
                                                                         VNĐ
                                                                     </h5>
                                                                 </div>
@@ -532,7 +532,7 @@
                                                                             class="fs-14 my-1 fw-normal">{{ Str::limit($item->product_name, 22, '...') }}</a>
                                                                     </h5>
                                                                     <h5 class="fs-14 my-1 fw-normal">
-                                                                        {{ $item->selling_price }}
+                                                                        {{ number_format($item->selling_price, 0, ',', '.') }}
                                                                         VNĐ
                                                                     </h5>
                                                                 </div>
@@ -577,7 +577,7 @@
                                                                             class="fs-14 my-1 fw-normal">{{ Str::limit($item->name, 22, '...') }}</a>
                                                                     </h5>
                                                                     <h5 class="fs-14 my-1 fw-normal">
-                                                                        {{ $item->variants->first()->selling_price }}
+                                                                        {{ number_format($item->variants->first()->selling_price, 0, ',', '.') }}
                                                                         VNĐ
                                                                     </h5>
                                                                 </div>
@@ -682,33 +682,33 @@
 
             if (select.value === 'khoang') {
                 khoangTime.style.display = 'block';
-                thoiDiem.style.display = 'none'; 
-                thoiDiem2.style.display = 'none'; 
+                thoiDiem.style.display = 'none';
+                thoiDiem2.style.display = 'none';
             } else {
-                khoangTime.style.display = 'none'; 
+                khoangTime.style.display = 'none';
             }
             if (select.value === 'year') {
-                thoiDiem.style.display = 'block'; 
-                thoiDiem2.style.display = 'block'; 
+                thoiDiem.style.display = 'block';
+                thoiDiem2.style.display = 'block';
                 timeInput.type = 'number';
-                timeInput.min = 2020; 
-                timeInput.max = new Date().getFullYear(); 
+                timeInput.min = 2020;
+                timeInput.max = new Date().getFullYear();
                 timeInput.placeholder = "Nhập năm";
             } else if (select.value === 'month') {
-                thoiDiem.style.display = 'block'; 
-                thoiDiem2.style.display = 'block'; 
+                thoiDiem.style.display = 'block';
+                thoiDiem2.style.display = 'block';
                 timeInput.type = 'month';
                 timeInput.removeAttribute('min');
                 timeInput.removeAttribute('max');
             } else if (select.value === 'day') {
-                thoiDiem.style.display = 'block'; 
-                thoiDiem2.style.display = 'block'; 
+                thoiDiem.style.display = 'block';
+                thoiDiem2.style.display = 'block';
                 timeInput.type = 'date';
                 timeInput.removeAttribute('min');
                 timeInput.removeAttribute('max');
             } else{
-                thoiDiem.style.display = 'none'; 
-                thoiDiem2.style.display = 'none'; 
+                thoiDiem.style.display = 'none';
+                thoiDiem2.style.display = 'none';
             }
         }
 

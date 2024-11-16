@@ -33,20 +33,20 @@
                     <a class="nav-link menu-link {{ Request::is('statistic*') ? 'active' : '' }}"
                         href="{{ route('statistic.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Thống kê</span>
+                        <i class="ri-bar-chart-box-line"></i> <span data-key="t-dashboards">Thống kê</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('category*') ? 'active' : '' }}"
                         href="{{ route('category.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Danh mục</span>
+                        <i class="ri-article-line"></i> <span data-key="t-dashboards">Danh mục</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('products*') ? 'active' : '' }}" href="#sidebarProduct"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Sản phẩm</span>
+                        <i class="ri-product-hunt-line"></i> <span data-key="t-dashboards">Sản phẩm</span>
                     </a>
                     <div class="collapse menu-dropdown {{ Request::is('products*') ? 'show' : '' }}"
                         id="sidebarProduct">
@@ -82,7 +82,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('user*') ? 'active' : '' }}" href="#sidebarUser"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUser">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Người Dùng</span>
+                        <i class="ri-user-line"></i> <span data-key="t-dashboards">Người Dùng</span>
                     </a>
                     <div class="collapse menu-dropdown {{ Request::is('user*') ? 'show' : '' }}" id="sidebarUser">
                         <ul class="nav nav-sm flex-column">
@@ -104,7 +104,7 @@
                     <a class="nav-link menu-link {{ Request::is('order*') ? 'active' : '' }}"
                         href="{{ route('order.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Đơn hàng</span>
+                        <i class="ri-bank-card-2-line"></i> <span data-key="t-dashboards">Đơn hàng</span>
                     </a>
                 </li>
 
@@ -119,7 +119,7 @@
                     <a class="nav-link menu-link {{ Request::is('comment*') ? 'active' : '' }}"
                         href="{{ route('comment.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Bình luận</span>
+                        <i class="ri-chat-4-line"></i> <span data-key="t-dashboards">Bình luận</span>
                     </a>
                 </li>
 
@@ -127,7 +127,7 @@
                     <a class="nav-link menu-link {{ Request::is('voucher*') ? 'active' : '' }}"
                         href="{{ route('voucher.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Ưu đãi</span>
+                        <i class="ri-percent-line"></i> <span data-key="t-dashboards">Ưu đãi</span>
                     </a>
                 </li>
             </ul>
