@@ -49,8 +49,8 @@
                                 </div>
                             </div>
                             <div class="form-check mb-3 float-start">
-                                <input class="form-check-input" type="checkbox" name="remember" id="auth-remember-check">
-                                <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label>
+                                {{-- <input class="form-check-input" type="checkbox" name="remember" id="auth-remember-check">
+                                <label class="form-check-label" for="auth-remember-check">Nhớ mật khẩu</label> --}}
                             </div>
                             <div class="float-end mb-3">
                                 <a href="{{ route('forgot') }}" class="text-muted ">Quên mật khẩu?</a>
@@ -59,7 +59,7 @@
                                 <button class="btn btn-success w-100" type="submit">Đăng Nhập</button>
                             </div>
 
-                            <div class="mt-4 text-center">
+                            {{-- <div class="mt-4 text-center">
                                 <div class="signin-other-title">
                                     <h5 class="fs-13 mb-4 title">Đăng Nhập với</h5>
                                 </div>
@@ -73,7 +73,7 @@
                                     <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i
                                             class="ri-twitter-fill fs-16"></i></button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </form>
 
                     </div>
