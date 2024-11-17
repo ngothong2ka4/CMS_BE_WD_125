@@ -8,12 +8,12 @@ use App\Http\Controllers\API\VoucherController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Common\Common;
+use App\Common\common;
 use App\Http\Controllers\API\FavoriteProductController;
 use App\Http\Controllers\AuthController as ControllersAuthController;
 
-Common::autoUpdateStatus();
-Common::deleteToken();
+common::autoUpdateStatus();
+common::deleteToken();
 
 
 /*

@@ -1,6 +1,6 @@
 <?php
 
-use App\Common\Common;
+use App\Common\common;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\comment\CommentController;
 use App\Http\Controllers\Order\OrderController;
@@ -23,8 +23,8 @@ use App\Http\Middleware\CheckStatusUser;
 use App\Models\Material;
 use Illuminate\Support\Facades\Route;
 
-Common::autoUpdateStatus();
-Common::deleteToken();
+common::autoUpdateStatus();
+common::deleteToken();
 // use App\Http\Controllers\AuthController as LoginController;
 /*
 |--------------------------------------------------------------------------

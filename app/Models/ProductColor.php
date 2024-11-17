@@ -16,6 +16,7 @@ class ProductColor extends Model
 
     protected $fillable = [
         'name',
+        'code'
     ];
 
     public function variants(){

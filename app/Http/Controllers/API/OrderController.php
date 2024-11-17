@@ -152,7 +152,7 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             if($request->used_accum > $user->accum_point){
-                return $this->jsonResponse('Điểm tích lũy không đủ');
+                return $this->jsonResponse('Điểm tiêu dùng không đủ');
             }
 
             if (!empty($data['cartIds'])) {
@@ -651,6 +651,8 @@ class OrderController extends Controller
                         'created_at' => now(),
                     ]);
                     $order->save();
+                    $user = User::find($order->id_user);
+                    $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
                     return response()->json(['message' => 'Đơn hàng đã được hủy thành công với lý do: ' . $note]);
                 }
             }

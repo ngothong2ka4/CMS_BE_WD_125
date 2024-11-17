@@ -7,7 +7,7 @@ use App\Models\OrderHistory;
 use App\Models\UserResetToken;
 use Illuminate\Support\Facades\DB;
 
-class Common
+class common
 {
 
 
