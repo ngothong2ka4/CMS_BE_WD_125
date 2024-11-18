@@ -41,22 +41,22 @@
                                     <td>{{ $item->rating }}/5</td>
                                     <td>
                                         <form action="{{ route('comment_status', $item->id) }}" method="POST" class="d-inline"
-                                            onsubmit="return confirm('Bạn có đồng ý {{ $item->status ? 'dừng kích hoạt' : 'kích hoạt' }} không?')">
+                                            onsubmit="return confirm('Bạn có đồng ý {{ $item->status ? 'ẩn' : 'hiển thị' }} không?')">
                                             @csrf
                                             @method('PATCH')
                                             <button
-                                                class="btn btn-danger">{{ $item->status ? 'Kích hoạt' : 'Dừng kích hoạt' }}</button>
+                                                class="btn btn-danger">{{ $item->status ? 'Hiển thị' : 'Ẩn' }}</button>
                                         </form>
                                     </td>
                                     <td>
                                         <a href="{{ route('comment.show', $item->id) }}"><button
                                                 class="btn btn-success me-3">Chi tiết</button></a>
-                                        <form action="{{ route('comment.destroy', $item->id) }}" method="POST"
+                                        {{-- <form action="{{ route('comment.destroy', $item->id) }}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Bạn có đồng ý xóa không?')">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger">Xóa</button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

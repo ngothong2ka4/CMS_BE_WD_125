@@ -18,13 +18,13 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
         return view('comment.show', compact('comment'));
     }
-    public function destroy($id)
-    {
-        $comment = Comment::findOrFail($id);
-        $comment->delete();
-        toastr()->success('Xóa bình luận thành công!');
-        return redirect()->back();
-    }
+    // public function destroy($id)
+    // {
+    //     $comment = Comment::findOrFail($id);
+    //     $comment->delete();
+    //     toastr()->success('Xóa bình luận thành công!');
+    //     return redirect()->back();
+    // }
     public function status($id)
     {
         $comment = Comment::findOrFail($id);
