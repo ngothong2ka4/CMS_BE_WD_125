@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Common\common;
+use App\Http\Controllers\API\AdsServiceController;
 use App\Http\Controllers\API\FavoriteProductController;
 use App\Http\Controllers\AuthController as ControllersAuthController;
 
@@ -37,6 +38,8 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 Route::post('forgotpassword', [AuthController::class, 'forgotPassword']);
 Route::post('resetpassword/{token}', [AuthController::class, 'resetPassword']);
 Route::get('/search-user', [AuthController::class, 'searchUser']);
+Route::get('getConfig', [AdsServiceController::class,'getAllConfig']); // chạy quảng cáo ở trang chủ
+
 
 Route::apiResource('category',CategoryController::class);
 // API sản phẩm mới (5 cái)
@@ -80,5 +83,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('updateUser', [AuthController::class, 'updateUser']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
 
+    Route::post('addAdsService', [AdsServiceController::class,'addAdsService']); // đăng ký dịch vụ
+    Route::post('addConfig', [AdsServiceController::class,'addConfig']);  // chi tiết quảng cáo
+    Route::get('getAds', [AdsServiceController::class,'getConfigUser']); // chi tiết dịch vụ
+    Route::post('adsPayment', [AdsServiceController::class,'paymentResult']);
     
 });

@@ -224,7 +224,7 @@ class AuthController extends Controller
             ], [
                 'name.required' => 'Tên khách hàng là bắt buộc.',
                 'name.max' => 'Tên khách hàng không được vượt quá 255 ký tự.',
-                'name.min' => 'Tên khách hàng phải có ít nhất 6 ký tự.',
+                'name.min' => 'Tên khách hàng phải có ít nhất 3 ký tự.',
                 'name.unique' => 'Tên khách hàng đã tồn tại, vui lòng chọn tên khác.',
 
                 'phone_number.regex' => 'Số điện thoại phải có 10 số',
