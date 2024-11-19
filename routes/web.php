@@ -43,7 +43,6 @@ common::deleteToken();
 //     return view('test');
 // })->name('login');
 
-
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin']);
 
