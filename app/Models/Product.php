@@ -45,6 +45,10 @@ class Product extends Model
     {
         return $this->hasMany(ProductView::class, 'id_product', 'id');
     }
+    public function combos()
+    {
+        return $this->belongsToMany(Combo::class, 'combo_product', 'id_combo', 'id_product');
+    }
 
     // public function vouchers()
     // {
