@@ -2,6 +2,7 @@
 
 use App\Common\common;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Combo\ComboController;
 use App\Http\Controllers\comment\CommentController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\AuthController as LoginController;
@@ -66,6 +67,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
         Route::resource('category', CategoryController::class);
         Route::resource('comment', CommentController::class);
+        Route::resource('combo', ComboController::class);
         Route::patch('comment/status/{id}', [CommentController::class, 'status'])->name('comment_status');
 
         Route::post('/order/{id}', [OrderController::class, 'updateStatus']);

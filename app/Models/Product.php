@@ -10,21 +10,7 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'products';
-    protected $fillable = [
-        'code',
-        'description',
-        'discount_type',
-        'discount_value',
-        'start_date',
-        'end_date',
-        'usage_limit',
-        'used_count',
-        'usage_per_user',
-        'user_voucher_limit',
-        'max_discount_amount',
-        'min_accumulated_points',
-        'max_accumulated_points'
-    ];
+    protected $guarded = [];
 
     public function category()
     {
@@ -58,6 +44,10 @@ class Product extends Model
     public function views()
     {
         return $this->hasMany(ProductView::class, 'id_product', 'id');
+    }
+    public function combos()
+    {
+        return $this->belongsToMany(Combo::class, 'combo_product', 'id_combo', 'id_product');
     }
 
     // public function vouchers()

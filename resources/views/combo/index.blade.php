@@ -9,10 +9,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Quản lý bình luận</h5>
+                    <h5 class="card-title mb-0">Quản lý Combo</h5>
                 </div>
                 <div class="card-body">
-                    {{-- <a href="{{ route('comment.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a> --}}
+                    <a href="{{ route('combo.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
                     @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -23,40 +23,32 @@
                         <thead>
                             <tr>
                                 <th>Stt</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Người dùng</th>
-                                <th>Nội dung</th>
-                                <th>Đánh giá</th>
-                                <th>Trạng thái</th>
+                                <th>Tên Combo</th>
+                                <th>Mô tả </th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($comments as $index => $item)
+                            @foreach ($combos as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->product->name }}</td>
-                                    <td>{{ $item->user->name }}</td>
-                                    <td>{{ $item->content }}</td>
-                                    <td>{{ $item->rating }}/5</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td>{{ $item->price }}</td>
+                                    <td>{{ $item->quantity }}</td>
                                     <td>
-                                        <form action="{{ route('comment_status', $item->id) }}" method="POST" class="d-inline"
-                                            onsubmit="return confirm('Bạn có đồng ý {{ $item->status ? 'ẩn' : 'hiển thị' }} không?')">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button
-                                                class="btn btn-danger">{{ $item->status ? 'Hiển thị' : 'Ẩn' }}</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('comment.show', $item->id) }}"><button
-                                                class="btn btn-success me-3">Chi tiết</button></a>
-                                        {{-- <form action="{{ route('comment.destroy', $item->id) }}" method="POST"
+                                        <a href="{{route('combo.show',$item->id)}}"><button
+                                            class="btn btn-info me-3">Chi tiết</button></a>
+                                        <a href="{{route('combo.edit',$item->id)}}"><button
+                                                class="btn btn-warning me-3">Sửa</button></a>
+                                        <form action="{{route('combo.destroy',$item->id)}}" method="POST"
                                             class="d-inline" onsubmit="return confirm('Bạn có đồng ý xóa không?')">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger">Xóa</button>
-                                        </form> --}}
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -69,7 +61,7 @@
     </div>
 @endsection
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
         new DataTable("#example", {
             order: [
@@ -94,4 +86,4 @@
             }
         });
     </script>
-@endpush
+@endpush --}}

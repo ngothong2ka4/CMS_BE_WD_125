@@ -44,6 +44,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('combos*') ? 'active' : '' }}"
+                        href="{{ route('combo.index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
+                        <i class="ri-article-line"></i> <span data-key="t-dashboards">Combo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link {{ Request::is('products*') ? 'active' : '' }}" href="#sidebarProduct"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProduct">
                         <i class="ri-record-circle-line"></i> <span data-key="t-dashboards">Sản phẩm</span>
