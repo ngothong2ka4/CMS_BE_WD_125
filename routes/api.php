@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Common\common;
 use App\Http\Controllers\API\AdsServiceController;
+use App\Http\Controllers\API\ComboController;
 use App\Http\Controllers\API\FavoriteProductController;
 use App\Http\Controllers\AuthController as ControllersAuthController;
 
@@ -87,5 +88,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('addConfig', [AdsServiceController::class,'addConfig']);  // chi tiết quảng cáo
     Route::get('getAds', [AdsServiceController::class,'getConfigUser']); // chi tiết dịch vụ
     Route::post('adsPayment', [AdsServiceController::class,'paymentResult']);
+
+    Route::get('/listInformationOrderCombo',[ComboController::class, 'listInformationOrder']);
+    Route::post('/paymentCombo',[ComboController::class, 'payment']);
+    Route::get('detailCombos/{id}',[ComboController::class, 'detailCombos']);
+
+    Route::resource('combo', ComboController::class);
     
 });

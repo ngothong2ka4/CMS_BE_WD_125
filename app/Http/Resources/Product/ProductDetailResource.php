@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Http\Resources\ComboResource;
 use App\Http\Resources\Product\CommentResource;
 use App\Http\Resources\Product\ImageResource;
 use App\Http\Resources\Product\MaterialResource;
@@ -30,6 +31,7 @@ class ProductDetailResource extends JsonResource
             'slideImages' => $this->slideImages,
             'averageRating' => (float) $this->average_rating,
             'comments' =>CommentResource::collection($this->whenLoaded('comments')),
+            'relatedCombos' => ComboResource::collection($this->whenLoaded('combos')),
         ];
         return $data;
     }
