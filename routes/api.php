@@ -16,7 +16,7 @@ use App\Http\Controllers\AuthController as ControllersAuthController;
 
 common::autoUpdateStatus();
 common::deleteToken();
-
+common::autoStopAds();
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +40,7 @@ Route::post('forgotpassword', [AuthController::class, 'forgotPassword']);
 Route::post('resetpassword/{token}', [AuthController::class, 'resetPassword']);
 Route::get('/search-user', [AuthController::class, 'searchUser']);
 Route::get('getConfig', [AdsServiceController::class,'getAllConfig']); // chạy quảng cáo ở trang chủ
+Route::get('visits/{id}', [AdsServiceController::class,'visits']); // tăng lượt truy cập
 
 
 Route::apiResource('category',CategoryController::class);

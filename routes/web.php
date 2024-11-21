@@ -1,6 +1,7 @@
 <?php
 
 use App\Common\common;
+use App\Http\Controllers\Ads\AdsServiceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Combo\ComboController;
 use App\Http\Controllers\comment\CommentController;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 common::autoUpdateStatus();
 common::deleteToken();
+common::autoStopAds();
 // use App\Http\Controllers\AuthController as LoginController;
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +99,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         });
 
         Route::resource('voucher', VoucherController::class);
+        Route::resource('ads_service', AdsServiceController::class);
 
     });
 });

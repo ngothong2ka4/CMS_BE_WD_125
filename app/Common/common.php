@@ -2,6 +2,7 @@
 
 namespace App\Common;
 
+use App\Models\AdsService;
 use App\Models\Order;
 use App\Models\OrderHistory;
 use App\Models\UserResetToken;
@@ -57,6 +58,20 @@ class common
                     UserResetToken::where('token', $resetToken->token)->delete();
                 }
             }
+        } catch (\Exception $e) {
+            toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+        }
+    }
+
+    public static function autoStopAds(){
+        try {
+            $now = date('Y-m-d H:i:s');
+            $ads = AdsService::where('status',1)->get();
+            foreach($ads as $value){
+                if($value->end < $now){
+                    $value->update(['status' => 2]);
+                }
+            }  
         } catch (\Exception $e) {
             toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
         }
