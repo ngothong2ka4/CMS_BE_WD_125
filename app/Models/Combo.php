@@ -18,10 +18,17 @@ class Combo extends Model
         'quantity',
         // 'id_product',
     ];
+    // public function products()
+    // {
+    //     return $this->belongsToMany(Product::class, 'combo_products', 'id_combo', 'id_product');
+    // }
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'combo_products', 'id_combo', 'id_product');
+        return $this->belongsToMany(Product::class, 'combo_products', 'id_combo', 'id_product')
+            ->withPivot('id_variant') // Lấy thêm id_variant
+            ->with(['variants.color', 'variants.size']);
     }
+
     protected static function boot()
     {
         parent::boot();

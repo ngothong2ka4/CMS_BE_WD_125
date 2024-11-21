@@ -255,6 +255,7 @@ class ProductController extends Controller
             'comments.user',
             'comments.variant.color',
             'comments.variant.size',
+            'combos.products'
         ])->find($id);
 
         if (!$product) {

@@ -47,7 +47,7 @@ class Product extends Model
     }
     public function combos()
     {
-        return $this->belongsToMany(Combo::class, 'combo_product', 'id_combo', 'id_product');
+        return $this->belongsToMany(Combo::class, 'combo_products', 'id_product', 'id_combo');
     }
 
     // public function vouchers()

@@ -295,11 +295,13 @@
                                 <div class="row gx-2">
                                     <div class="col">
                                         <label for="year" class="form-label">Bắt đầu</label>
-                                        <input type="date" class="form-control" name="start" id="start" required>
+                                        <input type="date" class="form-control" name="start" id="start"
+                                            required>
                                     </div>
                                     <div class="col">
                                         <label for="year" class="form-label">Kết thúc</label>
-                                        <input type="date" class="form-control" name="end" id="end" required>
+                                        <input type="date" class="form-control" name="end" id="end"
+                                            required>
                                     </div>
                                     <div class="col d-flex align-item-center">
                                         <button type="submit" style="height: 50%; margin-top: 29px"
@@ -446,7 +448,8 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->total_revenue }}
+                                                            <h5 class="fs-14 my-1 fw-normal">
+                                                                {{ number_format($item->total_revenue, 0, ',', '.') }}
                                                                 VNĐ</h5>
                                                             <span class="text-muted fs-12">Doanh thu</span>
                                                         </td>
@@ -492,7 +495,8 @@
                                                         </td>
                                                         <td>
                                                         <td>
-                                                            <h5 class="fs-14 my-1 fw-normal">{{ $item->total_profit }} VNĐ
+                                                            <h5 class="fs-14 my-1 fw-normal">
+                                                                {{ number_format($item->total_profit, 0, ',', '.') }} VNĐ
                                                             </h5>
                                                             <span class="text-muted fs-12">Lợi nhuận</span>
                                                         </td>
@@ -706,14 +710,14 @@
                 timeInput.type = 'date';
                 timeInput.removeAttribute('min');
                 timeInput.removeAttribute('max');
-            } else{
+            } else {
                 thoiDiem.style.display = 'none';
                 thoiDiem2.style.display = 'none';
             }
         }
 
         if (condition) {
-                document.getElementById('myDiv').style.display = 'none'; // Ẩn div
-            }
+            document.getElementById('myDiv').style.display = 'none'; // Ẩn div
+        }
     </script>
 @endpush
