@@ -23,11 +23,13 @@
 
                 <table id="example"
                     class="table table-bordered dt-responsive nowrap table-striped align-middle"
-                    style="width:100%">
+                    >
                     <thead>
                         <tr>
-                            <th>Mã dịch vụ</th>
+                            <th>Mã</th>
                             <th>Tên khách hàng</th>
+                            <th>Thời hạn</th>
+                            <th>Lượt truy cập</th>
                             <th>Thành tiền</th>
                             <th>Trạng thái dịch vụ</th>
                             <th>Trạng thái thanh toán</th>
@@ -39,6 +41,8 @@
                         <tr>
                             <td>{{ $ads->id }}</td>
                             <td>{{ $ads->name }}</td>
+                            <td>Từ {{$ads->start }} -> {{$ads->end}}</td>
+                            <td>{{$ads->visits}}</td>
                             <td>{{ number_format($ads->price) }} đ</td>
 
                             <td>

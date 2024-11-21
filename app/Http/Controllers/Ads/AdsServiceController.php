@@ -63,7 +63,20 @@ class AdsServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $request->validate([
+                'note' => 'required',
+            ], [
+                'note.required' => 'Ghi chú là bắt buộc.',
+            ]);
+            $ads = AdsService::find($id);
+            $ads->update(['note'=> $request->note, 'status' => 2]);
+            toastr()->success('Dừng hoạt động');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**

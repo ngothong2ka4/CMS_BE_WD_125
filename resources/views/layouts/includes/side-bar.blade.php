@@ -44,10 +44,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ Request::is('combos*') ? 'active' : '' }}"
+                    <a class="nav-link menu-link {{ Request::is('combo*') ? 'active' : '' }}"
                         href="{{ route('combo.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-article-line"></i> <span data-key="t-dashboards">Combo</span>
+                        <i class="ri-links-line"></i> <span data-key="t-dashboards">Combo</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -134,7 +134,7 @@
                     <a class="nav-link menu-link {{ Request::is('ads_service*') ? 'active' : '' }}"
                         href="{{ route('ads_service.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-percent-line"></i> <span data-key="t-dashboards">Dịch vụ quảng cáo</span>
+                        <i class="ri-global-line"></i> <span data-key="t-dashboards">Dịch vụ quảng cáo</span>
                     </a>
                 </li>
             </ul>
