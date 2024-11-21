@@ -13,22 +13,79 @@
 
 
         <div class="card mb-2">
-            <div class="card-header">
-                <h4 class="mb-0">Thông tin dịch vụ</h4>
+            <div class="card-header ">
+                <div class="row">
+                    <h4 class="mb-0 col-lg-10">Thông tin dịch vụ</h4>
+                    @if($ads->status ==1)
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Dừng hoạt động
+                        </button>
+
+
+                    </div>
+
+                    @endif
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="{{ route('ads_service.update', $ads->id) }}" class="modal-content" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Nhập ghi chú</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="form-control" name="note" id="meassageInput" rows="3"></textarea>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
-                <div>
-                    <label for="basiInput" class="form-label">Mã dịch vụ</label>
-                    <input type="text" class="form-control mb-3" id="basiInput" name="name"
-                        value="#{{ $ads->id }}" disabled>
-
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Mã dịch vụ</label>
+                        <input type="text" class="form-control mb-3" id="basiInput" name="name"
+                            value="#{{ $ads->id }}" disabled>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Lượt truy cập</label>
+                        <input type="text" class="form-control mb-3" id="basiInput" name="name"
+                            value="{{$ads->visits}}"
+                            disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Trạng thái</label>
+                        <input type="text" class="form-control mb-3" id="basiInput" name="name"
+                            @if($ads-> status == 1)
+                        value=" Hoạt động"
+                        @endif
+                        @if($ads-> status == 2)
+                        value=" Dừng hoạt động"
+                        @endif disabled>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Vị trí</label>
+                        <input type="text" class="form-control mb-3" id="basiInput" name="name"
+                            value="{{ $ads->location }}" disabled>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
                         <label for="basiInput" class="form-label">Phương thức thanh toán</label>
                         <input type="text" class="form-control mb-3" id="basiInput" name="name"
-                        value = "Thanh toán qua VNPay" disabled >
-                      
+                            value="Thanh toán qua VNPay" disabled>
+
 
                     </div>
 
@@ -59,6 +116,21 @@
 
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Thời gian bắt đầu</label>
+                        <input type="text" class="form-control mb-3" id="basiInput" name="name"
+                            value="{{ $ads->start }}" disabled>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Thời gian kết thúc</label>
+                        <input type="text" class="form-control mb-3" id="basiInput"
+                            value="{{ $ads->end }}" disabled>
+
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -81,41 +153,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                   @foreach($config as $index => $value)
+                        @foreach($config as $index => $value)
                         <tr>
                             <td>{{$index + 1}}</td>
                             <td>{{$value->title}}</td>
                             <td>{{$value->highlight}}</td>
-                            <td>{{$value->image}}</td>
+                            <td><img src="{{$value->image}}" alt="" width="100px"></td>
                             <td>{{$value->url}}</td>
                             <td>{{$value->created_at}}</td>
                         </tr>
-                        
-                    @endforeach
+
+                        @endforeach
                     </tbody>
                 </table>
 
-              
-                </div>
-               
 
             </div>
+
+
+
         </div>
 
         <div class="card mt-2">
-            @if($ads->status ==1)
 
-                <div class="card-header">
-                <h4 class="mb-0">Thay đổi trạng thái đơn hàng</h4>
-        </div>
-     
-        @endif
-        @if($ads->status == 2)
-        <div class="mt-3 text-center mb-2">
-            <a href="{{ route('ads_service.index') }}" class="btn btn-success">Quay lại</a>
+
+            <div class="mt-3 text-center mb-2">
+                <a href="{{ route('ads_service.index') }}" class="btn btn-success">Quay lại</a>
+
+            </div>
 
         </div>
-        @endif
     </div>
-</div>
-@endsection
+
+    @endsection
