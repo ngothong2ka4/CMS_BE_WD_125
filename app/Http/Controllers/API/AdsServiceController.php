@@ -75,19 +75,22 @@ class AdsServiceController extends Controller
     public function paymentResult(Request $request)
     {
         $user = Auth::user();
-        if(!$user){
+        if (!$user) {
             return $this->jsonResponse('Bạn chưa đăng nhập!', false);
         }
         $adsId = $request->input('vnp_TxnRef');
+        $adsUser = AdsService::where('id_user', $user->id)->orderBy('created_at', 'desc')
+                ->first();
         \Log::debug('Service ID from vnp_TxnRef: ' . $adsId);
         $ads = AdsService::find($adsId);
 
-        if (!$ads) {
+        if (!$ads || $adsUser->id != $adsId) {
             \Log::error('Service not found with ID: ' . $adsId);
             return $this->jsonResponse(message: 'Dịch vụ không tồn tại');
         }
         $email = $ads->email;
         if ($request->input('vnp_ResponseCode') == '00') {
+            $ads->update(['status_payment'=> 2, 'status'=>1]);
             Mail::send(
                 'emails.ads-service',
                 compact('ads'),
@@ -151,7 +154,7 @@ class AdsServiceController extends Controller
     public function addAdsService(Request $request)
     {
         $user = Auth::user();
-        if(!$user){
+        if (!$user) {
             return $this->jsonResponse('Bạn chưa đăng nhập!', false);
         }
         try {
@@ -180,11 +183,12 @@ class AdsServiceController extends Controller
 
             $data = $this->getStartEndPrice($request->all());
             $data['id_user'] = $user->id;
+            $data['status'] = 2;
             if (AdsService::where('status', 1)
                 ->where('location', $request->location)
                 ->first()
             ) {
-                return $this->jsonResponse('Bạn không thể thuê vị trí ' . $request->location, false);
+                return $this->jsonResponse('Bạn chỉ được thuê 1 vị trí ', false);
             }
             if (AdsService::where('status', 1)
                 ->where('id_user', $user->id)
@@ -205,7 +209,7 @@ class AdsServiceController extends Controller
     public function addConfig(Request $request)
     {
         $user = Auth::user();
-        if(!$user){
+        if (!$user) {
             return $this->jsonResponse('Bạn chưa đăng nhập!', false);
         }
         try {
@@ -266,12 +270,12 @@ class AdsServiceController extends Controller
                 $ads1 = AdsService::where('status', 1)
                     ->where('location', 1)->orderBy('created_at', 'desc')
                     ->first();
-        
-                $config1 = $ads1 ? $this->getConfig($ads1->id) : null;
+
+                $config1 = $ads1 ? $this->getConfig($ads1->id) : 'Vị trí này còn trống';
                 $ads2 = AdsService::where('status', 1)
                     ->where('location', 2)->orderBy('created_at', 'desc')
                     ->first();
-                $config2 = $ads2 ? $this->getConfig($ads2->id) : null;
+                $config2 = $ads2 ? $this->getConfig($ads2->id) : 'Vị trí này còn trống';
                 $config = ['1' => $config1, '2' => $config2];
                 return $this->jsonResponse('Thành công!', true, $config);
             } else {
@@ -287,8 +291,8 @@ class AdsServiceController extends Controller
     public function getConfigUser()
     {
         $user = Auth::user();
-      
-        if(!$user){
+
+        if (!$user) {
             return $this->jsonResponse('Bạn chưa đăng nhập!', false);
         }
         try {
@@ -312,5 +316,22 @@ class AdsServiceController extends Controller
             ->select('title', 'highlight', 'url', 'image', 'id_ads')
             ->first();
         return $config;
+    }
+
+    public function visits($id)
+    {
+        try {
+            $ads = AdsService::find($id);
+            $config = $this->getConfig($ads->id);
+            if($config == null || $config->url == null){
+                return $this->jsonResponse('Chưa có đường dẫn', false);
+            }
+            $ads->increment('visits');
+            return $this->jsonResponse('Truy cập thành công', true);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return $this->jsonResponse($exception->getMessage());
+        }
     }
 }
