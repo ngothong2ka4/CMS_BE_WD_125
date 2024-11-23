@@ -295,7 +295,7 @@
                         }).then((result) => {
                             if (result.isConfirmed) window.location.reload();
                         });
-                    } else {
+                    } if (res.error) {
                         console.log(res.error);
                         Swal.fire({
                             icon: "error",
