@@ -47,14 +47,6 @@ class Voucher extends Model
             return false;
         }
 
-        $voucherUserAccess = DB::table('voucher_user_access')->where('id_voucher', $this->id)
-        ->where('id_user', Auth::id())
-        ->first();
-
-        if (!$voucherUserAccess) {
-            return false;
-        }
-
         $userUsageCount = DB::table('voucher_user')->where('voucher_id', $this->id)
                                                   ->where('user_id', Auth::id())
                                                   ->first();

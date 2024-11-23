@@ -7,6 +7,7 @@ use App\Models\Voucher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class VoucherController extends Controller
 {
@@ -39,9 +40,19 @@ class VoucherController extends Controller
         if ($voucher->user_voucher_limit == 2) {
             $userPoints = Auth::user()->accumulated_points;
 
-            if (($voucher->min_accumulated_points && $userPoints < $voucher->min_accumulated_points) || 
+            if (($voucher->min_accumulated_points && $userPoints < $voucher->min_accumulated_points) ||
                 ($voucher->max_accumulated_points && $userPoints > $voucher->max_accumulated_points)) {
                 return $this->jsonResponse('Bạn không đủ điểm để sử dụng voucher này');
+            }
+        }
+
+        if ($voucher->user_voucher_limit == 3 ) {
+            $voucherUserAccess = DB::table('voucher_user_access')->where('id_voucher', $voucher->id)
+            ->where('id_user', Auth::id())
+            ->first();
+
+            if (!$voucherUserAccess) {
+                return $this->jsonResponse('Bạn không đủ điều kiện để sử dụng voucher này');
             }
         }
 
