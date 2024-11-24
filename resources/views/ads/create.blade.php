@@ -41,7 +41,7 @@ toastr()->error($error);
                         <label for="basiInput" class="form-label">Thời hạn</label>
                         <select name="duration" class="form-select mb-3" aria-label="Default select example">
                             <option value="none">Vô thời hạn</option>
-                            <option value="1h"  {{ old('duration') == '1h' ? 'selected' : '' }}>>1 giờ</option>
+                            <option value="1h"  {{ old('duration') == '1h' ? 'selected' : '' }}>1 giờ</option>
                             <option value="12h" {{ old('duration') == '12h' ? 'selected' : '' }}>12 giờ</option>
                             <option value="1d" {{ old('duration') == '1d' ? 'selected' : '' }}>1 ngày</option>
                             <option value="1w" {{ old('duration') == '1w' ? 'selected' : '' }}>1 tuần</option>
