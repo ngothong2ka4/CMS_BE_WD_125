@@ -31,9 +31,9 @@
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
-                    <form action="{{ route('ads_service.update', $ads->id) }}" class="modal-content" method="POST">
+                    <form action="{{ route('ads_service.destroy', $ads->id) }}" class="modal-content" method="POST">
                         @csrf
-                        @method('PUT')
+                        @method('DELETE')
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Nhập ghi chú</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -131,7 +131,12 @@
 
                     </div>
                 </div>
+                <div class="">
+                        <label for="basiInput" class="form-label">Đơn giá</label>
+                        <input type="text" class="form-control mb-3" id="basiInput"
+                            value="{{ number_format($ads->price, 0, '.', '')}} đ" disabled>
 
+                    </div>
             </div>
         </div>
         <div class="card mt-2">
@@ -144,7 +149,7 @@
                     style="width:100%">
                     <thead>
                         <tr>
-                            <th>STT</th>
+                           
                             <th>Tiêu đề</th>
                             <th>Nội dung</th>
                             <th>Hình ảnh</th>
@@ -153,17 +158,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($config as $index => $value)
+                    
                         <tr>
-                            <td>{{$index + 1}}</td>
-                            <td>{{$value->title}}</td>
-                            <td>{{$value->highlight}}</td>
-                            <td><img src="{{$value->image}}" alt="" width="100px"></td>
-                            <td>{{$value->url}}</td>
-                            <td>{{$value->created_at}}</td>
+                            <td>{{$config->title}}</td>
+                            <td>{{$config->highlight}}</td>
+                            <td><img src="{{$config->image}}" alt="" width="100px"></td>
+                            <td>{{$config->url}}</td>
+                            <td>{{$config->created_at}}</td>
                         </tr>
 
-                        @endforeach
+                       
                     </tbody>
                 </table>
 

@@ -267,16 +267,8 @@ class AdsServiceController extends Controller
             $ads = AdsService::where('status', 1)->first();
             // dd($ads);
             if ($ads) {
-                $ads1 = AdsService::where('status', 1)
-                    ->where('location', 1)->orderBy('created_at', 'desc')
-                    ->first();
-
-                $config1 = $ads1 ? $this->getConfig($ads1->id) : 'Vị trí này còn trống';
-                $ads2 = AdsService::where('status', 1)
-                    ->where('location', 2)->orderBy('created_at', 'desc')
-                    ->first();
-                $config2 = $ads2 ? $this->getConfig($ads2->id) : 'Vị trí này còn trống';
-                $config = ['1' => $config1, '2' => $config2];
+                $config =  $this->getConfig($ads->id) ?? 'Vị trí này còn trống';
+               
                 return $this->jsonResponse('Thành công!', true, $config);
             } else {
                 return $this->jsonResponse('Chưa có người thuê!', false);

@@ -85,10 +85,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('updateUser', [AuthController::class, 'updateUser']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
 
-    Route::post('addAdsService', [AdsServiceController::class,'addAdsService']); // đăng ký dịch vụ
-    Route::post('addConfig', [AdsServiceController::class,'addConfig']);  // chi tiết quảng cáo
-    Route::get('getAds', [AdsServiceController::class,'getConfigUser']); // chi tiết dịch vụ
-    Route::post('adsPayment', [AdsServiceController::class,'paymentResult']);
+    // Route::post('addAdsService', [AdsServiceController::class,'addAdsService']); // đăng ký dịch vụ
+    // Route::post('addConfig', [AdsServiceController::class,'addConfig']);  // chi tiết quảng cáo
+    // Route::get('getAds', [AdsServiceController::class,'getConfigUser']); // chi tiết dịch vụ
+    // Route::post('adsPayment', [AdsServiceController::class,'paymentResult']);
 
     Route::get('/listInformationOrderCombo',[ComboController::class, 'listInformationOrder']);
     Route::post('/paymentCombo',[ComboController::class, 'payment']);
