@@ -10,7 +10,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header row">
-                <h5 class="card-title mb-0 col-lg-9">Quản lý đơn hàng</h5>
+                <h5 class="card-title mb-0 col-lg-9">Quản lý dịch vụ</h5>
                 <form class="col-lg-3">
                     <select name="status" onchange="this.form.submit()" class=" form-select">
                         <option value="1" {{request('status') == 1 ?'selected' : '' }}>Hoạt động</option>
@@ -20,7 +20,7 @@
 
             </div>
             <div class="card-body">
-
+            <a href="{{ route('ads_service.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
                 <table id="example"
                     class="table table-bordered dt-responsive nowrap table-striped align-middle"
                     >
@@ -32,7 +32,6 @@
                             <th>Lượt truy cập</th>
                             <th>Thành tiền</th>
                             <th>Trạng thái dịch vụ</th>
-                            <th>Trạng thái thanh toán</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -41,7 +40,7 @@
                         <tr>
                             <td>{{ $ads->id }}</td>
                             <td>{{ $ads->name }}</td>
-                            <td>Từ {{$ads->start }} -> {{$ads->end}}</td>
+                            <td>@if( $ads->end) Từ {{$ads->start }} -> {{$ads->end}} @else Vô thời hạn @endif</td>
                             <td>{{$ads->visits}}</td>
                             <td>{{ number_format($ads->price) }} đ</td>
 
@@ -54,15 +53,16 @@
                                 @endif
                                 
                             </td>
-                            <td>
+                            <!-- <td>
                                 @if($ads-> status_payment == 1)
                                 Chưa thanh toán
                                 @endif
                                 @if($ads-> status_payment == 2)
                                 Đã thanh toán
                                 @endif
-                            </td>
+                            </td> -->
                             <td>
+                            <a href="{{ route('ads_service.edit', $ads->id) }}"><button class="btn btn-warning">Sửa</button></a>
                                 <a href="{{ route('ads_service.show', $ads->id) }}"><button class="btn btn-info">Chi tiết</button></a>
                             </td>
                             @endforeach

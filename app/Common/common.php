@@ -68,7 +68,8 @@ class common
             $now = date('Y-m-d H:i:s');
             $ads = AdsService::where('status',1)->get();
             foreach($ads as $value){
-                if($value->end < $now){
+               
+                if($value->end && $value->end < $now){
                     $value->update(['status' => 2]);
                 }
             }  
