@@ -90,6 +90,7 @@ class AdsServiceController extends Controller
             'email' => $request->email,
             'location' => 1,
             'duration' => $request->duration,
+            'start' => null,
             'price' => $request->price,
             'id_user' => 0,
             'status_payment' => 2,
