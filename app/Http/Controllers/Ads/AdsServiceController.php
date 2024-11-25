@@ -45,7 +45,7 @@ class AdsServiceController extends Controller
                 'email' => 'required|email',
                 // 'location' => 'required',
                 // 'duration' => 'required',
-                'price' => 'nullable|integer|min:0',
+                'price' => 'nullable|integer|min:0|max:99999999999',
                 'title' => 'nullable|max:255|min:3',
                 'image' => 'nullable|file|image|max:2048',
                 'highlight' => 'nullable|max:255|min:3',
@@ -68,6 +68,7 @@ class AdsServiceController extends Controller
 
                 'price.integer' => 'Giá phải là số',
                 'price.min' => 'Giá phải lớn hơn 0',
+                'price.max' => 'Giá quá lớn',
 
                 'title.required' => 'Tên khách hàng là bắt buộc.',
                 'title.max' => 'Tên khách hàng không được vượt quá 255 ký tự.',
@@ -158,7 +159,7 @@ class AdsServiceController extends Controller
                 'email' => 'required|email',
                 // 'location' => 'required',
                 // 'duration' => 'required',
-                'price' => 'nullable|integer|min:0',
+                'price' => 'nullable|integer|min:0|max:9999999999',
                 'title' => 'nullable|max:255|min:3',
                 'image' => 'nullable|file|image|max:2048',
                 'highlight' => 'nullable|max:255|min:3',
@@ -181,6 +182,7 @@ class AdsServiceController extends Controller
 
                 'price.integer' => 'Giá phải là số',
                 'price.min' => 'Giá phải lớn hơn 0',
+                'price.max' => 'Giá quá lớn',
 
                 'title.required' => 'Tên khách hàng là bắt buộc.',
                 'title.max' => 'Tên khách hàng không được vượt quá 255 ký tự.',
