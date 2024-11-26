@@ -7,6 +7,7 @@ use App\Http\Controllers\Combo\ComboController;
 use App\Http\Controllers\comment\CommentController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\AuthController as LoginController;
+use App\Http\Controllers\BinController;
 use App\Http\Controllers\category\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\product\ProductColorController;
@@ -45,6 +46,7 @@ common::autoStopAds();
 // Route::get('/test', function () {
 //     return view('test');
 // })->name('login');
+
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin']);
@@ -100,6 +102,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
         Route::resource('voucher', VoucherController::class);
         Route::resource('ads_service', AdsServiceController::class);
+
+        Route::get('/bin', [BinController::class, 'index']);
+        Route::post('/bin', [BinController::class, 'deleteCheck']);
+        Route::get('/binforce/{id}/{key}', [BinController::class, 'forceDelete'])->name('forceDelete');
+        Route::get('/binrestore/{id}/{key}', [BinController::class, 'restore'])->name('restore');
 
     });
 });
