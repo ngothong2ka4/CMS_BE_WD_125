@@ -27,6 +27,7 @@ class ComboController extends Controller
             $params = $request->validate([
                 'name' => 'required|min:3 ',
                 'id_product' => 'required|min:2',
+                'image' => 'required|file|image|mimes:jpg,jpeg,png,gif',
                 'price' => 'required',
                 'description' => 'nullable',
                 'quantity' => 'required',
@@ -34,6 +35,8 @@ class ComboController extends Controller
                 'name.required' => 'Tên combo là bắt buộc.',
                 'name.min' => 'Tên combo phải có ít nhất 3 ký tự.',
 
+                'image.required' => 'Ảnh combo là bắt buộc.',
+                'image.mimes' => 'Ảnh phải là định dạng jpg, jpeg, png hoặc gif.',
 
                 'id_product.required' => 'Sản phẩm là bắt buộc.',
                 'id_product.min' => 'Phải có 2 sản phẩm trở lên.',
@@ -41,9 +44,16 @@ class ComboController extends Controller
 
                 'price.required' => 'Giá là bắt buộc',
 
-                'quantity.required' => 'Giá là bắt buộc',
+                'quantity.required' => 'Số lượng là bắt buộc',
 
             ]);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $nameImage = time() . "_" . "_" . time() . "_" . uniqid() . "." . $image->getClientOriginalExtension();
+                $image->move('img/combo', $nameImage);
+                $path = 'img/combo/' . $nameImage;
+            }
+            $params['image'] = $path ? $path : null;
 
             if (isset($params['id_product']) && !is_array($params['id_product'])) {
                 $params['id_product'] = explode(',', $params['id_product']);
@@ -105,7 +115,7 @@ class ComboController extends Controller
 
                 'price.required' => 'Giá là bắt buộc',
 
-                'quantity.required' => 'Giá là bắt buộc',
+                'quantity.required' => 'Số lượng là bắt buộc',
 
             ]);
 
@@ -127,7 +137,7 @@ class ComboController extends Controller
             return redirect()->back()->withErrors($e->errors())->withInput();
         }
     }
-    public function destroy( $id)
+    public function destroy($id)
     {
         $combo = Combo::findOrFail($id);
         // $combo->products()->detach();

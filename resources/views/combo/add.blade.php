@@ -12,12 +12,17 @@
                     <h5 class="card-title mb-0">Thêm mới Combo</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('combo.store') }}" method="POST">
+                    <form action="{{ route('combo.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div>
                             <label class="form-label">Tên combo</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
                                 name="name" value="{{ old('name') }}">
+                        </div>
+                        <div>
+                            <label class="form-label">Ảnh combo</label>
+                            <input type="file" class="form-control @error('image') is-invalid @enderror" 
+                                name="image" >
                         </div>
                         <div class="d-flex my-3">
                             <label for="basiInput" class="form-label">Chọn sản phẩm </label>

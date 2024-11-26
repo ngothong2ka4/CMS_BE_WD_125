@@ -13,6 +13,7 @@ class Combo extends Model
     protected $table = "combos";
     protected $fillable = [
         'name',
+        'image',
         'price',
         'description',
         'quantity',
