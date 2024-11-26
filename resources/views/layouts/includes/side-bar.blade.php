@@ -137,6 +137,13 @@
                         <i class="ri-global-line"></i> <span data-key="t-dashboards">Dịch vụ quảng cáo</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Request::is('bin*') ? 'active' : '' }}"
+                        href="/bin" role="button" aria-expanded="false"
+                        aria-controls="sidebarDashboards">
+                        <i class="ri-delete-bin-line"></i> <span data-key="t-dashboards">Thùng rác</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->
