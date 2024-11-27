@@ -103,6 +103,7 @@ class ComboController extends Controller
             'productpayment' => [
                 'id' => $combo->id,
                 'name' => $combo->name,
+                'image' => $combo->image,
                 'price' => $combo->price,
                 'quantity' => $quantity,
                 'description' => $combo->description,
