@@ -18,6 +18,7 @@ class ComboResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'image' => $this->image,
             'price' => $this->price,
             'description' => $this->description,
             'products' => $this->products->map(function ($product) {
@@ -25,7 +26,7 @@ class ComboResource extends JsonResource
                     'id' => $product->id,
                     'name' => $product->name,
                     'thumbnail' => $product->thumbnail,
-                    'variants' => VariantResource::collection($product->variants), // Sử dụng VariantResource
+                    'variants' => VariantResource::collection($product->variants),
                 ];
             }),
         ];
