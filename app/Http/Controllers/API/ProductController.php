@@ -264,17 +264,17 @@ class ProductController extends Controller
         //  $product->increment('views');
         if (Auth::guard('sanctum')->check()) {
             $view = ProductView::where('id_user', Auth::guard('sanctum')->id())
-            ->where('id_product', $id)->first();
-            if($view){
+                ->where('id_product', $id)->first();
+            if ($view) {
                 $view->update(['viewed_at' => now(),]);
-            }else{
+            } else {
                 ProductView::create([
                     'id_product' => $id,
                     'viewed_at' => now(),
                     'id_user' => Auth::guard('sanctum')->id(),
                 ]);
             }
-           
+
         }
         $imageLinks = $product->images->pluck('link_image')->toArray();
         foreach ($product->variants as $variant) {
@@ -451,20 +451,17 @@ class ProductController extends Controller
     public function searchProduct(Request $request)
     {
         $query = $request->get('query');
-    if (strlen($query) < 3) {
-        return response()->json([]);
+        if (strlen($query) < 3) {
+            return response()->json([]);
+        }
+        $products = Product::query()
+            ->with('variants')
+            ->when($query, function ($queryBuilder) use ($query) {
+                $queryBuilder->where('name', 'LIKE', "%{$query}%");
+            })
+            ->get();
+        return response()->json($products);
     }
-    $products = Product::where('name', 'LIKE', "%{$query}%")
-                       ->take(10) // Giới hạn số lượng kết quả trả về
-                       ->get(['id', 'name']); // Chỉ lấy trường cần thiết
-                    //    $products = Variant::with('product')
-                    //    ->whereHas('product', function ($queryBuilder) use ($query) {
-                    //        $queryBuilder->where('name', 'LIKE', "%{$query}%");
-                    //    })
-                    //    ->take(10)
-                    //    ->get();
-    return response()->json($products);
-    }
-   
+
 
 }
