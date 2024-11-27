@@ -63,7 +63,7 @@
     </div>
 @endsection
 
-{{-- @push('scripts')
+@push('scripts')
     <script>
         new DataTable("#example", {
             order: [
@@ -88,4 +88,4 @@
             }
         });
     </script>
-@endpush --}}
+@endpush
