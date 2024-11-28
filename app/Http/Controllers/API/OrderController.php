@@ -16,6 +16,7 @@ use App\Models\Voucher;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
@@ -163,6 +164,8 @@ class OrderController extends Controller
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
+
+                    Cache::put(Order::URL_PAYMENT, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -189,6 +192,8 @@ class OrderController extends Controller
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
+
+                    Cache::put(Order::URL_PAYMENT, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -665,6 +670,8 @@ class OrderController extends Controller
 
         $orders = $orders->slice(($page - 1) * $perPage, $perPage)->values();
 
+        $order['urlPayment'] = Cache::get(Order::URL_PAYMENT) ?? "deo co";
+        
         return response()->json([
             'current_page' => $page,
             'total_pages' => $totalPages,

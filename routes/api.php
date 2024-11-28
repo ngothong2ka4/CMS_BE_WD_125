@@ -13,6 +13,8 @@ use App\Http\Controllers\API\AdsServiceController;
 use App\Http\Controllers\API\ComboController;
 use App\Http\Controllers\API\FavoriteProductController;
 use App\Http\Controllers\AuthController as ControllersAuthController;
+use App\Models\Order;
+use Illuminate\Support\Facades\Cache;
 
 common::autoUpdateStatus();
 common::deleteToken();
@@ -59,6 +61,11 @@ Route::get('detailCombos/{id}',[ComboController::class, 'detailCombos']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/geturl', function(){
+        $url = Cache::get(Order::URL_PAYMENT) ?? "deo co";
+        return $url;
+    });
     Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
     Route::get('/listCommentUser',[ProductController::class, 'listCommentUser']);
     Route::get('/view',[ProductController::class,'getRecentViewedProducts']);
@@ -79,7 +86,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
     Route::get('/vouchers/list', [VoucherController::class, 'listVoucher']);
-    
+
     Route::get('favoriteProduct/check', [FavoriteProductController::class, 'isFavorite']);
     Route::resource('favoriteProduct', FavoriteProductController::class);
 
@@ -95,5 +102,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/paymentCombo',[ComboController::class, 'payment']);
 
     Route::resource('combo', ComboController::class);
-    
+
 });
