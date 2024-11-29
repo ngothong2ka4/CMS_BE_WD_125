@@ -16,6 +16,7 @@ use App\Models\Voucher;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
@@ -163,6 +164,10 @@ class OrderController extends Controller
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
+
+                    $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
+
+                    Cache::put($cacheKey, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -189,6 +194,10 @@ class OrderController extends Controller
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
+
+                    $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
+
+                    Cache::put($cacheKey, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -572,6 +581,18 @@ class OrderController extends Controller
             ->select('id', 'id_user', 'recipient_name', 'email', 'phone_number', 'recipient_address', 'note', 'total_payment', 'payment_role', 'status_payment', 'status', 'created_at')
             ->where('id_user', $id_user)
             ->get();
+
+        foreach ($orders as $order) {
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+
+            if (Cache::has($cacheKey)) {
+                $cacheValue = Cache::get($cacheKey);
+
+                $order->urlBackPayment = $cacheValue;
+            } else {
+                $order->urlBackPayment = null;
+            }
+        }
 
         if ($orders->isEmpty()) {
             return response()->json(['message' => 'Không có đơn hàng nào'], 404);

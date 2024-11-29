@@ -47,7 +47,7 @@ class ComboController extends Controller
     // require: authToken
     // API: /api/listInformationOrderCombo
     // parram: (cart_ids(mảng id cart thanh toán) || id_variant,quantity)
-    // example:        
+    // example:
     // {
     //     "comboId": 3,
     //     "quantity": 2,
@@ -242,7 +242,7 @@ class ComboController extends Controller
                     'selling_price' => $variant->selling_price,
                     'product_name' => $variant->product->name,
                     'product_image' => $variant->product->thumbnail,
-                    'quantity' => $data['quantity'], // vì mỗi biến thể trong 1 combo chỉ được mua 1 
+                    'quantity' => $data['quantity'], // vì mỗi biến thể trong 1 combo chỉ được mua 1
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
