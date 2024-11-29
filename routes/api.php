@@ -61,11 +61,6 @@ Route::get('detailCombos/{id}',[ComboController::class, 'detailCombos']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-
-    Route::get('/geturl', function(){
-        $url = Cache::get(Order::URL_PAYMENT) ?? "deo co";
-        return $url;
-    });
     Route::post('/addCommentProduct',[ProductController::class, 'addCommentProduct']);
     Route::get('/listCommentUser',[ProductController::class, 'listCommentUser']);
     Route::get('/view',[ProductController::class,'getRecentViewedProducts']);

@@ -165,7 +165,9 @@ class OrderController extends Controller
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
 
-                    Cache::put(Order::URL_PAYMENT, $url, now()->addMinutes(1));
+                    $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
+
+                    Cache::put($cacheKey, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -193,7 +195,9 @@ class OrderController extends Controller
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
 
-                    Cache::put(Order::URL_PAYMENT, $url, now()->addMinutes(1));
+                    $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
+
+                    Cache::put($cacheKey, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -578,6 +582,18 @@ class OrderController extends Controller
             ->where('id_user', $id_user)
             ->get();
 
+        foreach ($orders as $order) {
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+
+            if (Cache::has($cacheKey)) {
+                $cacheValue = Cache::get($cacheKey);
+
+                $order->urlBackPayment = $cacheValue;
+            } else {
+                $order->urlBackPayment = null;
+            }
+        }
+
         if ($orders->isEmpty()) {
             return response()->json(['message' => 'Không có đơn hàng nào'], 404);
         }
@@ -670,8 +686,6 @@ class OrderController extends Controller
 
         $orders = $orders->slice(($page - 1) * $perPage, $perPage)->values();
 
-        $order['urlPayment'] = Cache::get(Order::URL_PAYMENT) ?? "deo co";
-        
         return response()->json([
             'current_page' => $page,
             'total_pages' => $totalPages,

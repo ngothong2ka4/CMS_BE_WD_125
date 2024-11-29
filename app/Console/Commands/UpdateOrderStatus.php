@@ -14,11 +14,12 @@ class UpdateOrderStatus extends Command
     public function handle()
     {
         $orders = Order::where('status', Order::STATUS_PENDING)
+                        ->where('status_payment',Order::STATUS_PAYMENT_PENDING)
                         ->where('payment_role',Order::PAYMENT_ROLE_VN_PAY)
                         ->get();
 
         foreach ($orders as $order) {
-            $cacheKey = Order::URL_PAYMENT;
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
 
             if (!Cache::has($cacheKey)) {
                 $order->update(['status' => Order::STATUS_CANCELED]);
