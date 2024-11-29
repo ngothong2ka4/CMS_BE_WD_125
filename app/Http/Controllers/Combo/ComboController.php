@@ -69,7 +69,7 @@ class ComboController extends Controller
             $totalPrice = $selectedProducts->sum(function ($product) {
                 return $product->variants->min('list_price') ?? 0;
             });
-            // Validate giá combo 
+            // Validate giá combo
             if ($params['price'] > $totalPrice) {
                 toastr()->error('Giá combo không được lớn hơn tổng giá sản phẩm (' . number_format($totalPrice) . ').');
                 return redirect()->back()->withInput();
@@ -93,7 +93,7 @@ class ComboController extends Controller
                 $image->move('img/combo', $nameImage);
                 $path = 'img/combo/' . $nameImage;
             }
-            $params['image'] = $path ? $path : null;
+            $params['image'] = $path ? url($path) : null;
 
             if (isset($params['id_product']) && !is_array($params['id_product'])) {
                 $params['id_product'] = explode(',', $params['id_product']);
@@ -197,7 +197,7 @@ class ComboController extends Controller
             $totalPrice = $selectedProducts->sum(function ($product) {
                 return $product->variants->min('list_price') ?? 0;
             });
-            // Validate giá combo 
+            // Validate giá combo
             if ($params['price'] > $totalPrice) {
                 toastr()->error('Giá combo không được lớn hơn tổng giá sản phẩm (' . number_format($totalPrice) . ').');
                 return redirect()->back()->withInput();

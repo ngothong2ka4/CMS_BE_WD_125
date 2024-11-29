@@ -167,7 +167,7 @@ class OrderController extends Controller
 
                     $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
 
-                    Cache::put($cacheKey, $url, now()->addMinutes(1));
+                    Cache::put($cacheKey, $url, now()->addMinutes(15));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -197,7 +197,7 @@ class OrderController extends Controller
 
                     $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
 
-                    Cache::put($cacheKey, $url, now()->addMinutes(1));
+                    Cache::put($cacheKey, $url, now()->addMinutes(15));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
