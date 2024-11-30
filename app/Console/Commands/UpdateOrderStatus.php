@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Order;
+use App\Models\Variant;
 
 class UpdateOrderStatus extends Command
 {
@@ -24,6 +25,14 @@ class UpdateOrderStatus extends Command
             if (!Cache::has($cacheKey)) {
                 $order->update(['status' => Order::STATUS_CANCELED]);
                 $this->info("Order ID {$order->id} đã được chuyển sang trạng thái cancelled.");
+                
+                foreach ($order->orderDetail as $orderDetail) {
+                    $variant = Variant::find($orderDetail->id_variant);
+                    if ($variant) {
+                        $variant->quantity += $orderDetail->quantity;
+                        $variant->save();
+                    }
+                }
             }
         }
 

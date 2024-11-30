@@ -197,7 +197,7 @@ class OrderController extends Controller
 
                     $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
 
-                    Cache::put($cacheKey, $url, now()->addMinutes(15));
+                    Cache::put($cacheKey, $url, now()->addMinutes(1));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -615,6 +615,7 @@ class OrderController extends Controller
                 return response()->json(['message' => 'Đơn hàng không tồn tại'], 404);
             } else {
                 if ($order->status == 4) {
+                    unset($order->urlBackPayment);
                     $order->status = 6;
                     OrderHistory::create([
                         'id_order' => $order->id,
@@ -634,6 +635,7 @@ class OrderController extends Controller
             $note = $request->note;
             $cancel_id = $request->input('cancel_id');
             $order = $orders->where('id', $cancel_id)->first();
+            unset($order->urlBackPayment);
 
             if (!$order) {
                 return response()->json(['message' => 'Đơn hàng không tồn tại'], 404);
