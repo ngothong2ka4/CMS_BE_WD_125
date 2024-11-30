@@ -264,10 +264,10 @@ class AdsServiceController extends Controller
     public function getAllConfig()
     {
         try {
-            $ads = AdsService::where('status', 1)->first();
+            $ads = AdsService::where('status', 1)->orderBy('created_at', 'desc')->first();
             // dd($ads);
             if ($ads) {
-                $config =  $this->getConfig($ads->id) ?? 'Vị trí này còn trống';
+                $config =  $this->getConfig($ads->id);
                
                 return $this->jsonResponse('Thành công!', true, $config);
             } else {
