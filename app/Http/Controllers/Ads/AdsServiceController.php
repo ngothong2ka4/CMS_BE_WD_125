@@ -218,7 +218,7 @@ class AdsServiceController extends Controller
                 $image->move('img/ads', $nameImage);
                 $path = 'img/ads/' . $nameImage;
 
-                if (file_exists(public_path($img_old))) {
+                if ($img_old && file_exists(public_path($img_old))) {
                     unlink(public_path($img_old));
                 }
             } else {
