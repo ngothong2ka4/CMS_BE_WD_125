@@ -167,7 +167,7 @@ class OrderController extends Controller
 
                     $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
 
-                    Cache::put($cacheKey, $url, now()->addMinutes(1));
+                    Cache::put($cacheKey, $url, now()->addMinutes(15));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -197,7 +197,7 @@ class OrderController extends Controller
 
                     $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
 
-                    Cache::put($cacheKey, $url, now()->addMinutes(1));
+                    Cache::put($cacheKey, $url, now()->addMinutes(15));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -476,6 +476,11 @@ class OrderController extends Controller
             $order->status_payment = Order::STATUS_PAYMENT_COMPLETED;
             $order->save();
 
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+            if (Cache::has($cacheKey)) {
+                Cache::forget($cacheKey);
+            }
+
             $information = [
                 'order' => $order,
                 'orderDetails' => $order->orderDetail->toArray(),
@@ -534,6 +539,11 @@ class OrderController extends Controller
         }
 
         $order->update(["status" => Order::STATUS_CANCELED]);
+
+        $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+        if (Cache::has($cacheKey)) {
+            Cache::forget($cacheKey);
+        }
 
         OrderHistory::create([
             'id_order' => $id_order,
