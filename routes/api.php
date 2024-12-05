@@ -58,6 +58,7 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/detailProduct/{id}',[ProductController::class, 'detailProduct']);
 Route::get('/relatedProducts/{id}',[ProductController::class, 'relatedProducts']);
 Route::get('detailCombos/{id}',[ComboController::class, 'detailCombos']);
+Route::get('/combo',[ComboController::class, 'index']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -95,7 +96,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/listInformationOrderCombo',[ComboController::class, 'listInformationOrder']);
     Route::post('/paymentCombo',[ComboController::class, 'payment']);
-
-    Route::resource('combo', ComboController::class);
-
 });
