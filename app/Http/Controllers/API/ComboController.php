@@ -251,7 +251,7 @@ class ComboController extends Controller
                 OrderDetail::create($insertData);
                 $orderDetails[] = $insertData;
 
-                $quantityInStock = $variant->quantity - 1;
+                $quantityInStock = $variant->quantity - $data['quantity'];
                 $variant->update([
                     "quantity" => $quantityInStock
                 ]);
