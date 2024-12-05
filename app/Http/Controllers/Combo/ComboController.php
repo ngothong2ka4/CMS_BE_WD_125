@@ -67,7 +67,7 @@ class ComboController extends Controller
 
             // Tính tổng giá sản phẩm (min_price) và tổng số lượng nhỏ nhất (min_quantity)
             $totalPrice = $selectedProducts->sum(function ($product) {
-                return $product->variants->min('selling_pric') ?? 0;
+                return $product->variants->min('selling_price') ?? 0;
             });
             // Validate giá combo
             if ($params['price'] > $totalPrice) {
@@ -226,7 +226,7 @@ class ComboController extends Controller
             } else {
                 $path = $old_image;
             }
-            $params['image'] = $path;
+            $params['image'] = url($path);
 
             if (isset($params['id_product']) && !is_array($params['id_product'])) {
                 $params['id_product'] = explode(',', $params['id_product']);

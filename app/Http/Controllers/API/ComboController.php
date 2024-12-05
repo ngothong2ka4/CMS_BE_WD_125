@@ -220,6 +220,8 @@ class ComboController extends Controller
 
         $user = User::find($userId);
         $user->update(['accum_point' => $user->accum_point - $order->used_accum]);
+        $combo = Combo::find($data['comboId']);
+        $combo->update(['quantity' => $combo->quantity - $data['quantity']]);
 
         $orderDetails = [];
         foreach ($data['variantIds'] as $productId => $variantId) {
@@ -229,7 +231,7 @@ class ComboController extends Controller
                 throw new \Exception('Sản phẩm không tồn tại.');
             }
             if ($variant->quantity - $data['quantity'] < 0) {
-                throw new \Exception('Sản phẩm ' . $variant->product->name . ' không đủ hàng trong kho.');
+                throw new \Exception('Xin lỗi, sản phẩm ' . $variant->product->name . ' không đủ hàng trong kho.');
             }
 
             if ($variant) { // Kiểm tra nếu variant tồn tại
