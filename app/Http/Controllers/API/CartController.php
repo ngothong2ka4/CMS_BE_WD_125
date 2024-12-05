@@ -16,19 +16,19 @@ class CartController extends Controller
     // require: authToken
     // API: /api/addCart
     // parram: (id_variant,quantity)
-    // example: 
+    // example:
     //     {
     //         "id_variant": 9,
     //         "quantity": 10
-        
+
     //     }
     // response:200
     //            {
     //                "status": true,
     //                "message": "Success",
     //                "data": cart
-    //            } 
-    public function addProductToCart(Request $request) 
+    //            }
+    public function addProductToCart(Request $request)
     {
         try {
             $id_variant = $request->id_variant;
@@ -39,13 +39,13 @@ class CartController extends Controller
             if ($quantity > $variant->quantity) {
                 return $this->jsonResponse('Sản phẩm ' . $variant->product->name . ' không đủ hàng trong kho.');
             }
-    
+
             DB::beginTransaction();
-            
+
             $cart = Cart::where('id_variant', $id_variant)
                         ->where('id_user', $id_user)
                         ->first();
-    
+
             if (!$cart) {
                 $cart = Cart::create([
                     'id_variant' => $id_variant,
@@ -62,9 +62,9 @@ class CartController extends Controller
                 $cart->quantity = $newQuantity;
                 $cart->save();
             }
-    
+
             DB::commit();
-    
+
             return $this->jsonResponse('Thêm vào giỏ hàng thành công', true, $cart);
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -77,7 +77,7 @@ class CartController extends Controller
     // require: authToken
     // API: /api/deleteCart
     // parram: (id_cart)
-    // example: 
+    // example:
     //     {
     //         "id" : 6
     //     }
@@ -87,7 +87,7 @@ class CartController extends Controller
     //                 "message": "Xoá sản phẩm trong giỏ hàng thành công",
     //                 "data": null
     //             }
-    public function deleteProductInCart(Request $request) 
+    public function deleteProductInCart(Request $request)
     {
         try {
             $userId = Auth::id();
@@ -96,9 +96,9 @@ class CartController extends Controller
             if (!$productInCart || $productInCart->id_user != $userId) {
                 return $this->jsonResponse('Bạn không có sản phẩm này trong giỏ hàng');
             }
-    
+
             $productInCart->delete();
-    
+
             return $this->jsonResponse('Xoá sản phẩm trong giỏ hàng thành công', true);
         }catch (\Exception $exception) {
             DB::rollBack();
@@ -111,7 +111,7 @@ class CartController extends Controller
     // require: authToken
     // API: /api/deleteMutipleCart
     // parram: (cart_ids(mảng id cần xoá), id_user)
-    // example: 
+    // example:
     //          {
     //            "cart_ids" :[4,5],
     //            "id_user" : 5
@@ -134,7 +134,7 @@ class CartController extends Controller
             if (empty($cartIds)) {
                 return $this->jsonResponse('Không có sản phẩm nào được xoá!');
             }
-    
+
             Cart::whereIn('id', $cartIds)->where('id_user', $userId)->delete();
             return $this->jsonResponse('Xóa sản phẩm được chọn thành công', true);
         } catch (\Exception $exception) {
@@ -152,7 +152,7 @@ class CartController extends Controller
     //                 "message": "Lấy sản phẩm trong giỏ hàng thành công",
     //                 "data": list cart
     //             }
-    public function listProductInCart() 
+    public function listProductInCart()
     {
         try {
             $user = Auth::id();
@@ -165,11 +165,18 @@ class CartController extends Controller
                 'variant.product',
                 'variant.color',
                 'variant.size',
-                ])->where("id_user", $user)->get();
-            
-            
-            return $this->jsonResponse('Lấy sản phẩm trong giỏ hàng thành công', 
-                                        true, 
+                ])
+                ->whereHas('variant', function($query) {
+                    $query->whereNull('deleted_at')
+                          ->whereHas('product', function($subQuery) {
+                              $subQuery->whereNull('deleted_at'); 
+                          });
+                })
+                ->where("id_user", $user)->get();
+
+
+            return $this->jsonResponse('Lấy sản phẩm trong giỏ hàng thành công',
+                                        true,
                                         CartResource::collection($productInCart));
         }catch (\Exception $exception) {
             DB::rollBack();
@@ -186,7 +193,7 @@ class CartController extends Controller
     //              "cartItems": [
     //                  {
     //                  "cart_id": 3,
-    //                  "id_variant": 2, 
+    //                  "id_variant": 2,
     //                  "quantity": 8
     //                  }
     //              ]
@@ -197,7 +204,7 @@ class CartController extends Controller
     //                 "message": "Cập nhật giỏ hàng thành công",
     //                 "data": null
     //             }
-    public function choseProductInCart(Request $request) 
+    public function choseProductInCart(Request $request)
     {
         try {
             DB::beginTransaction();
@@ -207,16 +214,16 @@ class CartController extends Controller
             if (!$userId) {
                 return $this->jsonResponse('Bạn chưa đăng nhập');
             }
-    
+
             $valid = collect($cartItems)->every(function ($item) {
                 $variant = Variant::find($item['id_variant']);
                 return $variant && $item['quantity'] <= $variant->quantity;
             });
-            
+
             if (!$valid) {
                 return $this->jsonResponse('Số lượng sản phẩm không đủ.', false);
             }
-            
+
             $data = collect($cartItems)->map(function ($item) use ($userId) {
                 return [
                     'id' => $item['cart_id'],
@@ -225,9 +232,9 @@ class CartController extends Controller
                     'quantity' => $item['quantity'],
                 ];
             })->toArray();
-    
+
             Cart::upsert($data, ['id', 'id_user', 'id_variant'], ['quantity', 'updated_at']);
-    
+
             DB::commit();
             return $this->jsonResponse('Cập nhật giỏ hàng thành công', true);
         } catch (\Exception $exception) {
