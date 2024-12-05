@@ -18,6 +18,10 @@ class ComboResource extends JsonResource
         $min_quantity = $this->products->map(function ($product) {
             return $product->variants->min('quantity');
         })->min();
+        $quantity = $this->quantity;
+
+        $available_quantity = min($min_quantity ?? 0, $quantity);
+        
         $sum_price = $this->products->map(function ($product) {
             return $product->variants->min('selling_price');
         })->sum();
@@ -26,8 +30,9 @@ class ComboResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image,
             'price' => $this->price,
+            'quantity' => $this->quantity,
             'description' => $this->description,
-            'available_quantity' => $min_quantity,
+            'available_quantity' => $available_quantity,
             'sum_price' => $sum_price,
             'products' => $this->products->map(function ($product) {
                 return [
