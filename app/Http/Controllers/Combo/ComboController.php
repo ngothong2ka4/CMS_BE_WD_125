@@ -22,7 +22,7 @@ class ComboController extends Controller
 
         // Xử lý để tìm giá và số lượng nhỏ nhất của từng sản phẩm
         $productsWithMinValues = $products->map(function ($product) {
-            $minPrice = $product->variants->min('list_price');
+            $minPrice = $product->variants->min('selling_price');
             $minQuantity = $product->variants->min('quantity');
 
             return [
@@ -67,7 +67,7 @@ class ComboController extends Controller
 
             // Tính tổng giá sản phẩm (min_price) và tổng số lượng nhỏ nhất (min_quantity)
             $totalPrice = $selectedProducts->sum(function ($product) {
-                return $product->variants->min('list_price') ?? 0;
+                return $product->variants->min('selling_price') ?? 0;
             });
             // Validate giá combo
             if ($params['price'] > $totalPrice) {
@@ -126,7 +126,7 @@ class ComboController extends Controller
 
         // Xử lý để tìm giá và số lượng nhỏ nhất của từng sản phẩm
         $productsWithMinValues = $products->map(function ($product) {
-            $minPrice = $product->variants->min('list_price');
+            $minPrice = $product->variants->min('selling_price');
             $minQuantity = $product->variants->min('quantity');
 
             return [
@@ -150,7 +150,7 @@ class ComboController extends Controller
 
         // Xử lý để tìm giá và số lượng nhỏ nhất của từng sản phẩm
         $productsWithMinValues = $products->map(function ($product) {
-            $minPrice = $product->variants->min('list_price');
+            $minPrice = $product->variants->min('selling_price');
             $minQuantity = $product->variants->min('quantity');
 
             return [
@@ -195,8 +195,13 @@ class ComboController extends Controller
 
             // Tính tổng giá sản phẩm (min_price) và tổng số lượng nhỏ nhất (min_quantity)
             $totalPrice = $selectedProducts->sum(function ($product) {
-                return $product->variants->min('list_price') ?? 0;
+                return $product->variants->min('selling_price') ?? 0;
             });
+            $discountLimit = $totalPrice * 0.8; // 20% giảm
+            if ($params['price'] < $discountLimit) {
+                toastr()->error('Giá combo không được giảm quá 20% so với tổng giá sản phẩm (' . number_format($totalPrice) . ').');
+                return redirect()->back()->withInput();
+            }
             // Validate giá combo
             if ($params['price'] > $totalPrice) {
                 toastr()->error('Giá combo không được lớn hơn tổng giá sản phẩm (' . number_format($totalPrice) . ').');
@@ -226,7 +231,7 @@ class ComboController extends Controller
             } else {
                 $path = $old_image;
             }
-            $params['image'] = $path;
+            $params['image'] = url($path);
 
             if (isset($params['id_product']) && !is_array($params['id_product'])) {
                 $params['id_product'] = explode(',', $params['id_product']);
