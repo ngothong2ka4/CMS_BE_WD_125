@@ -35,6 +35,38 @@ $(document).ready(function() {
             cache: true
         }
     });
+    function updateComboDetails() {
+        let totalPrice = 0; // Khởi tạo tổng giá
+        let minQuantity = null; // Khởi tạo số lượng nhỏ nhất
+
+        // Lặp qua các sản phẩm đã chọn
+        productSelect.find('option:selected').each(function () {
+            const price = parseFloat($(this).attr('data-min-price')); // Giá sản phẩm
+            const quantity = parseFloat($(this).attr('data-min-quantity')); // Số lượng sản phẩm
+
+            if (!isNaN(price)) {
+                totalPrice += price; // Tính tổng giá
+            }
+
+            if (!isNaN(quantity)) {
+                // Tìm số lượng nhỏ nhất
+                if (minQuantity === null || quantity < minQuantity) {
+                    minQuantity = quantity;
+                }
+            }
+        });
+
+        // Gán giá trị vào input
+        totalPriceInput.val(totalPrice.toFixed(2)); // Tổng giá (định dạng 2 số thập phân)
+        minQuantityInput.val(minQuantity !== null ? minQuantity : 0); // Số lượng nhỏ nhất (nếu không có, gán 0)
+    }
+
+    // Tính toán ngay khi trang load (xem chi tiết combo)
+    updateComboDetails();
+
+    // Tính toán lại khi có thay đổi (nếu giao diện cho phép chỉnh sửa sản phẩm)
+    productSelect.on('change', updateComboDetails);
+    
     // Tính tổng giá và số lượng nhỏ nhất
     productSelect.on('change', function () {
         let totalPrice = 0;
