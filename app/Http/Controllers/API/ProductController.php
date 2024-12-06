@@ -411,9 +411,20 @@ class ProductController extends Controller
                 'variant.size',
             ])
                 ->where('id_user', $user->id)
-                ->get();
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
 
-            return $this->jsonResponse('Lấy danh sách đánh giá thành công', true, ListCommentResource::collection($comments));
+                return response()->json([
+                    'message' => 'Lấy danh sách đánh giá thành công',
+                    'success' => true,
+                    'data' => ListCommentResource::collection($comments->items()),
+                    'meta' => [
+                        'current_page' => $comments->currentPage(),
+                        'last_page' => $comments->lastPage(),
+                        'per_page' => $comments->perPage(),
+                        'total' => $comments->total(),
+                    ],
+                ]);
         } catch (\Exception $exception) {
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Có lỗi xảy ra');
