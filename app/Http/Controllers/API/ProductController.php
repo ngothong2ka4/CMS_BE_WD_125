@@ -237,7 +237,7 @@ class ProductController extends Controller
     //                "status": true,
     //                "message": "Success",
     //                "data": productDetail
-    //            } 
+    //            }
 
     public function detailProduct($id)
     {
@@ -301,7 +301,7 @@ class ProductController extends Controller
     //                "status": true,
     //                "message": "Success",
     //                "data": relatedProducts
-    //            } 
+    //            }
 
     public function relatedProducts($id)
     {
@@ -391,6 +391,7 @@ class ProductController extends Controller
     //                  "content": "đ biết nói gì",
     //                  "rating": 3,
     //                  "created_at": "2024-10-19T08:34:35.000000Z",
+    //                  "product_id": 3,
     //                  "product_name": "Nhẫn cưới Vàng 18K& Platinum 950 Kim cương tự nhiên",
     //                  "color": "xanh dương",
     //                  "size": "1.7"
