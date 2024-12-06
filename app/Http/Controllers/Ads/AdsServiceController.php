@@ -132,6 +132,10 @@ class AdsServiceController extends Controller
     public function show(string $id, Request $request)
     {
         $ads = AdsService::find($id);
+        if($request->start && $request->end && $request->start > $request->end){
+            toastr()->error('Khoảng thời gian không hợp lệ');
+                return back();
+        }
         if($request->start && $request->end){
             $start = $request->start;
             $end = $request->end;
