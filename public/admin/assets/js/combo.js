@@ -35,7 +35,7 @@ $(document).ready(function() {
             cache: true
         }
     });
-    function updateComboDetails() {
+        function updateComboDetails() {
         let totalPrice = 0; // Khởi tạo tổng giá
         let minQuantity = null; // Khởi tạo số lượng nhỏ nhất
 
@@ -57,7 +57,7 @@ $(document).ready(function() {
         });
 
         // Gán giá trị vào input
-        totalPriceInput.val(totalPrice.toFixed(2)); // Tổng giá (định dạng 2 số thập phân)
+        totalPriceInput.val(totalPrice.toLocaleString('vi-VN', { style: 'decimal', maximumFractionDigits: 0 })); // Hiển thị tổng giá (VNĐ)
         minQuantityInput.val(minQuantity !== null ? minQuantity : 0); // Số lượng nhỏ nhất (nếu không có, gán 0)
     }
 
@@ -89,7 +89,6 @@ $(document).ready(function() {
             }
         });
 
-        // Gán tổng giá và số lượng nhỏ nhất vào input
         totalPriceInput.val(totalPrice);
         minQuantityInput.val(minQuantity !== null ? minQuantity : 0); // Nếu không có sản phẩm nào, gán giá trị 0
     });
