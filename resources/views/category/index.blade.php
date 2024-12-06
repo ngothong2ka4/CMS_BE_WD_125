@@ -41,6 +41,8 @@
                                             @method('DELETE')
                                             <button class="btn btn-danger">Xóa</button>
                                         </form>
+                                        {{-- <button class="btn btn-danger"
+                                            onclick="confirmDelete({{ $item->id }})">Xoá</button> --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -78,4 +80,27 @@
             }
         });
     </script>
+    {{-- <script>
+        // Hàm để gọi SweetAlert2 và xử lý khi xoá danh mục
+        function confirmDelete(categoryId) {
+            Swal.fire({
+                title: 'Chọn cách xử lý sản phẩm!',
+                text: "Bạn muốn xử lý các sản phẩm trước khi xoá danh mục?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Giữ lại sản phẩm',
+                cancelButtonText: 'Xoá tất cả sản phẩm'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gửi yêu cầu với hành động '1' (Giữ sản phẩm)
+                    window.location.href = '/category/' + categoryId + '/destroy?action=1&_method=DELETE';
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Gửi yêu cầu với hành động '2' (Xoá tất cả sản phẩm)
+                    window.location.href = '/category/' + categoryId + '/destroy?action=2&_method=DELETE';
+                }
+            });
+        }
+    </script> --}}
 @endpush
