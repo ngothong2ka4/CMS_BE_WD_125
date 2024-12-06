@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\AdsService;
 use App\Models\ConfigAds;
+use App\Models\Visit;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -319,6 +320,7 @@ class AdsServiceController extends Controller
                 return $this->jsonResponse('Chưa có đường dẫn', false);
             }
             $ads->increment('visits');
+            Visit::create(['id_ads'=> $id]);
             return $this->jsonResponse('Truy cập thành công', true);
         } catch (\Exception $exception) {
             DB::rollBack();

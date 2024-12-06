@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Ads;
 use App\Http\Controllers\Controller;
 use App\Models\AdsService;
 use App\Models\ConfigAds;
+use App\Models\Visit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdsServiceController extends Controller
 {
@@ -127,11 +129,34 @@ class AdsServiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
         $ads = AdsService::find($id);
+        if($request->start && $request->end){
+            $start = $request->start;
+            $end = $request->end;
+        }else{
+            $start = Carbon::parse($ads->start)->format('Y-m-d');
+            $end = Carbon::now()->format('Y-m-d');
+        }
+       
+        $visits = Visit::
+        select(
+            DB::raw('DATE(created_at) as time'),
+            DB::raw('count(*) as visit'),
+        )
+        ->where('id_ads',$id)
+        ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])
+ 
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->orderBy('time')
+        ->get();
+    // dd($visits);
         $config = ConfigAds::where('id_ads', $id)->orderBy('created_at', 'desc')->first();
-        return view('ads.show', compact('ads','config'));
+           
+       
+
+        return view('ads.show', compact('ads','config','visits','start','end'));
     }
 
     /**
