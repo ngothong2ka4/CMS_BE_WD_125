@@ -84,8 +84,9 @@ class ComboController extends Controller
 
             // Kiểm tra variant_ids hợp lệ
             $selectedProducts = $combo->products->map(function ($product) use ($variantIds) {
-                $variantId = $variantIds[$product->id] ?? null; // Lấy variant_id cho sản phẩm
-                $selectedVariant = $product->variants->where('id', $variantId)->first();
+                $selectedVariant = $product->variants
+                    ->whereIn('id', $variantIds)
+                    ->first();
 
                 return [
                     'id' => $product->id,
