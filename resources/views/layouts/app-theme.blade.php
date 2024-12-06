@@ -67,8 +67,8 @@
 
     @stack('scripts')
     <script src="{{ asset('admin/assets/js/pages/password-addon.init.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/pages/voucher.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/pages/combo.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/voucher.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/combo.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     
