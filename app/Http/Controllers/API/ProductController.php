@@ -412,19 +412,23 @@ class ProductController extends Controller
             ])
                 ->where('id_user', $user->id)
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->get();
 
-                return response()->json([
-                    'message' => 'Lấy danh sách đánh giá thành công',
-                    'success' => true,
-                    'data' => ListCommentResource::collection($comments->items()),
-                    'meta' => [
-                        'current_page' => $comments->currentPage(),
-                        'last_page' => $comments->lastPage(),
-                        'per_page' => $comments->perPage(),
-                        'total' => $comments->total(),
-                    ],
-                ]);
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page', 10);
+        $total = count($comments);
+        $totalPages = ceil($total / $perPage);
+
+        $pagedComments = $comments->slice(($page - 1) * $perPage, $perPage)->values();
+        return response()->json([
+            'message' => 'Lấy danh sách đánh giá thành công',
+            'success' => true,
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_items' => $total,
+            'per_page' => $perPage,
+            'data' => ListCommentResource::collection($pagedComments),
+        ]);
         } catch (\Exception $exception) {
             \Log::error($exception->getMessage());
             return $this->jsonResponse('Có lỗi xảy ra');
