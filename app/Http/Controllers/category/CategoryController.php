@@ -4,6 +4,7 @@ namespace App\Http\Controllers\category;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -102,13 +103,6 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors($e->errors())->withInput();
         }
     }
-
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Request $request, string $id)
     {
         if ($request->isMethod('DELETE')) {
@@ -116,9 +110,42 @@ class CategoryController extends Controller
             $category = Category::query()->findOrFail($id);
 
             $category->delete();
+            Product::where('id_category', $category->id)
+                    ->update(['id_category' => 0]);
             toastr()->success('Xoá danh mục thành công!');
 
             return redirect()->route('category.index');
         }
     }
+
+    // public function destroy(Request $request, string $id)
+    // {
+    //     // Kiểm tra nếu có action từ request
+    //     $action = $request->input('action'); // Lấy hành động từ frontend
+    //     $category = Category::findOrFail($id);
+
+    //     switch ($action) {
+    //         case '1':
+    //             // Giữ nguyên sản phẩm nhưng không phân loại
+    //             Product::where('id_category', $category->id)
+    //                 ->update(['id_category' => null]);
+    //             break;
+
+    //         case '2':
+    //             // Xóa toàn bộ sản phẩm trong danh mục
+    //             Product::where('id_category', $category->id)
+    //                 ->delete();
+    //             break;
+
+    //         default:
+    //             toastr()->error('Hành động không hợp lệ!');
+    //             return redirect()->route('category.index');
+    //     }
+
+    //     // Xóa danh mục
+    //     $category->delete();
+
+    //     toastr()->success('Xóa danh mục và xử lý sản phẩm thành công!');
+    //     return redirect()->route('category.index');
+    // }
 }

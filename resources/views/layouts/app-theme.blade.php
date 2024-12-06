@@ -2,14 +2,15 @@
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-sidebar-image="none" data-preloader="disable">
 
-    @include('layouts.includes.theme-header');
-    
-    @stack('styles')
-    <script>
-        const PATH_ROOT = '{{ asset('admin') }}';
-    </script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    
+@include('layouts.includes.theme-header');
+
+@stack('styles')
+<script>
+    const PATH_ROOT = '{{ asset('admin') }}';
+</script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.11/dist/sweetalert2.min.css"> --}}
+
 <body>
 
     <!-- Begin page -->
@@ -17,7 +18,7 @@
 
         @include('layouts.includes.header')
         <!-- ========== App Menu ========== -->
-        
+
         @include('layouts.includes.side-bar')
         <!-- Left Sidebar End -->
         <!-- Vertical Overlay-->
@@ -71,7 +72,8 @@
     <script src="{{ asset('admin/assets/js/combo.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    
+
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.11/dist/sweetalert2.min.js"></script> --}}
 
 </body>
 

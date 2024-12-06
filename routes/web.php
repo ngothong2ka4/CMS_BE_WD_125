@@ -68,6 +68,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::middleware(['auth', AdminMiddleware::class, CheckStatusUser::class])->group(function () {
         Route::redirect('', 'statistic');
         Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+        // Route::match(['get', 'post'], '/category/{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
         Route::resource('category', CategoryController::class);
         Route::resource('comment', CommentController::class);
         Route::resource('combo', ComboController::class);
