@@ -224,7 +224,7 @@
 
 
         </div>
-        @if(count($visits) > 0)
+    
         <div class="card-header row">
                 <h4 class="mb-0 col-6">Thống kê lượt truy cập</h4>
                 <div class="col-6" id="khoangTime" >
@@ -251,11 +251,11 @@
                             </form>
                         </div>
             </div>
-     
+            @if(count($visits) > 0)
         <div id="chart_div" style=" height: 450px;"></div>
         @else
         <div class="card-header row">
-        <h4 class="mb-0 col-6">Không có lượt truy cập</h4>
+        <h4 class="mb-0 col-6" style=" color:red">Không có lượt truy cập</h4>
         </div>
         @endif
         <div class="card mt-2">
