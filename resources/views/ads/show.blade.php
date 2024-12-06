@@ -1,5 +1,52 @@
 @extends('layouts.app-theme')
+@push('scripts')
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawVisualization);
 
+        function drawVisualization() {
+            var data = google.visualization.arrayToDataTable([
+                ['Ngày', 'Lượt truy cập',],
+
+                @foreach ($visits as $visit)
+                    ['{{ $visit['time'] }}',  {{ $visit['visit'] }}],
+                @endforeach
+            ]);
+
+            var options = {
+                title: 'Biểu đồ theo dõi lượt truy cập từ {{$start}} đến {{$end}}',
+                colors: ['#2d65cd', '#0ab39c'],
+                titleTextStyle: {
+                    fontSize: 18, // Kích thước chữ tiêu đề
+                    bold: true
+                },
+                chartArea: {
+                    top: 60, // Điều chỉnh margin trên của biểu đồ (tạo khoảng trống cho tiêu đề)
+                    height: '70%', // Giảm chiều cao của vùng biểu đồ để tạo thêm khoảng cách phía dưới
+                    width: '75%'
+                },
+                vAxis: {
+                    title: 'Lượt truy cập'
+                },
+                hAxis: {
+                    title: 'Ngày'
+                },
+                seriesType: 'bars',
+                // series: {
+                //     1: {
+                //         type: 'line'
+                //     }
+                // }
+            };
+
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+@endpush
 
 @section('content')
 
@@ -134,7 +181,7 @@
                 <div class="">
                         <label for="basiInput" class="form-label">Đơn giá</label>
                         <input type="text" class="form-control mb-3" id="basiInput"
-                            value="{{ number_format($ads->price, 0, '.', '')}} đ" disabled>
+                            value="{{ number_format($ads->price)}} đ" disabled>
 
                     </div>
             </div>
@@ -177,7 +224,40 @@
 
 
         </div>
-
+    
+        <div class="card-header row">
+                <h4 class="mb-0 col-6">Thống kê lượt truy cập</h4>
+                <div class="col-6" id="khoangTime" >
+                            <form method="get">
+         
+                                <div class="row">
+                                    <div class="col">
+                                        Từ 
+                                        <input type="date" class="form-control" name="start" id="start" min="{{\Carbon\Carbon::parse($ads->start)->format('Y-m-d')}}"
+                        max="{{\Carbon\Carbon::now()->format('Y-m-d')}}" value = {{$start}}
+                                            required>
+                                    </div>
+                                    <div class="col">
+                                        Đến
+                                        <input type="date" class="form-control" name="end" id="end" min="{{\Carbon\Carbon::parse($ads->start)->format('Y-m-d')}}"
+                        max="{{\Carbon\Carbon::now()->format('Y-m-d')}}" value = {{$end}}
+                                            required>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit"
+                                            class="btn btn-sm btn-secondary form-control mt-4">Gửi</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+            </div>
+            @if(count($visits) > 0)
+        <div id="chart_div" style=" height: 450px;"></div>
+        @else
+        <div class="card-header row">
+        <h4 class="mb-0 col-6" style=" color:red">Không có lượt truy cập</h4>
+        </div>
+        @endif
         <div class="card mt-2">
 
 

@@ -9,7 +9,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Cập nhật Combo</h5>
+                    <h5 class="card-title mb-0">Chi tiết Combo</h5>
                 </div>
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
@@ -30,25 +30,23 @@
                                 <select id="id_product" name="id_product[]" class="form-control" multiple="multiple"
                                     style="width: 100%;" disabled>
                                     @foreach ($productsWithMinValues as $product)
-                                        <option value="{{ $product['id'] }}" data-min-price="{{ $product['min_price'] }}"
-                                            data-min-quantity="{{ $product['min_quantity'] }}"
-                                            {{ in_array($product['id'], $selectedProductIds) ? 'selected' : '' }}>
-                                            {{ $product['name'] }} (Giá: {{ number_format($product['min_price']) }}
-                                            - SL: {{ $product['min_quantity'] }})
-                                        </option>
+                                    <option value="{{ $product['id'] }}" 
+                                    data-min-price="{{ $product['min_price'] }}" 
+                                    data-min-quantity="{{ $product['min_quantity'] }}" 
+                                    {{ in_array($product['id'], $selectedProductIds) ? 'selected' : '' }}>
+                                    {{ $product['name'] }} (Giá: {{ number_format($product['min_price']) }} - SL: {{ $product['min_quantity'] }})
+                                </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="d-flex w-50">
                                 <div class="d-flex mx-3">
-                                    <label for="" class="form-label">Tổng giá sản phẩm</label>
-                                    <input type="number" class="form-control mb-3" id="total_price" name="total_price"
-                                        readonly>
+                                    <label for="total_price" class="form-label">Tổng giá sản phẩm</label>
+                                    <input type="text" class="form-control mb-3" id="total_price" name="total_price" readonly>
                                 </div>
                                 <div class="d-flex mx-3">
-                                    <label for="" class="form-label">Số lượng sản phẩm</label>
-                                    <input type="number" class="form-control mb-3" id="minQuantity" name="minQuantity"
-                                         readonly>
+                                    <label for="minQuantity" class="form-label">Số lượng sản phẩm</label>
+                                    <input type="text" class="form-control mb-3" id="minQuantity" name="minQuantity" readonly>
                                 </div>
                             </div>
                         </div>

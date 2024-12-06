@@ -197,6 +197,11 @@ class ComboController extends Controller
             $totalPrice = $selectedProducts->sum(function ($product) {
                 return $product->variants->min('selling_price') ?? 0;
             });
+            $discountLimit = $totalPrice * 0.8; // 20% giảm
+            if ($params['price'] < $discountLimit) {
+                toastr()->error('Giá combo không được giảm quá 20% so với tổng giá sản phẩm (' . number_format($totalPrice) . ').');
+                return redirect()->back()->withInput();
+            }
             // Validate giá combo
             if ($params['price'] > $totalPrice) {
                 toastr()->error('Giá combo không được lớn hơn tổng giá sản phẩm (' . number_format($totalPrice) . ').');

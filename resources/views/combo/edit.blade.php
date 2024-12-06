@@ -42,9 +42,8 @@
                             </div>
                             <div class="d-flex w-50">
                                 <div class="d-flex mx-3">
-                                    <label for="" class="form-label">Tổng giá sản phẩm</label>
-                                    <input type="number" class="form-control mb-3" id="total_price" name="total_price"
-                                        readonly>
+                                    <label for="total_price" class="form-label">Tổng giá sản phẩm</label>
+                                    <input type="text" class="form-control mb-3" id="total_price" name="total_price" readonly>
                                 </div>
                                 <div class="d-flex mx-3">
                                     <label for="" class="form-label">Số lượng sản phẩm</label>
@@ -81,4 +80,5 @@
 @endsection
 
 @push('scripts')
+<script></script>
 @endpush
