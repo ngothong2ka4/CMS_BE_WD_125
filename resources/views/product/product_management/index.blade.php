@@ -17,6 +17,7 @@
                         @foreach($categories as $category)
                         <option value="{{$category->id}}" {{request('category') == $category->id ?'selected' : '' }}>{{$category->name}}</option>
                         @endforeach
+                        <option value="0" {{request('category') == '0' ?'selected' : '' }}> Sản phẩm chưa có danh mục</option>
                         
                     </select>
                 </form>

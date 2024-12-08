@@ -326,4 +326,16 @@ class AdsServiceController extends Controller
         $data['start'] = $data['start'] ?? date('Y-m-d H:i:s');
         return $data;
     }
+
+    public function active($id){
+        try {
+            $ads = AdsService::find($id);
+            $ads->update(['status' => 1, 'note'=> null]);
+            toastr()->success('Kích hoạt thành công');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            toastr()->error('Đã có lỗi xảy ra: ' . $e->getMessage());
+            return redirect()->back();
+        }
+    }
 }
