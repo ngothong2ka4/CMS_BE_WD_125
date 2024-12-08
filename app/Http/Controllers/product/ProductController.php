@@ -21,9 +21,9 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
+    {     
         $categories = Category::all();
-        if ($request->category && $request->category != 'all') {
+        if ($request->category != null && $request->category != 'all') {
             $category = $request->category;
             $products = Product::where('id_category', $category)->get();
         }else{

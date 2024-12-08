@@ -68,10 +68,13 @@
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Dừng hoạt động
                         </button>
-
-
                     </div>
-
+                    @else
+                    <div class="col-lg-2">
+                        <a onclick="return confirm('Kích hoạt lại dịch vụ?')" href="/active/{{$ads->id}}" type="button" class="btn btn-primary" >
+                            Kích hoạt
+                         </a>
+                    </div>
                     @endif
                 </div>
             </div>

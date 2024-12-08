@@ -103,6 +103,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
         Route::resource('voucher', VoucherController::class);
         Route::resource('ads_service', AdsServiceController::class);
+        Route::get('active/{id}', [AdsServiceController::class, 'active']);
 
         Route::get('/bin', [BinController::class, 'index']);
         Route::post('/bin', [BinController::class, 'deleteCheck']);
