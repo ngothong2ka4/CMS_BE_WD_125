@@ -39,6 +39,9 @@ class Order extends Model
     const STATUS_SHIPPING = 3;
     const STATUS_COMPLETED = 4;
     const STATUS_CANCELED = 7;
+
+
+    const POINT_CONVERSION_VALUE = 5000;
     public function orderDetail()
     {
         return $this->hasMany(OrderDetail::class, 'id_order');

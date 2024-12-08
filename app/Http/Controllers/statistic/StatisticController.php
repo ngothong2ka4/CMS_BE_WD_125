@@ -23,281 +23,214 @@ class StatisticController extends Controller
 
         // $time = $request->input('year', now()->year);
 
-        $timeType = $request->input('timeType');
+        $timeType = $request->query('timeType');
         $time = $request->input('time', now()->format('Y-m-d'));
         $year = substr($time, 0, 4);
         $month = substr($time, 5, 2);
         $day = substr($time, 8, 2);
 
-        if (empty($request->input('timeType')) && empty($request->input('start'))) {
-            $lastMonthRevenue = Order::with('orderDetail')
-                ->select(DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'))
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month - 1)
-                ->where('order.status', '!=', 7)
+        if ((empty($request->input('timeType')) && empty($request->input('start'))) || ($timeType === 'month')) {
+            $lastRevenue = Order::select(DB::raw('SUM(total_payment) as total_revenue'))
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month - 1)
+                ->where('status', '!=', 7)
                 ->first();
-
             $totalStatistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('COUNT(DISTINCT order.id) as total_orders'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->where('order.status', '!=', 7)
+                ->selectRaw('
+                    COUNT(id) as total_orders,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->where('status', '!=', 7)
                 ->first();
-
+            if ($totalStatistic) {
+                $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
+            }
             $percentageChange = 0;
-            if ($lastMonthRevenue && $lastMonthRevenue->total_revenue > 0) {
-                $percentageChange = (($totalStatistic->total_revenue - $lastMonthRevenue->total_revenue) / $lastMonthRevenue->total_revenue) * 100;
+            if ($lastRevenue && $lastRevenue->total_revenue > 0) {
+                $percentageChange = (($totalStatistic->total_revenue - $lastRevenue->total_revenue) / $lastRevenue->total_revenue) * 100;
             }
 
             $Statistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('DAY(order.created_at) as time'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->where('order.status', '!=', 7)
-                ->groupBy(DB::raw('DAY(order.created_at)'))
+                ->selectRaw('
+                    DAY(created_at) as time,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->where('status', '!=', 7)
+                ->groupBy(DB::raw('DAY(created_at)'))
                 ->orderBy('time')
-                ->get();
-
+                ->get()
+                ->map(function ($order) {
+                    $order->profit = $order->total_revenue - $order->total_cost; // Tính lợi nhuận
+                    return $order;
+                });
             // dd($Statistic);
-            $completeStatistic = [];
-
-            foreach (range(1, 31) as $day) {
-                $revenueData = $Statistic->where('time', $day)->first();
-                $total_revenue = $revenueData ? $revenueData->total_revenue : 0;
-                $profit = $revenueData ? $revenueData->profit : 0;
-                $total_cost = $revenueData ? $revenueData->total_cost : 0;
-
-                $completeStatistic[] = [
-                    'time' => $day,
-                    'total_revenue' => $total_revenue,
-                    'profit' => $profit,
-                    'total_cost' => $total_cost,
-                ];
-            }
+            $completeStatistic = $this->generateCompleteStatistics($Statistic, 1, 31);
+            // dd($completeStatistic);
             $title = "Thống kê doanh thu, lợi nhuận kinh doanh tháng $month, năm $year";
             $cotY = "Ngày";
         } elseif ($timeType === 'year') {
-            $lastYearRevenue = Order::with('orderDetail')
-                ->select(DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'))
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year - 1)
-                ->where('order.status', '!=', 7)
+            $lastRevenue = Order::select(DB::raw('SUM(total_payment) as total_revenue'))
+                ->whereYear('created_at', $year - 1)
+                ->where('status', '!=', 7)
                 ->first();
-
             $totalStatistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('COUNT(DISTINCT order.id) as total_orders'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->where('order.status', '!=', 7)
+                ->selectRaw('
+                    COUNT(id) as total_orders,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereYear('created_at', $year)
+                ->where('status', '!=', 7)
                 ->first();
-
+            if ($totalStatistic) {
+                $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
+            }
             $percentageChange = 0;
-            if ($lastYearRevenue && $lastYearRevenue->total_revenue > 0) {
-                $percentageChange = (($totalStatistic->total_revenue - $lastYearRevenue->total_revenue) / $lastYearRevenue->total_revenue) * 100;
+            if ($lastRevenue && $lastRevenue->total_revenue > 0) {
+                $percentageChange = (($totalStatistic->total_revenue - $lastRevenue->total_revenue) / $lastRevenue->total_revenue) * 100;
             }
 
             $Statistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('MONTH(order.created_at) as time'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->where('order.status', '!=', 7)
-                ->groupBy(DB::raw('MONTH(order.created_at)'))
+                ->selectRaw('
+                    MONTH(created_at) as time,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereYear('created_at', $year)
+                ->where('status', '!=', 7)
+                ->groupBy(DB::raw('MONTH(created_at)'))
                 ->orderBy('time')
-                ->get();
+                ->get()
+                ->map(function ($order) {
+                    $order->profit = $order->total_revenue - $order->total_cost;
+                    return $order;
+                });
+
             // dd($Statistic);
-            $completeStatistic = [];
-            foreach (range(1, 12) as $month) {
-                $revenueData = $Statistic->where('time', $month)->first();
-                $total_revenue = $revenueData ? $revenueData->total_revenue : 0;
-                $profit = $revenueData ? $revenueData->profit : 0;
-                $total_cost = $revenueData ? $revenueData->total_cost : 0;
-
-                $completeStatistic[] = [
-                    'time' => $month,
-                    'total_revenue' => $total_revenue,
-                    'profit' => $profit,
-                    'total_cost' => $total_cost,
-                ];
-            }
-            $title = "Thống kê doanh thu, lợi nhuận kinh doanh năm $time";
+            $completeStatistic = $this->generateCompleteStatistics($Statistic, 1, 12);
+            // dd($completeStatistic);
+            $title = "Thống kê doanh thu, lợi nhuận kinh doanh năm $year";
             $cotY = "Tháng";
-        } elseif ($timeType === 'month') {
-            $lastMonthRevenue = Order::with('orderDetail')
-                ->select(DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'))
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month - 1)
-                ->where('order.status', '!=', 7)
-                ->first();
-
-            $totalStatistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('COUNT(DISTINCT order.id) as total_orders'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->where('order.status', '!=', 7)
-                ->first();
-
-            $percentageChange = 0;
-            if ($lastMonthRevenue && $lastMonthRevenue->total_revenue > 0) {
-                $percentageChange = (($totalStatistic->total_revenue - $lastMonthRevenue->total_revenue) / $lastMonthRevenue->total_revenue) * 100;
-            }
-
-            $Statistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('DAY(order.created_at) as time'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->where('order.status', '!=', 7)
-                ->groupBy(DB::raw('DAY(order.created_at)'))
-                ->orderBy('time')
-                ->get();
-            // dd($totalStatistic);
-            $completeStatistic = [];
-
-            foreach (range(1, 31) as $day) {
-                $revenueData = $Statistic->where('time', $day)->first();
-                $total_revenue = $revenueData ? $revenueData->total_revenue : 0;
-                $profit = $revenueData ? $revenueData->profit : 0;
-                $total_cost = $revenueData ? $revenueData->total_cost : 0;
-
-                $completeStatistic[] = [
-                    'time' => $day,
-                    'total_revenue' => $total_revenue,
-                    'profit' => $profit,
-                    'total_cost' => $total_cost,
-                ];
-            }
-            $title = "Thống kê doanh thu, lợi nhuận kinh doanh tháng $month, năm $year";
-            $cotY = "Ngày";
         } elseif ($timeType === 'day') {
-            $day = substr($time, 8, 2);
-            $lastDayRevenue = Order::with('orderDetail')
-                ->select(DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'))
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->whereDay('order.created_at', $day - 1)
-                ->where('order.status', '!=', 7)
+            $lastRevenue = Order::select(DB::raw('SUM(total_payment) as total_revenue'))
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->whereDay('created_at', $day - 1)
+                ->where('status', '!=', 7)
                 ->first();
-
             $totalStatistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('COUNT(DISTINCT order.id) as total_orders'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->whereDay('order.created_at', $day)
-                ->where('order.status', '!=', 7)
+                ->selectRaw('
+                    COUNT(id) as total_orders,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->whereDay('created_at', $day)
+                ->where('status', '!=', 7)
                 ->first();
-
+            if ($totalStatistic) {
+                $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
+            }
             $percentageChange = 0;
-            if ($lastDayRevenue && $lastDayRevenue->total_revenue > 0) {
-                $percentageChange = (($totalStatistic->total_revenue - $lastDayRevenue->total_revenue) / $lastDayRevenue->total_revenue) * 100;
+            if ($lastRevenue && $lastRevenue->total_revenue > 0) {
+                $percentageChange = (($totalStatistic->total_revenue - $lastRevenue->total_revenue) / $lastRevenue->total_revenue) * 100;
             }
+
             $Statistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('HOUR(order.created_at) as time'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereYear('order.created_at', $year)
-                ->whereMonth('order.created_at', $month)
-                ->whereDay('order.created_at', $day)
-                ->where('order.status', '!=', 7)
-                ->groupBy(DB::raw('HOUR(order.created_at)'))
+                ->selectRaw('
+                    HOUR(created_at) as time,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->whereDay('created_at', $day)
+                ->where('status', '!=', 7)
+                ->groupBy(DB::raw('HOUR(created_at)'))
                 ->orderBy('time')
-                ->get();
+                ->get()
+                ->map(function ($order) {
+                    $order->profit = $order->total_revenue - $order->total_cost; // Tính lợi nhuận
+                    return $order;
+                });
 
-            // dd($day);
-            $completeStatistic = [];
-            foreach (range(0, 23) as $hour) {
-                $revenueData = $Statistic->where('time', $hour)->first();
-                $total_revenue = $revenueData ? $revenueData->total_revenue : 0;
-                $profit = $revenueData ? $revenueData->profit : 0;
-                $total_cost = $revenueData ? $revenueData->total_cost : 0;
-
-                $completeStatistic[] = [
-                    'time' => $hour,
-                    'total_revenue' => $total_revenue,
-                    'profit' => $profit,
-                    'total_cost' => $total_cost,
-                ];
-            }
-            $title = "Thống kê doanh thu, lợi nhuận kinh doanh ngày $day, tháng $month, năm $year";
-            $cotY = "Khung giờ";
-        }
-
-        if ($request->start && $request->end) {
+            // dd($Statistic);
+            $completeStatistic = $this->generateCompleteStatistics($Statistic, 0, 23);
+            // dd($completeStatistic);
+            $title = "Thống kê doanh thu, lợi nhuận kinh doanh ngày $day tháng $month, năm $year";
+            $cotY = "Giờ";
+        } elseif ($request->start && $request->end) {
             $startDate = $request->input('start');
             $endDate = $request->input('end');
 
             $totalStatistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('COUNT(DISTINCT order.id) as total_orders'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_details.import_price * order_details.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_details.import_price * order_details.quantity)) as profit')
-                )
-                ->join('order_detail as order_details', 'order.id', '=', 'order_details.id_order')
-                ->whereBetween('order.created_at', [$startDate, $endDate])
-                ->where('order.status', '!=', 7)
+                ->selectRaw('
+                    COUNT(id) as total_orders,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('status', '!=', 7)
                 ->first();
+            if ($totalStatistic) {
+                $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
+            }
             $percentageChange = null;
-            $Statistic = Order::with('orderDetail')
-                ->select(
-                    DB::raw('DATE(order.created_at) as time'),
-                    DB::raw('SUM(DISTINCT order.total_payment) as total_revenue'),
-                    DB::raw('SUM(order_detail.import_price * order_detail.quantity) as total_cost'),
-                    DB::raw('(SUM(DISTINCT order.total_payment) - SUM(order_detail.import_price * order_detail.quantity)) as profit')
-                )
-                ->join('order_detail', 'order.id', '=', 'order_detail.id_order')
-                ->whereBetween('order.created_at', [$startDate, $endDate])
-                ->where('order.status', '!=', 7)
-                ->groupBy(DB::raw('DATE(order.created_at)'))
-                ->orderBy('time')
-                ->get();
-            // dd($Statistic);
 
+            $Statistic = Order::with('orderDetail')
+                ->selectRaw('
+                    DATE(created_at) as time,
+                    SUM(total_payment) as total_revenue,
+                    SUM(
+                        (SELECT SUM(od.import_price * od.quantity)
+                        FROM order_detail od
+                        WHERE od.id_order = order.id)
+                    ) as total_cost
+                ')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('status', '!=', 7)
+                ->groupBy(DB::raw('DATE(created_at)'))
+                ->orderBy('time')
+                ->get()
+                ->map(function ($order) {
+                    $order->profit = $order->total_revenue - $order->total_cost; // Tính lợi nhuận
+                    return $order;
+                });
             $start = new DateTime($startDate);
             $end = new DateTime($endDate);
             $end = $end->modify('+1 day');
@@ -324,9 +257,13 @@ class StatisticController extends Controller
                     'total_cost' => $total_cost,
                 ];
             }
+            // dd($completeStatistic);
             $title = "Thống kê doanh thu, lợi nhuận kinh doanh từ $startDate đến $endDate";
             $cotY = "Mốc thời gian";
+        } else {
+            return redirect('/statistic');
         }
+
         $topSellers = OrderDetail::select(
             'id_product',
             'product_image',
@@ -398,18 +335,39 @@ class StatisticController extends Controller
     }
 
     private function countOrderStatus()
-{
-    return [
-        'choXacNhan' => Order::where('status', '1')->count(),
-        'daXacNhan' => Order::where('status', '2')->count(),
-        'dangGiao' => Order::where('status', '3')->count(),
-        'giaoThanhCong' => Order::where('status', '4')->count(),
-        'giaoThatBai' => Order::where('status', '5')->count(),
-        'hoanThanh' => Order::where('status', '6')->count(),
-        'daHuy' => Order::where('status', '7')->count(),
-        'thanhCong' => Order::whereIn('status', ['4', '6'])->count()
-    ];
-}
+    {
+        return [
+            'choXacNhan' => Order::where('status', '1')->count(),
+            'daXacNhan' => Order::where('status', '2')->count(),
+            'dangGiao' => Order::where('status', '3')->count(),
+            'giaoThanhCong' => Order::where('status', '4')->count(),
+            'giaoThatBai' => Order::where('status', '5')->count(),
+            'hoanThanh' => Order::where('status', '6')->count(),
+            'daHuy' => Order::where('status', '7')->count(),
+            'thanhCong' => Order::whereIn('status', ['4', '6'])->count()
+        ];
+    }
+
+    private function generateCompleteStatistics($Statistic, $start, $end)
+    {
+        $completeStatistic = [];
+
+        foreach (range($start, $end) as $time) {
+            $revenueData = $Statistic->where('time', $time)->first();
+            $total_revenue = $revenueData ? $revenueData->total_revenue : 0;
+            $profit = $revenueData ? $revenueData->profit : 0;
+            $total_cost = $revenueData ? $revenueData->total_cost : 0;
+
+            $completeStatistic[] = [
+                'time' => $time,
+                'total_revenue' => $total_revenue,
+                'profit' => $profit,
+                'total_cost' => $total_cost,
+            ];
+        }
+
+        return $completeStatistic;
+    }
 
     /**
      * Show the form for creating a new resource.
