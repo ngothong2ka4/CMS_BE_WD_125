@@ -180,11 +180,12 @@ class OrderController extends Controller
                     $voucher->incrementUsage($user->id);
                 }
 
+                $titleOrder = 'Thông tin đơn hàng #' . $res['id_order'];
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order',
                     $information,
                     $data['email'],
-                    'Thông tin đơn hàng');
+                    $titleOrder);
 
                 return $this->jsonResponse('Đặt hàng thành công', true,  $res);
             } elseif (!empty($data['variantId']) && !empty($data['quantity'])) {
@@ -210,11 +211,12 @@ class OrderController extends Controller
                     $voucher->incrementUsage($user->id);
                 }
 
+                $titleOrder = 'Thông tin đơn hàng #' . $res['id_order'];
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order',
                     $information,
                     $data['email'],
-                    'Thông tin đơn hàng');
+                    $titleOrder);
 
                 return $this->jsonResponse('Đặt hàng thành công', true, $res);
             } else {
@@ -490,12 +492,12 @@ class OrderController extends Controller
             if ($voucher) {
                 $voucher->incrementUsage(Auth::id());
             }
-
+            $titleOrder = 'Thông tin đơn hàng #' . $order->id;
             SendEmailAfterOrder::dispatch(
                 'emails.information-order',
                 $information,
                 $value['vnp_email'],
-                'Thông tin đơn hàng');
+                $titleOrder);
 
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
