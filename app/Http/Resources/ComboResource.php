@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\Product\VariantResource;
+use App\Models\Combo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,16 +16,10 @@ class ComboResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $min_quantity = $this->products->map(function ($product) {
-            return $product->variants->min('quantity');
-        })->min();
-        $quantity = $this->quantity;
-
-        $available_quantity = min($min_quantity ?? 0, $quantity);
-        
         $sum_price = $this->products->map(function ($product) {
             return $product->variants->min('selling_price');
         })->sum();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -32,7 +27,7 @@ class ComboResource extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'description' => $this->description,
-            'available_quantity' => $available_quantity,
+            'available_quantity' => $this->quantity,
             'sum_price' => $sum_price,
             'products' => $this->products->map(function ($product) {
                 return [
