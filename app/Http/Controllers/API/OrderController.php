@@ -86,8 +86,8 @@ class OrderController extends Controller
 
             $totalAmount = $product->selling_price * $quantity;
             $productInCart = [[
-                        'variant' => $product,
-                        'quantity' => $quantity
+                'variant' => $product,
+                'quantity' => $quantity
             ]];
         }
 
@@ -152,7 +152,7 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-            if($request->used_accum > $user->accum_point){
+            if ($request->used_accum > $user->accum_point) {
                 return $this->jsonResponse('Điểm tiêu dùng không đủ');
             }
 
@@ -185,7 +185,8 @@ class OrderController extends Controller
                     'emails.information-order',
                     $information,
                     $data['email'],
-                    $titleOrder);
+                    $titleOrder
+                );
 
                 return $this->jsonResponse('Đặt hàng thành công', true,  $res);
             } elseif (!empty($data['variantId']) && !empty($data['quantity'])) {
@@ -216,7 +217,8 @@ class OrderController extends Controller
                     'emails.information-order',
                     $information,
                     $data['email'],
-                    $titleOrder);
+                    $titleOrder
+                );
 
                 return $this->jsonResponse('Đặt hàng thành công', true, $res);
             } else {
@@ -466,7 +468,7 @@ class OrderController extends Controller
         $value = unserialize(urldecode($request->input('vnp_OrderInfo')));
         $orderId = $request->input('vnp_TxnRef');
         \Log::debug('Order ID from vnp_TxnRef: ' . $orderId);
-        $order = Order::with(['orderDetail','user'])->find($orderId);
+        $order = Order::with(['orderDetail', 'user'])->find($orderId);
 
         if (!$order) {
             \Log::error('Order not found with ID: ' . $orderId);
@@ -497,7 +499,8 @@ class OrderController extends Controller
                 'emails.information-order',
                 $information,
                 $value['vnp_email'],
-                $titleOrder);
+                $titleOrder
+            );
 
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
@@ -590,9 +593,9 @@ class OrderController extends Controller
                         }]);
                 }]);
         }])
-            ->select('id', 'id_user', 'recipient_name', 'email', 'phone_number', 'recipient_address', 'note', 'total_payment', 'discount_value', 'payment_role', 'status_payment', 'status', 'created_at')
+            ->select('id', 'id_user', 'recipient_name', 'email', 'phone_number', 'recipient_address', 'note', 'used_accum', 'total_payment', 'discount_value', 'payment_role', 'status_payment', 'status', 'created_at')
             ->where('id_user', $id_user)
-            ->orderBy('created_at','desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         foreach ($orders as $order) {
@@ -629,6 +632,17 @@ class OrderController extends Controller
                         'created_at' => now(),
                     ]);
                     $order->save();
+                    $titleOrder = 'Thông tin đơn hàng #' . $order->id;
+                    $information = [
+                        'order' => $order,
+                        'orderDetails' => $order->orderDetail->toArray(),
+                    ];
+                    SendEmailAfterOrder::dispatch(
+                        'emails.complete-order',
+                        $information,
+                        $order->email,
+                        $titleOrder
+                    );
                     return response()->json(['message' => 'Đơn hàng đã được xác nhận hoàn thành']);
                 }
             }
@@ -689,6 +703,18 @@ class OrderController extends Controller
                     $order->save();
                     $user = User::find($order->id_user);
                     $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
+                    $titleOrder = 'Thông tin đơn hàng #' . $order->id;
+                    $information = [
+                        'order' => $order,
+                        'orderDetails' => $order->orderDetail->toArray(),
+                        'note' => $note
+                    ];
+                    SendEmailAfterOrder::dispatch(
+                        'emails.cancel-order',
+                        $information,
+                        $order->email,
+                        $titleOrder
+                    );
                     return response()->json(['message' => 'Đơn hàng đã được hủy thành công với lý do: ' . $note]);
                 }
             }
