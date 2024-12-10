@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/purchasedOrders',[OrderController::class, 'purchasedOrders']);
     Route::post('/payment',[OrderController::class, 'payment']);
     Route::get('/paymentResult',[OrderController::class, 'paymentResult']);
-    Route::post('/cancelOrder',[OrderController::class, 'cancelOrder']);
+    // Route::post('/cancelOrder',[OrderController::class, 'cancelOrder']);
     Route::get('/listStatusOrderHistory',[OrderController::class, 'listStatusOrderHistory']);
 
     Route::post('/vouchers/apply', [VoucherController::class, 'applyVoucher']);
@@ -96,4 +96,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/listInformationOrderCombo',[ComboController::class, 'listInformationOrder']);
     Route::post('/paymentCombo',[ComboController::class, 'payment']);
+    Route::get('/paymentComboResult',[ComboController::class, 'paymentResult']);
 });

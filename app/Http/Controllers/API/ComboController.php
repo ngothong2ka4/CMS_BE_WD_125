@@ -34,9 +34,16 @@ class ComboController extends Controller
             'products.variants.color',
             'products.variants.size',
         ])->find($id);
-
         if (!$combo) {
             return $this->jsonResponse('Không tìm thấy combo');
+        }
+
+        $inventory_quantity = $combo->products->map(function ($product) {
+            return $product->variants->min('quantity') ?? 0;
+        })->min() ?? 0;
+        if ($inventory_quantity < $combo->quantity) {
+            $combo->update(['quantity' => $inventory_quantity]);
+            $combo->quantity = $inventory_quantity;
         }
 
         return $this->jsonResponse('Success', true, new ComboResource($combo));
