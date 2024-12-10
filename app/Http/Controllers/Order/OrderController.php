@@ -146,8 +146,8 @@ class OrderController extends Controller
                 $data['status_payment']  = 2;
 
                 $user_order->update([
-                    'accum_point' => $user_order->accum_point + ceil($order->total_payment / 20000),
-                    'accumulated_points' => $user_order->accumulated_points + ceil($order->total_payment / 20000)
+                    'accum_point' => $user_order->accum_point + ceil($order->total_payment / 200000),
+                    'accumulated_points' => $user_order->accumulated_points + ceil($order->total_payment / 200000)
                 ]);
 
 
