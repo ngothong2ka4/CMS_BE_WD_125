@@ -39,12 +39,12 @@ class ComboController extends Controller
     {
         try {
             $params = $request->validate([
-                'name' => 'required|min:3 ',
-                'id_product' => 'required|min:2',
+                'name' => 'required|min:3',
+                'id_product' => 'required|array|min:2',
                 'image' => 'required|file|image|mimes:jpg,jpeg,png,gif',
-                'price' => 'required|min:0',
+                'price' => 'required|numeric|min:0',
                 'description' => 'nullable',
-                'quantity' => 'required|min:1',
+                'quantity' => 'required|integer|min:1',
             ], [
                 'name.required' => 'Tên combo là bắt buộc.',
                 'name.min' => 'Tên combo phải có ít nhất 3 ký tự.',
@@ -59,7 +59,7 @@ class ComboController extends Controller
                 'price.required' => 'Giá là bắt buộc',
 
                 'quantity.required' => 'Số lượng là bắt buộc',
-                'quantity.min' => 'Số lượng combo phải ít nhất là 1.',
+                'quantity.min' => 'Số lượng combo ít nhất là 1.',
 
             ]);
             // Lấy danh sách sản phẩm được chọn
@@ -167,12 +167,12 @@ class ComboController extends Controller
     {
         try {
             $params = $request->validate([
-                'name' => 'required|min:3 ',
-                'id_product' => 'required|array|min:2',
+                'name' => 'required|min:3',
+                'id_product' => 'required|array|array|min:2',
                 'image' => 'nullable|file|image|mimes:jpg,jpeg,png,gif',
-                'price' => 'required|min:0',
+                'price' => 'required|numeric|min:0',
                 'description' => 'nullable',
-                'quantity' => 'required|min:1',
+                'quantity' => 'required|integer|min:1',
             ], [
                 'name.required' => 'Tên combo là bắt buộc.',
                 'name.min' => 'Tên combo phải có ít nhất 3 ký tự.',
@@ -187,7 +187,7 @@ class ComboController extends Controller
                 'price.required' => 'Giá là bắt buộc',
 
                 'quantity.required' => 'Số lượng là bắt buộc',
-                'quantity.min' => 'Số lượng combo phải ít nhất là 1.',
+                'quantity.min' => 'Số lượng combo ít nhất là 1.',
 
             ]);
             // Lấy danh sách sản phẩm được chọn
@@ -231,7 +231,7 @@ class ComboController extends Controller
             } else {
                 $path = $old_image;
             }
-            $params['image'] = url($path);
+            $params['image'] = isset($path) ? url($path) : $combo->image;
 
             if (isset($params['id_product']) && !is_array($params['id_product'])) {
                 $params['id_product'] = explode(',', $params['id_product']);
