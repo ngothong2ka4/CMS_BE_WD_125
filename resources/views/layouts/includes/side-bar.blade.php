@@ -13,7 +13,7 @@
         <!-- Light Logo-->
         <a href="{{ route('dashboard') }}" class="logo logo-light">
             <span class="logo-lg">
-                <img src="{{ asset('admin/assets/images/Logo. shine.2.png') }}" alt="" width="100" height="50">
+                <img src="{{ asset('admin/assets/images/Logo. shine.2.png') }}" alt="" width="100" height="90">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
