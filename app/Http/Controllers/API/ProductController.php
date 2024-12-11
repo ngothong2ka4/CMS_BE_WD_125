@@ -26,6 +26,9 @@ class ProductController extends Controller
         $id_category = $request->input('id_category');
         $sortBy = $request->input('sort_by', 'price');
         $sortOrder = $request->input('sort', 'asc');
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+
         $products = Product::with([
             'variants' => function ($query) {
                 $query->select('id_product', 'selling_price', 'list_price')
@@ -45,9 +48,13 @@ class ProductController extends Controller
             ->when($id_category, function ($query, $id_category) {
                 return $query->where('id_category', $id_category);  // Lọc theo danh mục
             })
+            ->when($minPrice && $maxPrice, function ($query) use ($minPrice, $maxPrice) {
+                return $query->whereHas('variants', function ($subQuery) use ($minPrice, $maxPrice) {
+                    $subQuery->whereBetween('selling_price', [$minPrice, $maxPrice]);
+                });
+            })
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name', 'thumbnail']);
-
         if ($sortBy === 'price') {
             $products = $products->sortBy(function ($product) {
                 return $product->variants->min('selling_price');
