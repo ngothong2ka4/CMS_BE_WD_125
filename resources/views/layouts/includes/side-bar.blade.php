@@ -2,7 +2,7 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="{{ route('dashboard') }}" class="logo logo-dark">
+        <a href="{{ route('statistic.index') }}" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="{{ asset('admin/assets/images/Logo. shine.2.png') }}" alt="" width="100" height="22">
             </span>
@@ -11,7 +11,7 @@
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="{{ route('dashboard') }}" class="logo logo-light">
+        <a href="{{ route('statistic.index') }}" class="logo logo-light">
             <span class="logo-lg">
                 <img src="{{ asset('admin/assets/images/Logo. shine.2.png') }}" alt="" width="100" height="90">
             </span>
