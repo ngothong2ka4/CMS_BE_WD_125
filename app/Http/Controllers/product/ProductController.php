@@ -338,7 +338,11 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);
-        // $product->variants()->delete();
+        $product->variants()->delete();
+        $product->combos()->each(function ($combo) {
+            $combo->delete();
+        });
+
         $product->delete();
 
         toastr()->success('Xoá thành công!');
