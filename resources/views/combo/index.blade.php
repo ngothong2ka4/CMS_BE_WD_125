@@ -25,7 +25,7 @@
                                 <th>Stt</th>
                                 <th>Tên Combo</th>
                                 <th>Ảnh Combo</th>
-                                <th>Mô tả </th>
+                                {{-- <th>Mô tả </th> --}}
                                 <th>Giá</th>
                                 <th>Số lượng</th>
                                 <th>Thao tác</th>
@@ -37,7 +37,7 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td><img src="{{ $item->image }}" alt="" width="80px"></td>
-                                    <td>{{ $item->description }}</td>
+                                    {{-- <td>{{ $item->description }}</td> --}}
                                     <td>{{ $item->price }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>
