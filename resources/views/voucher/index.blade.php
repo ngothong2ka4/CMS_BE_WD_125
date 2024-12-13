@@ -22,6 +22,7 @@
                             <th >STT</th>
                             {{-- <th >Tên sản phẩm</th> --}}
                             <th >Mã Code</th>
+                            <th >Tên</th>
                             <th >Mức ưu đãi</th>
                             <th >Ngày bắt đầu</th>
                             <th>Ngày kết thúc</th>
@@ -35,6 +36,7 @@
                                     <td>{{ $index + 1 }}</td>
                                     {{-- <td>{{ $voucher->id_product ?$voucher->product->name :' ' }}</td> --}}
                                     <td>{{ $voucher->code }}</td>
+                                    <td>{{ $voucher->title }}</td>
                                     <td>{{$voucher->discount_type==1 ? $voucher->discount_value ."%":$voucher->discount_value."đ" }}</td>
                                     <td>{{ \Carbon\Carbon::parse($voucher->start_date)->format('d-m-Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($voucher->end_date)->format('d-m-Y') }}</td>

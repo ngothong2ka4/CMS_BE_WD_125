@@ -13,11 +13,17 @@
                 </div>
                 <div class="card-body">
                     <form >
-                        <div class="">
-                            <label for="basiInput" class="form-label">Mã code<span class="text-danger">*</span></label>
-                            <input required type="text"
-                                class="form-control w-50 mb-3 @error('code') is-invalid @enderror" id="basiInput"
-                                name="code" value="{{ $voucher->code }}" disabled>
+                        <<div class="d-flex">
+                            <div class="w-50">
+                                <label for="basiInput" class="form-label">Mã code<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control w-50 mb-3 @error('code') is-invalid @enderror"
+                                    id="basiInput" name="code" value="{{ $voucher->code }}" disabled>
+                            </div>
+                            <div class="w-50">
+                                <label for="basiInput" class="form-label">Tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control w-50 mb-3 @error('title') is-invalid @enderror"
+                                    id="basiInput" name="title" value="{{ $voucher->title }}" disabled>
+                            </div>
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>

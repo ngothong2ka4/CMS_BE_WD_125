@@ -22,32 +22,40 @@
                                 </select>
                             </div>
                         </div> --}}
-                        <div class="">
-                            <label for="basiInput" class="form-label">Mã code<span class="text-danger">*</span></label>
-                            <input required type="text"
-                                class="form-control w-50 mb-3 @error('code') is-invalid @enderror" id="basiInput"
-                                name="code" value="{{ old('code') }}">
+                        <div class="d-flex">
+                            <div class="w-50">
+                                <label for="basiInput" class="form-label">Mã code<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control w-50 mb-3 @error('code') is-invalid @enderror"
+                                    id="basiInput" name="code" value="{{ old('code') }}">
+                            </div>
+                            <div class="w-50">
+                                <label for="basiInput" class="form-label">Tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control w-50 mb-3 @error('title') is-invalid @enderror"
+                                    id="basiInput" name="title" value="{{ old('title') }}">
+                            </div>
                         </div>
                         <div>
                             <label for="basiInput" class="form-label">Mô tả</label>
                             <textarea class="form-control mb-3" name="description" id="meassageInput" rows="3" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
                         </div>
                         <div class="">
-                            <label for="basiInput" class="form-label">Loại giảm giá <span class="text-danger">*</span></label>
-                            <select required name="discount_type" class="form-select mb-3 w-25" id="discount_type"
+                            <label for="basiInput" class="form-label">Loại giảm giá <span
+                                    class="text-danger">*</span></label>
+                            <select name="discount_type" class="form-select mb-3 w-25" id="discount_type"
                                 aria-label="Default select example" onchange="toggleDiscountFields()">
                                 {{-- <option value="">Chọn</option> --}}
                                 <option value="2" {{ old('discount_type') == 2 ? 'selected' : '' }}>Giảm giá giá trị cố
                                     định</option>
                                 <option value="1" {{ old('discount_type') == 1 ? 'selected' : '' }}>Giảm giá theo phần
                                     trăm</option>
-                                
+
 
                             </select>
                         </div>
                         <div class="d-flex">
                             <div class="w-50">
-                                <label for="basiInput" class="form-label">Mức ưu đãi <span class="text-danger">*</span></label>
+                                <label for="basiInput" class="form-label">Mức ưu đãi <span
+                                        class="text-danger">*</span></label>
                                 <input type="number"
                                     class="form-control mb-3 @error('discount_value') is-invalid @enderror"
                                     id="discount_value" name="discount_value" value="{{ old('discount_value') }}"
@@ -57,7 +65,8 @@
                                 style="display: {{ old('discount_type') == 1 ? 'block' : 'none' }};">
 
                                 <div class="">
-                                    <label for="basiInput" class="form-label">Số tiền giảm tối đa<span class="text-danger">*</span></label>
+                                    <label for="basiInput" class="form-label">Số tiền giảm tối đa<span
+                                            class="text-danger">*</span></label>
                                     <input type="number"
                                         class="form-control mb-3 @error('max_discount_amount') is-invalid @enderror"
                                         id="basiInput" name="max_discount_amount"
@@ -67,15 +76,17 @@
                             </div>
                         </div>
                         <div class="">
-                            <label for="basiInput" class="form-label">Người có thể sử dụng ưu đãi<span class="text-danger">*</span></label>
-                            <select required name="user_voucher_limit" class="form-select mb-3 w-25" id="user_voucher_limit"
+                            <label for="basiInput" class="form-label">Người có thể sử dụng ưu đãi<span
+                                    class="text-danger">*</span></label>
+                            <select name="user_voucher_limit" class="form-select mb-3 w-25" id="user_voucher_limit"
                                 aria-label="Default select example" onchange="toggleFields()">
                                 {{-- <option value="">Chọn</option> --}}
                                 <option value="1" {{ old('user_voucher_limit') == 1 ? 'selected' : '' }}>Tất cả mọi
                                     người</option>
                                 <option value="2" {{ old('user_voucher_limit') == 2 ? 'selected' : '' }}>Người có điểm
                                     tích lũy trong khoảng</option>
-                                <option value="3" {{ old('user_voucher_limit') == 3 ? 'selected' : '' }}>Người dùng mã ưu đãi cụ thể</option>
+                                <option value="3" {{ old('user_voucher_limit') == 3 ? 'selected' : '' }}>Người dùng mã
+                                    ưu đãi cụ thể</option>
                             </select>
                         </div>
                         <div id="conditionalFields"
@@ -97,32 +108,36 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="conditionalUserField" style="display: {{ old('user_voucher_limit') == 3 ? 'block' : 'none' }};">
+                        <div id="conditionalUserField"
+                            style="display: {{ old('user_voucher_limit') == 3 ? 'block' : 'none' }};">
                             <div class="d-flex gap-3">
                                 <div class="m-3">
-                                    <label for="id_user" class="form-label">Chọn người dùng<span class="text-danger">*</span></label>
-                                    <select id="id_user" name="id_user[]" class="form-control" multiple="multiple" style="width: 100%;">
+                                    <label for="id_user" class="form-label">Chọn người dùng<span
+                                            class="text-danger">*</span></label>
+                                    <select id="id_user" name="id_user[]" class="form-control" multiple="multiple"
+                                        style="width: 100%;">
                                         @foreach ($users as $user)
-                                        <option value="{{ $user->id }}" 
-                                            {{ in_array($user->id, old('id_user', [])) ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                        </option>
-                                    @endforeach</select>
+                                            <option value="{{ $user->id }}"
+                                                {{ in_array($user->id, old('id_user', [])) ? 'selected' : '' }}>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex gap-3 mb-3">
                             <div class="">
-                                <label for="basiInput" class="form-label">Ngày bắt đầu<span class="text-danger">*</span></label>
-                                <input required type="date"
-                                    class="form-control @error('start_date') is-invalid @enderror" id="basiInput"
-                                    name="start_date" value="{{ old('start_date') }}">
+                                <label for="basiInput" class="form-label">Ngày bắt đầu<span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control @error('start_date') is-invalid @enderror"
+                                    id="basiInput" name="start_date" value="{{ old('start_date') }}">
                             </div>
                             <div class="">
-                                <label for="basiInput" class="form-label">Ngày kết thúc<span class="text-danger">*</span></label>
-                                <input required type="date"
-                                    class="form-control @error('end_date') is-invalid @enderror" id="basiInput"
-                                    name="end_date" value="{{ old('end_date') }}">
+                                <label for="basiInput" class="form-label">Ngày kết thúc<span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control @error('end_date') is-invalid @enderror"
+                                    id="basiInput" name="end_date" value="{{ old('end_date') }}">
                             </div>
                         </div>
                         <div class="d-flex">
@@ -146,4 +161,3 @@
         </div><!--end col-->
     </div>
 @endsection
-
