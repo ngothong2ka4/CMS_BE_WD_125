@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Combo;
-use App\Models\ComboProduct;
 use App\Models\Material;
 use App\Models\Product;
 use App\Models\ProductColor;
@@ -30,7 +29,7 @@ class BinController extends Controller
                 } else
             if ($request->combo) {
                     foreach ($request->combo as $val) {
-                        $combo = ComboProduct::withTrashed()->find($val);
+                        $combo = Combo::withTrashed()->find($val);
                         $combo->forceDelete();
                     }
                 } else
@@ -86,7 +85,7 @@ class BinController extends Controller
                 } else
             if ($request->combo) {
                     foreach ($request->combo as $val) {
-                        $combo = ComboProduct::withTrashed()->find($val);
+                        $combo = Combo::withTrashed()->find($val);
                         $combo->restore();
                     }
                 } else
@@ -211,7 +210,7 @@ class BinController extends Controller
             $category->forceDelete();
         }
         if ($key == 'combo') {
-            $combo = ComboProduct::withTrashed()->find($id);
+            $combo = Combo::withTrashed()->find($id);
             $combo->forceDelete();
         }
         if ($key == 'product') {
@@ -250,7 +249,7 @@ class BinController extends Controller
             $category->restore();
         }
         if ($key == 'combo') {
-            $combo = ComboProduct::withTrashed()->find($id);
+            $combo = Combo::withTrashed()->find($id);
             $combo->restore();
         }
         if ($key == 'product') {
