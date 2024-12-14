@@ -33,7 +33,7 @@ class StatisticController extends Controller
             $lastRevenue = Order::select(DB::raw('SUM(total_payment) as total_revenue'))
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month - 1)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             $totalStatistic = Order::with('orderDetail')
                 ->selectRaw('
@@ -47,7 +47,7 @@ class StatisticController extends Controller
                 ')
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             if ($totalStatistic) {
                 $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
@@ -69,7 +69,7 @@ class StatisticController extends Controller
                 ')
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->groupBy(DB::raw('DAY(created_at)'))
                 ->orderBy('time')
                 ->get()
@@ -85,7 +85,7 @@ class StatisticController extends Controller
         } elseif ($timeType === 'year') {
             $lastRevenue = Order::select(DB::raw('SUM(total_payment) as total_revenue'))
                 ->whereYear('created_at', $year - 1)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             $totalStatistic = Order::with('orderDetail')
                 ->selectRaw('
@@ -98,7 +98,7 @@ class StatisticController extends Controller
                     ) as total_cost
                 ')
                 ->whereYear('created_at', $year)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             if ($totalStatistic) {
                 $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
@@ -119,7 +119,7 @@ class StatisticController extends Controller
                     ) as total_cost
                 ')
                 ->whereYear('created_at', $year)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->groupBy(DB::raw('MONTH(created_at)'))
                 ->orderBy('time')
                 ->get()
@@ -138,7 +138,7 @@ class StatisticController extends Controller
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)
                 ->whereDay('created_at', $day - 1)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             $totalStatistic = Order::with('orderDetail')
                 ->selectRaw('
@@ -153,7 +153,7 @@ class StatisticController extends Controller
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)
                 ->whereDay('created_at', $day)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             if ($totalStatistic) {
                 $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
@@ -176,7 +176,7 @@ class StatisticController extends Controller
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)
                 ->whereDay('created_at', $day)
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->groupBy(DB::raw('HOUR(created_at)'))
                 ->orderBy('time')
                 ->get()
@@ -205,7 +205,7 @@ class StatisticController extends Controller
                     ) as total_cost
                 ')
                 ->whereBetween('created_at', [$startDate, $endDate])
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->first();
             if ($totalStatistic) {
                 $totalStatistic->profit = $totalStatistic->total_revenue - $totalStatistic->total_cost;
@@ -223,7 +223,7 @@ class StatisticController extends Controller
                     ) as total_cost
                 ')
                 ->whereBetween('created_at', [$startDate, $endDate])
-                ->where('status', '!=', 7)
+                ->whereNotIn('status', ['7', '5'])
                 ->groupBy(DB::raw('DATE(created_at)'))
                 ->orderBy('time')
                 ->get()
@@ -271,7 +271,7 @@ class StatisticController extends Controller
             DB::raw('MIN(selling_price) as selling_price'),
             DB::raw('SUM(quantity) as total_quantity')
         )->join('order', 'order_detail.id_order', '=', 'order.id')
-            ->where('order.status', '!=', 7)
+            ->whereNotIn('order.status', ['7', '5'])
             ->groupBy('id_product', 'product_image', 'product_name')
             ->orderBy('total_quantity', 'desc')
             ->take(5)
@@ -293,7 +293,7 @@ class StatisticController extends Controller
             ) as total_revenue')
         )
             ->join('order', 'order_detail.id_order', '=', 'order.id')
-            ->where('order.status', '!=', 7)
+            ->whereNotIn('order.status', ['7', '5'])
             ->groupBy('id_product', 'product_name', 'product_image')
             ->orderBy('total_revenue', 'desc')
             ->take(5)
@@ -317,7 +317,7 @@ class StatisticController extends Controller
                 ) * COALESCE(order.discount_value, 0))
             ) as total_profit')
         )->join('order', 'order_detail.id_order', '=', 'order.id')
-            ->where('order.status', '!=', 7)
+            ->whereNotIn('order.status', ['7', '5'])
             ->groupBy('id_product', 'product_name', 'product_image')
             ->orderBy('total_profit', 'desc')
             ->take(5)
