@@ -88,7 +88,7 @@ class VoucherController extends Controller
                     ->whereRaw('voucher_user.usage_count < vouchers.usage_per_user')
                     ->orWhereNull('voucher_user.user_id');
             })
-            ->select('vouchers.code', 'vouchers.description', 'vouchers.start_date', 'vouchers.end_date', 'voucher_user.usage_count', 'vouchers.usage_per_user')
+            ->select('vouchers.code','vouchers.title', 'vouchers.description', 'vouchers.start_date', 'vouchers.end_date', 'voucher_user.usage_count', 'vouchers.usage_per_user')
             ->get();
 
         return response()->json([
