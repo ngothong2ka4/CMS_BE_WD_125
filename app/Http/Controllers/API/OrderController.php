@@ -508,6 +508,11 @@ class OrderController extends Controller
             $order->status_payment = Order::STATUS_PAYMENT_PENDING;
             $order->status = Order::STATUS_CANCELED;
             $order->save();
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+            if (Cache::has($cacheKey)) {
+                Cache::forget($cacheKey);
+            }
+
             $user = User::find($order->id_user);
             $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
             $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
