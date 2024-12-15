@@ -324,8 +324,7 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <p class="text-uppercase fw-medium text-secondary text-truncate mb-0">Vốn
-                                                    đầu tư</p>
+                                                <p class="text-uppercase fw-medium text-secondary text-truncate mb-0">Giá vốn</p>
                                             </div>
                                         </div>
                                         <div>
