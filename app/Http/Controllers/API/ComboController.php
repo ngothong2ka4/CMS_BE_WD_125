@@ -404,6 +404,7 @@ class ComboController extends Controller
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
         } else {
+            if($order->status != Order::STATUS_CANCELED){
             $order->status_payment = Order::STATUS_PAYMENT_PENDING;
             $order->status = Order::STATUS_CANCELED;
             $order->save();
@@ -427,7 +428,7 @@ class ComboController extends Controller
                 \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
                 return $this->jsonResponse('Thanh toán thất bại', false, $order);
             }
-           
+        }
         }
     }
 
