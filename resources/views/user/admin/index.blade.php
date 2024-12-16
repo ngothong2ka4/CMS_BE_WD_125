@@ -39,13 +39,7 @@
                                     <td> <img src="{{ $item->image }}" class="rounded-circle" alt="" width=100 height=100></td>
                                     <td>{{ $item->role == 1 ? 'user' : 'admin' }}</td>
                                     <td>
-                                        <form action="{{ route('user_status', $item->id) }}" method="POST" class="d-inline"
-                                            onsubmit="return confirm('Bạn có đồng ý {{ $item->status ? 'dừng kích hoạt' : 'kích hoạt' }} không?')">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button
-                                                class="btn btn-danger">{{ $item->status ? 'Kích hoạt' : 'Dừng kích hoạt' }}</button>
-                                        </form>
+                                        {{ $item->status ? 'Hoạt động' : 'Dừng hoạt động' }}
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.show', $item->id) }}"><button
