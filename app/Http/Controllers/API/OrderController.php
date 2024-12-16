@@ -505,21 +505,24 @@ class OrderController extends Controller
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
         } else {
-            if($order->status != Order::STATUS_CANCELED){
-                $order->status_payment = Order::STATUS_PAYMENT_PENDING;
-                $order->status = Order::STATUS_CANCELED;
-                $order->save();
-                $user = User::find($order->id_user);
-                $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
-                $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
-                    return [$detail->id_variant => $detail->quantity];
-                })->toArray();
-    
-                if (!empty($variantDatas)) {
-                    foreach ($variantDatas as $key => $value) {
-                        Variant::where('id', $key)
-                            ->increment('quantity', $value);
-                    }
+            $order->status_payment = Order::STATUS_PAYMENT_PENDING;
+            $order->status = Order::STATUS_CANCELED;
+            $order->save();
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+            if (Cache::has($cacheKey)) {
+                Cache::forget($cacheKey);
+            }
+
+            $user = User::find($order->id_user);
+            $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
+            $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
+                return [$detail->id_variant => $detail->quantity];
+            })->toArray();
+
+            if (!empty($variantDatas)) {
+                foreach ($variantDatas as $key => $value) {
+                    Variant::where('id', $key)
+                        ->increment('quantity', $value);
                 }
     
                 \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
