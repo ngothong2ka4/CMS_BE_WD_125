@@ -173,8 +173,8 @@ class AdminController extends Controller
             'email' => $request->email,
             'address' => $request->address,
             'phone_number' => $request->phone_number,
-            'role' => $request->role,
-            'status' => $request->status,
+            // 'role' => $request->role,
+            // 'status' => $request->status,
         ];
         $user->update($data);
         $request->session()->regenerate();

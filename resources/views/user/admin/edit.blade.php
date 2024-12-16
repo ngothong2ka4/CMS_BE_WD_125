@@ -64,16 +64,16 @@
                                     value="{{ $user->address }}">
                             </div>
 
-                            <div class="d-flex m-3"> <strong class="col-2">Quyền: </strong>
+                            {{-- <div class="d-flex m-3"> <strong class="col-2">Quyền: </strong>
                                 <div>
                                     <select class="form-select mb-3" name="role" id="role">
                                         <option value="1"{{ $user->role == 1 ? 'selected' : ' ' }}>User</option>
                                         <option value="2"{{ $user->role == 2 ? 'selected' : ' ' }}>Admin</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
-                            <div class="d-flex m-3"> <strong class="col-2"> Trang thái: </strong>
+                            {{-- <div class="d-flex m-3"> <strong class="col-2"> Trang thái: </strong>
                                 <div>
                                     <select class="form-select mb-3" name="status">
                                         <option value="1"{{ $user->status == 1 ? 'selected' : ' ' }}>Hoạt động</option>
@@ -81,7 +81,7 @@
                                         </option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
 
                         </div>
