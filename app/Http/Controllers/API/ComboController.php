@@ -15,6 +15,7 @@ use App\Models\Variant;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ComboController extends Controller
@@ -173,10 +174,16 @@ class ComboController extends Controller
             if (!empty($data['variantIds']) && !empty($data['comboId']) && !empty($data['quantity'])) {
 
                 $res = $this->processDirectPayment($data, $user->id);
+                if ($res instanceof \Illuminate\Http\JsonResponse) {
+                    return $res; // Trả về ngay lập tức để tránh lỗi
+                }
                 if ($res['payment_role'] == 2) {
                     $res['id_voucher'] = $voucher ? $voucher->id : null;
                     $res['email'] = $data['email'];
                     $url = $this->createPaymentUrl($res);
+                    $cacheKey = $res['id_order'] . '_' . Order::URL_PAYMENT;
+
+                    Cache::put($cacheKey, $url, now()->addMinutes(15));
                     return $this->jsonResponse('Đặt hàng thành công', true, $url);
                 }
 
@@ -188,11 +195,12 @@ class ComboController extends Controller
                 if ($voucher) {
                     $voucher->incrementUsage($user->id);
                 }
+                $titleOrder = 'Thông tin đơn hàng #' . $res['id_order'];
                 SendEmailAfterOrder::dispatch(
                     'emails.information-order',
                     $information,
                     $data['email'],
-                    'Thông tin đơn hàng'
+                    $titleOrder
                 );
 
                 return $this->jsonResponse('Đặt hàng thành công', true, $res);
@@ -210,6 +218,10 @@ class ComboController extends Controller
 
     private function processDirectPayment($data, $userId)
     {
+        $combo = Combo::find($data['comboId']);
+        if(!$combo){
+            return $this->jsonResponse(message: 'Combo không tồn tại');
+        }
         $order = Order::create([
             'id_user' => $userId,
             'recipient_name' => $data['recipient_name'],
@@ -228,7 +240,7 @@ class ComboController extends Controller
 
         $user = User::find($userId);
         $user->update(['accum_point' => $user->accum_point - $order->used_accum]);
-        $combo = Combo::find($data['comboId']);
+        
         $combo->update(['quantity' => $combo->quantity - $data['quantity']]);
 
         $orderDetails = [];
@@ -381,12 +393,12 @@ class ComboController extends Controller
             if ($voucher) {
                 $voucher->incrementUsage(Auth::id());
             }
-
+            $titleOrder = 'Thông tin đơn hàng #' . $order->id;
             SendEmailAfterOrder::dispatch(
                 'emails.information-order',
                 $information,
                 $value['vnp_email'],
-                'Thông tin đơn hàng'
+                $titleOrder
             );
 
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
@@ -395,6 +407,11 @@ class ComboController extends Controller
             $order->status_payment = Order::STATUS_PAYMENT_PENDING;
             $order->status = Order::STATUS_CANCELED;
             $order->save();
+            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+            if (Cache::has($cacheKey)) {
+                Cache::forget($cacheKey);
+            }
+            
             $user = User::find($order->id_user);
             $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
             $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {

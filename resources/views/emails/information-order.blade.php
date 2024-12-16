@@ -103,11 +103,13 @@
         </table>
 
         <div class="total">
-            <p><strong>Tổng cộng: {{ number_format($order->total_payment, 0, ',', '.') }} đ</strong></p>
+            <p><strong>Tổng cộng: {{ number_format($order->discount_value + $order->total_payment , 0, ',', '.') }} đ</strong></p>
+            <p><strong>Giảm giá: {{ number_format($order->discount_value, 0, ',', '.') }} đ</strong></p>
+            <p><strong>Thành tiền: {{ number_format($order->total_payment, 0, ',', '.') }} đ</strong></p>
         </div>
 
         <div class="footer">
-            <p>Nếu bạn có bất kỳ câu hỏi nào về đơn hàng, vui lòng liên hệ với chúng tôi qua email <a href="mailto:ngothong2ka4@gmail.com">ngothong2ka4@gmail.com</a>.</p>
+            <p>Nếu bạn có bất kỳ câu hỏi nào về đơn hàng, vui lòng liên hệ với chúng tôi qua email <a href="mailto:shinetrangsuc@gmail.com">shinetrangsuc@gmail.com</a>.</p>
             <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi!</p>
         </div>
     </div>
