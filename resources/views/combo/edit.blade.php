@@ -9,19 +9,19 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Cập nhật Combo</h5>
+                    <h5 class="card-title mb-0">Cập nhật bộ trang sức</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('combo.update',$combos->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div>
-                            <label class="form-label">Tên combo</label>
+                            <label class="form-label">Tên bộ trang sức</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                             value="{{$combos->name}}">
                         </div>
                         <div>
-                            <label class="form-label">Ảnh combo</label>
+                            <label class="form-label">Ảnh bộ trang sức</label>
                             <img src="{{$combos->image}}" alt=""width="80px">
                             <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
                         </div>
@@ -52,14 +52,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex">
-                            <div class="w-50 mx-3">
-                                <label class="form-label">Giá combo</label>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label">Giá bộ trang sức</label>
                                 <input type="number" class="form-control @error('price') is-invalid @enderror"
                                     name="price" value="{{$combos->price}}">
                             </div>
-                            <div class="w-50 mx-3">
-                                <label class="form-label">Số lượng combo</label>
+                            <div class="col-6">
+                                <label class="form-label">Số lượng bộ trang sức</label>
                                 <input type="number" class="form-control @error('quantity') is-invalid @enderror"
                                     name="quantity" value="{{$combos->quantity }}">
                             </div>

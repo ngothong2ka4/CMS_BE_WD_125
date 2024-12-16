@@ -524,10 +524,11 @@ class OrderController extends Controller
                     Variant::where('id', $key)
                         ->increment('quantity', $value);
                 }
+    
+                \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
+                return $this->jsonResponse('Thanh toán thất bại', false, $order);
             }
-
-            \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
-            return $this->jsonResponse('Thanh toán thất bại', false, $order);
+         
         }
     }
 

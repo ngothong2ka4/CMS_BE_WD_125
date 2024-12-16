@@ -9,7 +9,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Quản lý Combo</h5>
+                    <h5 class="card-title mb-0">Quản lý bộ trang sức</h5>
                 </div>
                 <div class="card-body">
                     <a href="{{ route('combo.create') }}"><button class="btn btn-secondary mb-2">Thêm mới</button></a>
@@ -23,8 +23,8 @@
                         <thead>
                             <tr>
                                 <th>Stt</th>
-                                <th>Tên Combo</th>
-                                <th>Ảnh Combo</th>
+                                <th>Tên bộ trang sức</th>
+                                <th>Ảnh</th>
                                 {{-- <th>Mô tả </th> --}}
                                 <th>Giá</th>
                                 <th>Số lượng</th>

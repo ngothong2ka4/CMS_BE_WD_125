@@ -47,7 +47,7 @@
                     <a class="nav-link menu-link {{ Request::is('combo*') ? 'active' : '' }}"
                         href="{{ route('combo.index') }}" role="button" aria-expanded="false"
                         aria-controls="sidebarDashboards">
-                        <i class="ri-links-line"></i> <span data-key="t-dashboards">Combo</span>
+                        <i class="ri-links-line"></i> <span data-key="t-dashboards">Bộ trang sức</span>
                     </a>
                 </li>
                 <li class="nav-item">

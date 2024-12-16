@@ -16,7 +16,7 @@
                         <option value="product" {{request('table') == 'product' ?'selected' : '' }}>Sản phẩm</option>
                         <option value="category" {{request('table') == 'category' ?'selected' : '' }}>Danh mục</option>
                         <option value="voucher" {{request('table') == 'voucher' ?'selected' : '' }}>Ưu đãi</option>
-                        <option value="combo" {{request('table') == 'combo' ?'selected' : '' }}>Combo</option>
+                        <option value="combo" {{request('table') == 'combo' ?'selected' : '' }}>Bộ trang sức</option>
                         <option value="color" {{request('table') == 'color' ?'selected' : '' }}>Màu sắc</option>
                         <option value="size" {{request('table') == 'size' ?'selected' : '' }}>Kích thước</option>
                         <option value="material" {{request('table') == 'material' ?'selected' : '' }}>Chất liệu</option>
@@ -85,7 +85,7 @@
                                 <tr>
                                     <td><input class="checkbox" type="checkbox" name="combo[]" value="{{$item->id}}"></td>
                                     <td>{{ $item->name }}</td>
-                                    <td>Combo</td>
+                                    <td>Bộ trang sức</td>
                                     <td>{{$item->deleted_at}}</td>
                                     <td>
                                         <a class="btn btn-danger me-3" onclick="return confirm('Bạn có đồng ý xóa vĩnh viễn không?')" href="/binforce/{{ $item->id}}/combo">
