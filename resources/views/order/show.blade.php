@@ -16,12 +16,42 @@
                     <h4 class="mb-0">Thông đơn hàng</h4>
                 </div>
                 <div class="card-body">
-                    <div>
+                    <div class="row">
+                    <div class="col-lg-6">
                         <label for="basiInput" class="form-label">Mã đơn hàng</label>
                         <input type="text" class="form-control mb-3" id="basiInput" name="name"
                             value="#{{ $order->id }}" disabled>
 
                     </div>
+                    <div class="col-lg-6">
+                        <label for="basiInput" class="form-label">Trạng thái đơn hàng</label>
+                        <input type="text" class="form-control mb-3" id="basiInput" name="name"
+                            @if ($order ->status == 1)
+                            value="Chờ xác nhận"
+                                        @endif
+                                        @if ($order ->status == 2)
+                                        value="Đã xác nhận"
+                                        @endif
+                                        @if ($order ->status == 3)
+                                        value="Đang giao"
+                                        @endif
+                                        @if ($order ->status == 4)
+                                        value="Giao hàng thành công"
+                                        @endif
+                                        @if ($order ->status == 5)
+                                        value="Giao hàng thất bại"
+                                        @endif
+                                        @if ($order ->status == 6)
+                                        value="Hoàn thành"
+                                        @endif
+                                        @if ($order ->status == 7)
+                                        value="Đã hủy"
+                                        @endif
+                                         disabled>
+
+                    </div>
+                    </div>
+                  
                     <div class="row">
                         <div class="col-lg-6">
                             <label for="basiInput" class="form-label">Phương thức thanh toán</label>
@@ -235,13 +265,13 @@
                                 <label for="basiInput" class="form-label">Trạng thái</label>
                                 <select name="to_status" class="form-select mb-3" id="test-select"
                                     aria-label="Default select example">
-                                    <option value="">Chọn trạng thái</option>
+                                    <option value="1" @if ($order->status ==1) selected @endif @if ($order->status >= 1) disabled @endif>Chờ xác nhận</option>
 
-                                    <option value="2" @if ($order->status >= 2) disabled @endif>Đã xác nhận
+                                    <option value="2" @if ($order->status ==2) selected @endif  @if ($order->status >= 2) disabled @endif>Đã xác nhận
                                     </option>
 
 
-                                    <option value="3" @if ($order->status == 1 || $order->status >= 3) disabled @endif>Đang giao hàng
+                                    <option value="3" @if ($order->status ==3) selected @endif  @if ($order->status == 1 || $order->status >= 3) disabled @endif>Đang giao hàng
                                     </option>
 
                                     <option value="4" @if ($order->status <= 2) disabled @endif>Giao hàng
@@ -277,18 +307,41 @@
             $(document).ready(function() {
                 $('#test-form').submit(function(e) {
                     e.preventDefault();
+                    let timerInterval;
+Swal.fire({
+  title: "Đang tải!",
+//   html: "I will close in <b></b> milliseconds.",
+  timer: 5000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading();
+    const timer = Swal.getPopup().querySelector("b");
+    timerInterval = setInterval(() => {
+      timer.textContent = `${Swal.getTimerLeft()}`;
+    }, 100);
+  },
+  willClose: () => {
+    clearInterval(timerInterval);
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log("I was closed by the timer");
+  }
+});
                     $.ajax({
                         url: '/order/{{ $order->id }}',
                         type: 'POST',
                         data: $('#test-form').serialize(),
                         success: function(res) {
+                            
                             if (res.status) {
                                 console.log(res.message);
                                 Swal.fire({
                                     icon: "success",
                                     title: res.message,
                                 }).then((result) => {
-                                    if (result.isConfirmed) window.location.reload();
+                                    window.location.reload();
                                 });
                             }
                             if (res.error) {

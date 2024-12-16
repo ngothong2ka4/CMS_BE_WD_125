@@ -93,7 +93,7 @@ class OrderController extends Controller
             'emails.status',
             compact('order'),
             function ($message) use ($email) {
-                $message->from(config('mail.from.address'), 'Shine');
+                $message->from(config('mail.from.address'), 'shinetrangsuc');
                 $message->to($email);
                 $message->subject('Trạng thái đơn hàng');
             }
