@@ -82,7 +82,7 @@ class ComboController extends Controller
 
             // Kiểm tra nếu số lượng combo lớn hơn số lượng nhỏ nhất
             if ($params['quantity'] > $minQuantity) {
-                toastr()->error('Số lượng combo không được lớn hơn số lượng nhỏ nhất của sản phẩm được chọn (' . $minQuantity . ').');
+                toastr()->error('Số lượng bộ trang sức không được lớn hơn số lượng nhỏ nhất của sản phẩm được chọn (' . $minQuantity . ').');
                 return redirect()->back()->withInput();
             }
 
@@ -104,7 +104,7 @@ class ComboController extends Controller
             if (!empty($params['id_product'])) {
                 $combos->products()->sync($params['id_product']);
             }
-            toastr()->success('Thêm combo thành công!');
+            toastr()->success('Thêm bộ trang sức thành công!');
             return redirect()->route('combo.index');
         } catch (\Illuminate\Validation\ValidationException $e) {
 
@@ -174,20 +174,20 @@ class ComboController extends Controller
                 'description' => 'nullable',
                 'quantity' => 'required|integer|min:1',
             ], [
-                'name.required' => 'Tên combo là bắt buộc.',
-                'name.min' => 'Tên combo phải có ít nhất 3 ký tự.',
+                'name.required' => 'Tên bộ trang sức là bắt buộc.',
+                'name.min' => 'Tên bộ trang sức phải có ít nhất 3 ký tự.',
 
-                'image.required' => 'Ảnh combo là bắt buộc.',
+                'image.required' => 'Ảnh bộ trang sức là bắt buộc.',
                 'image.mimes' => 'Ảnh phải là định dạng jpg, jpeg, png hoặc gif.',
 
                 'id_product.required' => 'Sản phẩm là bắt buộc.',
                 'id_product.min' => 'Phải có 2 sản phẩm trở lên.',
 
-                'price.min' => 'Giá combo phải lớn hơn hoặc bằng 0.',
+                'price.min' => 'Giá bộ trang sức phải lớn hơn hoặc bằng 0.',
                 'price.required' => 'Giá là bắt buộc',
 
                 'quantity.required' => 'Số lượng là bắt buộc',
-                'quantity.min' => 'Số lượng combo ít nhất là 1.',
+                'quantity.min' => 'Số lượng bộ trang sức ít nhất là 1.',
 
             ]);
             // Lấy danh sách sản phẩm được chọn
@@ -199,12 +199,12 @@ class ComboController extends Controller
             });
             $discountLimit = $totalPrice * 0.8; // 20% giảm
             if ($params['price'] < $discountLimit) {
-                toastr()->error('Giá combo không được giảm quá 20% so với tổng giá sản phẩm (' . number_format($totalPrice) . ').');
+                toastr()->error('Giá bộ trang sức không được giảm quá 20% so với tổng giá sản phẩm (' . number_format($totalPrice) . ').');
                 return redirect()->back()->withInput();
             }
             // Validate giá combo
             if ($params['price'] > $totalPrice) {
-                toastr()->error('Giá combo không được lớn hơn tổng giá sản phẩm (' . number_format($totalPrice) . ').');
+                toastr()->error('Giá bộ trang sức không được lớn hơn tổng giá sản phẩm (' . number_format($totalPrice) . ').');
                 return redirect()->back()->withInput();
             }
 
@@ -215,7 +215,7 @@ class ComboController extends Controller
 
             // Kiểm tra nếu số lượng combo lớn hơn số lượng nhỏ nhất
             if ($params['quantity'] > $minQuantity) {
-                toastr()->error('Số lượng combo không được lớn hơn số lượng nhỏ nhất của sản phẩm được chọn (' . $minQuantity . ').');
+                toastr()->error('Số lượng bộ trang sức không được lớn hơn số lượng nhỏ nhất của sản phẩm được chọn (' . $minQuantity . ').');
                 return redirect()->back()->withInput();
             }
 
@@ -242,7 +242,7 @@ class ComboController extends Controller
             if (!empty($params['id_product'])) {
                 $combo->products()->sync($params['id_product']);
             }
-            toastr()->success('Sửa combo thành công!');
+            toastr()->success('Sửa bộ trang sức thành công!');
             return redirect()->back()->withInput();
         } catch (\Illuminate\Validation\ValidationException $e) {
 
@@ -257,7 +257,7 @@ class ComboController extends Controller
         $combo = Combo::findOrFail($id);
         // $combo->products()->detach();
         $combo->delete();
-        toastr()->success('Xoá combo thành công!');
+        toastr()->success('Xoá bộ trang sức thành công!');
         return redirect()->back();
     }
 }

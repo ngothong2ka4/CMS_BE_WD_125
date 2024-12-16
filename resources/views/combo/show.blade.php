@@ -9,23 +9,23 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Chi tiết Combo</h5>
+                    <h5 class="card-title mb-0">Chi tiết bộ trang sức</h5>
                 </div>
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div>
-                            <label class="form-label">Tên combo</label>
+                            <label class="form-label">Tên bộ trang sức</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                             value="{{$combos->name}}" disabled>
                         </div>
                         <div>
-                            <label class="form-label">Ảnh combo</label>
+                            <label class="form-label">Ảnh bộ trang sức</label>
                             <img src="{{$combos->image}}" alt=""width="80px">
                         </div>
                         <div class="d-flex bd-highlight my-3">
-                            <label for="" class="form-label">Chọn sản phẩm </label>
+                            <label for="" class="form-label">Các sản phẩm </label>
                             <div class="w-50 mx-3">
                                 <select id="id_product" name="id_product[]" class="form-control" multiple="multiple"
                                     style="width: 100%;" disabled>
@@ -52,12 +52,12 @@
                         </div>
                         <div class="d-flex">
                             <div class="w-50 mx-3">
-                                <label class="form-label">Giá combo</label>
+                                <label class="form-label">Giá bộ trang sức</label>
                                 <input type="number" class="form-control @error('price') is-invalid @enderror"
                                     name="price" value="{{$combos->price}}" disabled>
                             </div>
                             <div class="w-50 mx-3">
-                                <label class="form-label">Số lượng combo</label>
+                                <label class="form-label">Số lượng bộ trang sức</label>
                                 <input type="number" class="form-control @error('quantity') is-invalid @enderror"
                                     name="quantity" value="{{$combos->quantity }}" disabled>
                             </div>

@@ -35,7 +35,7 @@ class ComboController extends Controller
             'products.variants.size',
         ])->find($id);
         if (!$combo) {
-            return $this->jsonResponse('Không tìm thấy combo');
+            return $this->jsonResponse('Không tìm thấy bộ trang sứcsức');
         }
 
         $inventory_quantity = $combo->products->map(function ($product) {
@@ -392,24 +392,27 @@ class ComboController extends Controller
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
         } else {
-            $order->status_payment = Order::STATUS_PAYMENT_PENDING;
-            $order->status = Order::STATUS_CANCELED;
-            $order->save();
-            $user = User::find($order->id_user);
-            $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
-            $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
-                return [$detail->id_variant => $detail->quantity];
-            })->toArray();
-
-            if (!empty($variantDatas)) {
-                foreach ($variantDatas as $key => $value) {
-                    Variant::where('id', $key)
-                        ->increment('quantity', $value);
+            if($order->status != Order::STATUS_CANCELED){
+                $order->status_payment = Order::STATUS_PAYMENT_PENDING;
+                $order->status = Order::STATUS_CANCELED;
+                $order->save();
+                $user = User::find($order->id_user);
+                $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
+                $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
+                    return [$detail->id_variant => $detail->quantity];
+                })->toArray();
+    
+                if (!empty($variantDatas)) {
+                    foreach ($variantDatas as $key => $value) {
+                        Variant::where('id', $key)
+                            ->increment('quantity', $value);
+                    }
                 }
+    
+                \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
+                return $this->jsonResponse('Thanh toán thất bại', false, $order);
             }
-
-            \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
-            return $this->jsonResponse('Thanh toán thất bại', false, $order);
+           
         }
     }
 
