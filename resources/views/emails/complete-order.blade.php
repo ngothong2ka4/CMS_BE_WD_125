@@ -72,7 +72,12 @@
 
         <div class="order-details">
             <h2>Thông tin đơn hàng:</h2>
-            <p><strong>Mã đơn hàng:</strong> {{ $order->id }}</p>
+            <p><strong>Mã đơn hàng:</strong> {{ $order->id }} -  @if($order-> status_payment == 1)
+                                Chưa thanh toán
+                                @endif
+                                @if($order-> status_payment == 2)
+                                Đã thanh toán
+                                @endif</p>
             <p><strong>Tên người nhận:</strong> {{ $order->recipient_name }}</p>
             <p><strong>Email:</strong> {{ $order->email }}</p>
             <p><strong>Số điện thoại:</strong> {{ $order->phone_number }}</p>
