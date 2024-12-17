@@ -219,7 +219,7 @@ class ComboController extends Controller
     private function processDirectPayment($data, $userId)
     {
         $combo = Combo::find($data['comboId']);
-        if(!$combo){
+        if (!$combo) {
             return $this->jsonResponse(message: 'Combo không tồn tại');
         }
         $order = Order::create([
@@ -240,7 +240,12 @@ class ComboController extends Controller
 
         $user = User::find($userId);
         $user->update(['accum_point' => $user->accum_point - $order->used_accum]);
-        
+
+        if ($combo->quantity < $data['quantity']) {
+            return response()->json([
+                'message' => 'Số lượng combo không đủ.'
+            ], 400);
+        }
         $combo->update(['quantity' => $combo->quantity - $data['quantity']]);
 
         $orderDetails = [];
@@ -404,31 +409,31 @@ class ComboController extends Controller
             \Log::info("Thanh toán thành công cho đơn hàng ID: " . $orderId);
             return $this->jsonResponse('Thanh toán thành công!', true, $order);
         } else {
-            if($order->status != Order::STATUS_CANCELED){
-            $order->status_payment = Order::STATUS_PAYMENT_PENDING;
-            $order->status = Order::STATUS_CANCELED;
-            $order->save();
-            $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
-            if (Cache::has($cacheKey)) {
-                Cache::forget($cacheKey);
-            }
-            
-            $user = User::find($order->id_user);
-            $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
-            $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
-                return [$detail->id_variant => $detail->quantity];
-            })->toArray();
-
-            if (!empty($variantDatas)) {
-                foreach ($variantDatas as $key => $value) {
-                    Variant::where('id', $key)
-                        ->increment('quantity', $value);
+            if ($order->status != Order::STATUS_CANCELED) {
+                $order->status_payment = Order::STATUS_PAYMENT_PENDING;
+                $order->status = Order::STATUS_CANCELED;
+                $order->save();
+                $cacheKey = $order->id . '_' . Order::URL_PAYMENT;
+                if (Cache::has($cacheKey)) {
+                    Cache::forget($cacheKey);
                 }
-    
-                \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
-                return $this->jsonResponse('Thanh toán thất bại', false, $order);
+
+                $user = User::find($order->id_user);
+                $user->update(['accum_point' => $user->accum_point + $order->used_accum]);
+                $variantDatas = $order->orderDetail->mapWithKeys(function ($detail) {
+                    return [$detail->id_variant => $detail->quantity];
+                })->toArray();
+
+                if (!empty($variantDatas)) {
+                    foreach ($variantDatas as $key => $value) {
+                        Variant::where('id', $key)
+                            ->increment('quantity', $value);
+                    }
+
+                    \Log::warning("Thanh toán thất bại cho đơn hàng ID: " . $orderId);
+                    return $this->jsonResponse('Thanh toán thất bại', false, $order);
+                }
             }
-        }
         }
     }
 
