@@ -36,7 +36,7 @@ class ComboController extends Controller
             'products.variants.size',
         ])->find($id);
         if (!$combo) {
-            return $this->jsonResponse('Không tìm thấy bộ trang sứcsức');
+            return $this->jsonResponse('Không tìm thấy bộ trang sức');
         }
 
         $inventory_quantity = $combo->products->map(function ($product) {
