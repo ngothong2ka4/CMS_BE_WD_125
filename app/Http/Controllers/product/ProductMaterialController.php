@@ -4,6 +4,7 @@ namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
 use App\Models\Material;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductMaterialController extends Controller
@@ -75,13 +76,17 @@ class ProductMaterialController extends Controller
     public function destroy(Request $request,$id)
     {
         if ($request->isMethod('DELETE')) {
-
+            if(!Product::where('id_materials',$id)->first() == []){
+                toastr()->error('Không thể xóa: Bản ghi đã được sử dụng!');
+                return redirect()->back();
+            }else{
             $material = Material::query()->findOrFail($id);
 
             $material->delete();
             toastr()->success('Xoá chất liệu thành công!');
 
             return redirect()->back();
+            }
         }
     }
 }

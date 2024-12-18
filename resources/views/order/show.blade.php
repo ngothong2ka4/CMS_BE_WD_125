@@ -120,7 +120,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $orderdetail->product_name }}</td>
-                                    <td>Màu: {{ $orderdetail->orderVariant?->color->name }}, Size:
+                                    <td>Màu: {{ $orderdetail->orderVariant?->color->name }}, Kích thước:
                                         {{ $orderdetail->orderVariant?->size->name }}</td>
 
                                     <td>{{ $orderdetail->quantity }}</td>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\product_color\StoreRequest;
 use App\Http\Requests\product_color\UpdateRequest;
 use App\Models\ProductColor;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -87,8 +88,13 @@ class ProductColorController extends Controller
      */
     public function destroy(ProductColor $productColor)
     {
+        if(!Variant::where('id_attribute_color',$productColor->id)->first() == []){
+            toastr()->error('Không thể xóa: Bản ghi đã được sử dụng!');
+            return redirect()->back();
+        }else{
         $productColor->delete();
         toastr()->success('Xoá thành công!');
         return redirect()->route('product_color.index');
+        }
     }
 }

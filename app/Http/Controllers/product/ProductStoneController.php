@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Stone;
 use Illuminate\Http\Request;
 
@@ -75,13 +76,17 @@ class ProductStoneController extends Controller
     public function destroy(Request $request,$id)
     {
         if ($request->isMethod('DELETE')) {
-
+            if(!Product::where('id_stones',$id)->first() == []){
+                toastr()->error('Không thể xóa: Bản ghi đã được sử dụng!');
+                return redirect()->back();
+            }else{
             $stone = Stone::query()->findOrFail($id);
 
             $stone->delete();
             toastr()->success('Xoá chất liệu thành công!');
 
             return redirect()->back();
+            }
         }
     }
 }
