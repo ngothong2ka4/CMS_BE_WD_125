@@ -55,7 +55,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="h4">I. THỐNG KÊ ĐƠN HÀNG</h2>
+                    <h2 class="h4">I. DANH SÁCH CẦN LÀM</h2>
                 </div>
             </div>
         </div><!--end col-->
