@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
@@ -12,9 +13,14 @@ use Illuminate\Http\Request;
 class ProductVariantController extends Controller
 {
     public function delete(string $id){
+        if(!OrderDetail::where('id_variant',$id)->first() == []){
+            toastr()->error('Không thể xóa: Bản ghi đã được sử dụng!');
+            return redirect()->back();
+        }else{
         Variant::findOrFail($id)->delete();
         toastr()->success('Xoá thành công!');
         return back();
+        }
     }
 
     public function index(string $id){

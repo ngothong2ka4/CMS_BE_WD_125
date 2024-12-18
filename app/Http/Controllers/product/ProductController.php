@@ -4,7 +4,9 @@ namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\FavoriteProduct;
 use App\Models\Material;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
@@ -337,15 +339,18 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+        if(!OrderDetail::where('id_product',$id)->first() == [] ||
+        !FavoriteProduct::where('id_product',$id)->first() == []){
+            toastr()->error('Không thể xóa: Bản ghi đã được sử dụng!');
+            return redirect()->back();
+        }else{
         $product = Product::findOrFail($id);
-        // $product->variants()->delete();
         $product->combos()->each(function ($combo) {
             $combo->delete();
         });
-
         $product->delete();
-
         toastr()->success('Xoá thành công!');
         return redirect()->route('product_management.index');
+    }
     }
 }

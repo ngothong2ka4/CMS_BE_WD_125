@@ -4,6 +4,7 @@ namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductSize;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -95,9 +96,15 @@ class ProductSizeController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(ProductSize $ProductSize)
-    {
-        $ProductSize->delete();
-        toastr()->success('Xoá thành công!');
-        return redirect()->route('product_size.index');
+    { 
+        if(!Variant::where('id_attribute_size',$ProductSize->id)->first() == []){
+            toastr()->error('Không thể xóa: Bản ghi đã được sử dụng!');
+            return redirect()->back();
+        }else{
+            $ProductSize->delete();
+            toastr()->success('Xoá thành công!');
+            return redirect()->route('product_size.index');
+        }
+       
     }
 }
