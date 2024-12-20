@@ -35,7 +35,7 @@
                             @foreach ($comments as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->product->name }}</td>
+                                    <td>{{ $item->product?->name }}</td>
                                     <td>{{ $item->user->name }}</td>
                                     <td>{{ $item->content }}</td>
                                     <td>{{ $item->rating }}/5</td>
